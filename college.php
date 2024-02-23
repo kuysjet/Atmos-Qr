@@ -129,8 +129,6 @@
 <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-<!-- QR Code generation script -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <!-- Enable downloading for qr code -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 <!-- Include html2canvas library -->
@@ -456,7 +454,7 @@ $('#importCsvForm').on('submit', function(e) {
   });
 
 
-  // Event listener for "View QR" button clicks
+// Event listener for "View QR" button clicks
 $('#collegeStudentsTable').on('click', '.view-qr-btn', function() {
   // Retrieve the student's Identification Number from the button's data attribute
   var identificationNumber = $(this).data('id');

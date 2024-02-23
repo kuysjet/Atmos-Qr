@@ -129,6 +129,10 @@
 <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<!-- Enable downloading for qr code -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+<!-- Include html2canvas library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
 <!-- AdminLTE App -->
 <script src="dist/js/adminlte.min.js"></script>
 
@@ -166,7 +170,8 @@ $(document).ready(function() {
         "data": null,
         "render": function(data, type, row) {
           return '<i class="fas fa-edit edit-btn text-success mr-2" title="Edit"></i>' +
-                '<i class="fas fa-trash-alt delete-btn text-danger" title="Delete"></i>';
+                '<i class="fas fa-trash-alt delete-btn text-danger mr-2" title="Delete"></i>' +
+                '<i class="fas fa-qrcode view-qr-btn text-info" title="View QR" data-id="' + row.IdentificationNumber + '"></i>';
         }
       }
     ],
@@ -452,6 +457,88 @@ $('#importFacultyCsvForm').on('submit', function(e) {
       }
     });
   });
+
+  // Event listener for "View QR" button clicks
+$('#facultyTable').on('click', '.view-qr-btn', function() {
+  // Retrieve the faculties Identification Number from the button's data attribute
+  var identificationNumber = $(this).data('id');
+
+  // Fetch the faculties information from the table row
+  var firstName = $(this).closest('tr').find('td:nth-child(4)').text().trim();
+  var lastName = $(this).closest('tr').find('td:nth-child(5)').text().trim();
+
+  // Construct the QR code path using the faculties Identification Number
+  var qrCodePath = 'qr_codes/' + identificationNumber + '.png';
+
+  // Set the src attribute of the QR code image in the modal
+  $('#qrCodeImage').attr('src', qrCodePath);
+
+  // Set the filename for downloading to the faculties first name and last name
+  var filename = firstName + '_' + lastName + '_qr_code.png'; // Using faculties first name and last name for filename
+  $('#downloadQR').attr('download', filename);
+
+  // Display the faculty name inside the card
+  $('#facultyName').text(firstName + ' ' + lastName);
+
+  // Show the modal
+  $('#viewQrCodeModal').modal('show');
+});
+
+
+
+// Function to download QR code and card from the modal
+function downloadQRCodeFromModal() {
+  // Get the QR code image element
+  var qrCodeImage = document.getElementById('qrCodeImage');
+
+  // Get the card element
+  var cardToDownload = document.getElementById('cardToDownload');
+
+  // Use html2canvas to capture both the QR code image and the card
+  html2canvas(cardToDownload).then(function(canvas) {
+    // Convert the canvas to a data URL
+    var dataURL = canvas.toDataURL('image/png');
+
+    // Create a new Blob object from the data URL
+    var blob = dataURLtoBlob(dataURL);
+
+    // Get the filename for downloading
+    var filename = $('#downloadQR').attr('download');
+
+    // Create a link element
+    var link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.download = filename;
+
+    // Append the link to the body and trigger the download
+    document.body.appendChild(link);
+    link.click();
+
+    // Remove the link from the body
+    document.body.removeChild(link);
+  });
+}
+
+// Attach click event listener to the download button in the modal
+document.getElementById('downloadQR').addEventListener('click', function() {
+  // Trigger downloadQRCodeFromModal function
+  downloadQRCodeFromModal();
+});
+
+// Function to convert data URL to Blob object
+function dataURLtoBlob(dataURL) {
+  var parts = dataURL.split(';base64,');
+  var contentType = parts[0].split(':')[1];
+  var raw = window.atob(parts[1]);
+  var rawLength = raw.length;
+  var uInt8Array = new Uint8Array(rawLength);
+
+  for (var i = 0; i < rawLength; ++i) {
+    uInt8Array[i] = raw.charCodeAt(i);
+  }
+
+  return new Blob([uInt8Array], { type: contentType });
+}
 });
 </script>
 
@@ -676,6 +763,39 @@ $('#importFacultyCsvForm').on('submit', function(e) {
           </div>
           <button type="submit" class="btn btn-primary">Import</button>
         </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+<!-- View QR Code Modal -->
+<div class="modal fade" id="viewQrCodeModal" tabindex="-1" aria-labelledby="viewQrCodeModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-info">
+        <h5 class="modal-title" id="viewQrCodeModalLabel">QR Code</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center" id="modalBodyToDownload">
+        <!-- Card with Background Image inside Modal Body with Medium Size -->
+        <div class="card" id="cardToDownload" style="max-width: 50%; margin: auto;">
+          <img src="dist/img/Card.png" class="card-img" alt="Background Image">
+          <div class="card-img-overlay d-flex flex-column justify-content-center align-items-center">
+            <!-- Logo above the QR Code -->
+            <img src="dist/img/aclc_complete_logo.png" alt="Logo" style="max-width: 36%; margin-bottom: 20px;">
+            <!-- QR Code Image -->
+            <img id="qrCodeImage" alt="QR Code" style="max-width: 60%;">
+            <!-- Faculty Name -->
+            <div id="facultyName" class="mt-3"></div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary btn-sm" id="downloadQR"><i class="fas fa-download"></i> Download</button>
       </div>
     </div>
   </div>

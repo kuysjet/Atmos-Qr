@@ -45,6 +45,9 @@ elseif ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['identificationNumb
     
         echo json_encode(array("status" => "success"));
         http_response_code(200); // OK
+    } else {
+        echo json_encode(array("error" => "Failed to add faculty"));
+        http_response_code(500); // Internal Server Error
     }
 }
 

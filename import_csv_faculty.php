@@ -1,6 +1,7 @@
 <?php
 // Include database connection code
 include 'database/db.php';
+include 'phpqrcode/qrlib.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["csvFile"])) {
     $file = $_FILES["csvFile"];
@@ -77,6 +78,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["csvFile"])) {
             // Execute the prepared statement
             if ($stmt->execute()) {
                 $successCount++;
+                // Generate and save the QR code
+                $qrCodePath = 'qr_codes/' . $identificationNumber . '.png'; // Make sure the qr_codes directory exists and is writable
+                QRcode::png($identificationNumber, $qrCodePath); // Generate QR code
             } else {
                 $errorCount++;
             }
