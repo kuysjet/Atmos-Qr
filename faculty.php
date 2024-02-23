@@ -159,7 +159,10 @@ $(document).ready(function() {
         orderable: false,
         className: 'dt-body-center',
       },
-      { "data": "ID" },
+      { "data": null, "render": function(data, type, row, meta) {
+          return meta.row + 1; // Add auto-increment number starting from 1
+        }
+      },
       { "data": "IdentificationNumber" },
       { "data": "FirstName" },
       { "data": "LastName" },

@@ -127,7 +127,10 @@ $(document).ready(function() {
   var table = $('#departmentTable').DataTable({
     "ajax": "crud_department.php",
     "columns": [
-      { "data": "ID" },
+      { "data": null, "render": function(data, type, row, meta) {
+          return meta.row + 1; // Add auto-increment number starting from 1
+        }
+      },
       { "data": "DepartmentName" },
       {
         "data": null,

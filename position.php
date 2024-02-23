@@ -127,7 +127,10 @@ $(document).ready(function() {
   var table = $('#positionTable').DataTable({
     "ajax": "crud_position.php",
     "columns": [
-      { "data": "ID" },
+      { "data": null, "render": function(data, type, row, meta) {
+          return meta.row + 1; // Add auto-increment number starting from 1
+        }
+      },
       { "data": "PositionName" },
       {
         "data": null,

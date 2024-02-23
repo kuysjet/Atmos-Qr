@@ -126,7 +126,10 @@ $(document).ready(function() {
   var table = $('#academicyearTable').DataTable({
     "ajax": "crud_academic_year.php",
     "columns": [
-      { "data": "ID" },
+      { "data": null, "render": function(data, type, row, meta) {
+          return meta.row + 1; // Add auto-increment number starting from 1
+        }
+      },
       { "data": "academic_year" },
       {
         "data": "status",
