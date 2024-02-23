@@ -131,6 +131,10 @@
   <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
   <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
   <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<!-- Enable downloading for qr code -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+<!-- Include html2canvas library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
   <!-- AdminLTE App -->
   <script src="dist/js/adminlte.min.js"></script>
 
@@ -454,15 +458,86 @@
 
 // Event listener for "View QR" button clicks
 $('#seniorhighStudentsTable').on('click', '.view-qr-btn', function() {
-  // Assuming that the IdentificationNumber is stored in a data attribute of the button
-  var identificationNumber = $(this).attr('data-id'); // Adjust this if the attribute storing the ID differs
+  // Retrieve the student's Identification Number from the button's data attribute
+  var identificationNumber = $(this).data('id');
 
-  // Update the path construction to use the identificationNumber
+  // Fetch the student's information from the table row
+  var firstName = $(this).closest('tr').find('td:nth-child(4)').text().trim();
+  var lastName = $(this).closest('tr').find('td:nth-child(5)').text().trim();
+
+  // Construct the QR code path using the student's Identification Number
   var qrCodePath = 'qr_codes/' + identificationNumber + '.png';
 
-  $('#qrCodeImage').attr('src', qrCodePath); // Set the src attribute of the image in the modal
-  $('#viewQrCodeModal').modal('show'); // Show the modal
+  // Set the src attribute of the QR code image in the modal
+  $('#qrCodeImage').attr('src', qrCodePath);
+
+  // Set the filename for downloading to the student's first name and last name
+  var filename = firstName + '_' + lastName + '_qr_code.png'; // Using student's first name and last name for filename
+  $('#downloadQR').attr('download', filename);
+
+  // Display the student's name inside the card
+  $('#studentName').text(firstName + ' ' + lastName);
+
+  // Show the modal
+  $('#viewQrCodeModal').modal('show');
 });
+
+
+
+// Function to download QR code and card from the modal
+function downloadQRCodeFromModal() {
+  // Get the QR code image element
+  var qrCodeImage = document.getElementById('qrCodeImage');
+
+  // Get the card element
+  var cardToDownload = document.getElementById('cardToDownload');
+
+  // Use html2canvas to capture both the QR code image and the card
+  html2canvas(cardToDownload).then(function(canvas) {
+    // Convert the canvas to a data URL
+    var dataURL = canvas.toDataURL('image/png');
+
+    // Create a new Blob object from the data URL
+    var blob = dataURLtoBlob(dataURL);
+
+    // Get the filename for downloading
+    var filename = $('#downloadQR').attr('download');
+
+    // Create a link element
+    var link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.download = filename;
+
+    // Append the link to the body and trigger the download
+    document.body.appendChild(link);
+    link.click();
+
+    // Remove the link from the body
+    document.body.removeChild(link);
+  });
+}
+
+// Attach click event listener to the download button in the modal
+document.getElementById('downloadQR').addEventListener('click', function() {
+  // Trigger downloadQRCodeFromModal function
+  downloadQRCodeFromModal();
+});
+
+// Function to convert data URL to Blob object
+function dataURLtoBlob(dataURL) {
+  var parts = dataURL.split(';base64,');
+  var contentType = parts[0].split(':')[1];
+  var raw = window.atob(parts[1]);
+  var rawLength = raw.length;
+  var uInt8Array = new Uint8Array(rawLength);
+
+  for (var i = 0; i < rawLength; ++i) {
+    uInt8Array[i] = raw.charCodeAt(i);
+  }
+
+  return new Blob([uInt8Array], { type: contentType });
+}
+
 
 
   });
@@ -799,25 +874,26 @@ $('#seniorhighStudentsTable').on('click', '.view-qr-btn', function() {
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body text-center">
+      <div class="modal-body text-center" id="modalBodyToDownload">
         <!-- Card with Background Image inside Modal Body with Medium Size -->
-        <div class="card" style="max-width: 50%; margin: auto;">
+        <div class="card" id="cardToDownload" style="max-width: 50%; margin: auto;">
           <img src="dist/img/Card.png" class="card-img" alt="Background Image">
           <div class="card-img-overlay d-flex flex-column justify-content-center align-items-center">
             <!-- Logo above the QR Code -->
             <img src="dist/img/aclc_complete_logo.png" alt="Logo" style="max-width: 36%; margin-bottom: 20px;">
             <!-- QR Code Image -->
-            <img id="qrCodeImage" src="YOUR_QR_CODE_IMAGE_URL" alt="QR Code" style="max-width: 60%;">
+            <img id="qrCodeImage" alt="QR Code" style="max-width: 60%;">
+            <!-- Student Name -->
+            <div id="studentName" class="mt-3"></div>
           </div>
         </div>
       </div>
       <div class="modal-footer">
+        <button type="button" class="btn btn-primary btn-sm" id="downloadQR"><i class="fas fa-download"></i> Download</button>
       </div>
     </div>
   </div>
 </div>
-
-
 
 
 

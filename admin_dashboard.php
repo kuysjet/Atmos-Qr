@@ -57,7 +57,7 @@
               <span class="info-box-icon bg-primary elevation-1"><i class="fas fa-users"></i></span>
 
               <div class="info-box-content">
-                <span class="info-box-text">Listed Audience</span>
+                <span class="info-box-text">Listed Registrants</span>
                 <span class="info-box-number">800</span>
               </div>
               <!-- /.info-box-content -->
