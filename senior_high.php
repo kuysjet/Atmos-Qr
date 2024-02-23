@@ -197,9 +197,24 @@
               columns: [2, 3, 4, 5, 6, 7, 8]
             }
           },
-            'excel',
-            'pdf',
-            'print'
+          {
+            extend: 'excel',
+            exportOptions: {
+              columns: [1, 2, 3, 4, 5, 6, 7, 8]
+            }
+          },
+          {
+            extend: 'pdf',
+            exportOptions: {
+              columns: [1, 2, 3, 4, 5, 6, 7, 8] 
+            }
+          },
+          {
+            extend: 'print',
+            exportOptions: {
+              columns: [1, 2, 3, 4, 5, 6, 7, 8]
+            }
+          },
           ]
         },
         {

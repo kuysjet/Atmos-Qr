@@ -195,9 +195,24 @@ $(document).ready(function() {
               columns: [2, 3, 4, 5, 6, 7] 
             }
           },
-          'excel',
-          'pdf',
-          'print'
+          {
+            extend: 'excel',
+            exportOptions: {
+              columns: [1, 2, 3, 4, 5, 6, 7]
+            }
+          },
+          {
+            extend: 'pdf',
+            exportOptions: {
+              columns: [1, 2, 3, 4, 5, 6, 7] 
+            }
+          },
+          {
+            extend: 'print',
+            exportOptions: {
+              columns: [1, 2, 3, 4, 5, 6, 7]
+            }
+          }
         ],
       },
       {
@@ -206,6 +221,7 @@ $(document).ready(function() {
         className: 'btn-sm',
       }
     ],
+    
   });
 
   $(document).tooltip();

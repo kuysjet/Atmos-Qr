@@ -191,12 +191,27 @@ $(document).ready(function() {
           {
             extend: 'csv',
             exportOptions: {
-              columns: [2, 3, 4, 5, 6, 7] // Include only columns 2 to 7 (excluding the checkbox column)
+              columns: [2, 3, 4, 5, 6, 7]
             }
           },
-          'excel',
-          'pdf',
-          'print'
+          {
+            extend: 'excel',
+            exportOptions: {
+              columns: [1, 2, 3, 4, 5, 6, 7]
+            }
+          },
+          {
+            extend: 'pdf',
+            exportOptions: {
+              columns: [1, 2, 3, 4, 5, 6, 7] 
+            }
+          },
+          {
+            extend: 'print',
+            exportOptions: {
+              columns: [1, 2, 3, 4, 5, 6, 7]
+            }
+          }
         ]
       },
       {
