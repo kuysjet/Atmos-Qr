@@ -39,15 +39,15 @@ elseif ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['identificationNumb
     $stmt->bind_param("sssssss", $identificationNumber, $firstName, $lastName, $email, $strand, $grade, $section);
     
     // Inside the section that handles adding a new student
-if ($stmt->execute()) {
-    // After successfully adding the student
-    $data = $identificationNumber; // Or any unique data
-    $qrCodePath = 'qr_codes/' . $identificationNumber . '.png';
-    QRcode::png($data, $qrCodePath);
+    if ($stmt->execute()) {
+        // After successfully adding the student
+        $data = $identificationNumber; // Or any unique data
+        $qrCodePath = 'qr_codes/' . $identificationNumber . '.png';
+        QRcode::png($data, $qrCodePath);
 
-    echo json_encode(array("status" => "success"));
-    http_response_code(200); // OK
-}
+        echo json_encode(array("status" => "success"));
+        http_response_code(200); // OK
+    }
 }
 
 // Update student
@@ -68,6 +68,7 @@ elseif ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editSeniorHighId']
     $stmt = $conn->prepare("UPDATE SeniorHighStudents SET IdentificationNumber=?, FirstName=?, LastName=?, Email=?, Strand=?, Grade=?, Section=? WHERE ID=?");
     $stmt->bind_param("sssssssi", $newIdentificationNumber, $_POST['editFirstName'], $_POST['editLastName'], $_POST['editEmail'], $_POST['editStrand'], $_POST['editGrade'], $_POST['editSection'], $studentId);
     
+    // Execute statement
     if ($stmt->execute()) {
         // Delete the old QR code if the identification number has changed
         if ($currentIdentificationNumber !== $newIdentificationNumber) {

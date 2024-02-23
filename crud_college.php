@@ -1,6 +1,7 @@
 <?php
 // Include database connection code
 include 'database/db.php';
+include 'phpqrcode/qrlib.php';
 
 // Fetch data from CollegeStudents table
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
@@ -35,32 +36,50 @@ elseif ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['identificationNumb
     // Bind parameters
     $stmt->bind_param("ssssss", $identificationNumber, $firstName, $lastName, $email, $course, $level);
     
-    // Execute statement
+    // Inside the section that handles adding a new student
     if ($stmt->execute()) {
+        // After successfully adding the student
+        $data = $identificationNumber; // Or any unique data
+        $qrCodePath = 'qr_codes/' . $identificationNumber . '.png';
+        QRcode::png($data, $qrCodePath);
+    
         echo json_encode(array("status" => "success"));
         http_response_code(200); // OK
-    } else {
-        echo json_encode(array("error" => "Failed to add college student"));
-        http_response_code(500); // Internal Server Error
     }
 }
 
 // Update student
 elseif ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editStudentId'])) {
     $studentId = $_POST['editStudentId'];
-    $identificationNumber = $_POST['editIdentificationNumber'];
-    $firstName = $_POST['editFirstName'];
-    $lastName = $_POST['editLastName'];
-    $email = $_POST['editEmail'];
-    $course = $_POST['editCourse'];
-    $level = $_POST['editLevel'];
+    $newIdentificationNumber = $_POST['editIdentificationNumber'];
+    
+    // Fetch the current identification number
+    $currentQuery = "SELECT IdentificationNumber FROM CollegeStudents WHERE ID = ?";
+    $currentStmt = $conn->prepare($currentQuery);
+    $currentStmt->bind_param("i", $studentId);
+    $currentStmt->execute();
+    $result = $currentStmt->get_result();
+    $currentData = $result->fetch_assoc();
+    $currentIdentificationNumber = $currentData['IdentificationNumber'];
 
-    // Prepare UPDATE statement
+    // Proceed with the update as before
     $stmt = $conn->prepare("UPDATE CollegeStudents SET IdentificationNumber=?, FirstName=?, LastName=?, Email=?, Course=?, Level=? WHERE ID=?");
-    $stmt->bind_param("ssssssi", $identificationNumber, $firstName, $lastName, $email, $course, $level, $studentId);
+    $stmt->bind_param("ssssssi", $newIdentificationNumber, $_POST['editFirstName'], $_POST['editLastName'], $_POST['editEmail'], $_POST['editCourse'], $_POST['editLevel'], $studentId);
 
     // Execute statement
     if ($stmt->execute()) {
+        // Delete the old QR code if the identification number has changed
+        if ($currentIdentificationNumber !== $newIdentificationNumber) {
+            $oldQrCodePath = 'qr_codes/' . $currentIdentificationNumber . '.png';
+            if (file_exists($oldQrCodePath)) {
+                unlink($oldQrCodePath); // Delete the old QR code file
+            }
+            
+            // Generate a new QR code with the new identification number
+            $newQrCodePath = 'qr_codes/' . $newIdentificationNumber . '.png';
+            QRcode::png($newIdentificationNumber, $newQrCodePath);
+        }
+
         echo json_encode(array("status" => "success"));
         http_response_code(200); // OK
     } else {
@@ -72,17 +91,37 @@ elseif ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editStudentId'])) 
 // Delete student
 elseif ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['student_id'])) {
     $student_id = $_POST['student_id'];
-    
-    // Prepare DELETE statement
-    $stmt = $conn->prepare("DELETE FROM CollegeStudents WHERE ID = ?");
-    $stmt->bind_param("i", $student_id);
 
-    if ($stmt->execute()) {
-        echo json_encode(array('status' => 'success', 'message' => 'Student deleted successfully'));
-        http_response_code(200); // OK
+    // Fetch the student's identification number before deletion
+    $fetchQuery = "SELECT IdentificationNumber FROM CollegeStudents WHERE ID = ?";
+    $fetchStmt = $conn->prepare($fetchQuery);
+    $fetchStmt->bind_param("i", $student_id);
+    $fetchStmt->execute();
+    $result = $fetchStmt->get_result();
+    if ($result->num_rows > 0) {
+        $student = $result->fetch_assoc();
+        $identificationNumber = $student['IdentificationNumber'];
+
+        // Proceed with the student deletion
+        $stmt = $conn->prepare("DELETE FROM CollegeStudents WHERE ID = ?");
+        $stmt->bind_param("i", $student_id);
+
+        if ($stmt->execute()) {
+            // After successful deletion, delete the QR code
+            $qrCodePath = 'qr_codes/' . $identificationNumber . '.png';
+            if (file_exists($qrCodePath)) {
+                unlink($qrCodePath); // Delete the QR code file
+            }
+
+            echo json_encode(array('status' => 'success', 'message' => 'Student deleted successfully'));
+            http_response_code(200); // OK
+        } else {
+            echo json_encode(array('error' => 'Failed to delete student'));
+            http_response_code(500); // Internal Server Error
+        }
     } else {
-        echo json_encode(array('error' => 'Failed to delete student'));
-        http_response_code(500); // Internal Server Error
+        echo json_encode(array('error' => 'Student not found'));
+        http_response_code(404); // Not Found
     }
 } 
 
@@ -91,26 +130,47 @@ elseif ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['bulkDelete'])) {
     $student_ids = $_POST['student_ids']; // Assume this is an array of student IDs
     
     if (is_array($student_ids)) {
+        // Fetch the identification numbers for all students to be deleted
         $placeholders = implode(',', array_fill(0, count($student_ids), '?'));
-        $stmt = $conn->prepare("DELETE FROM CollegeStudents WHERE ID IN ($placeholders)");
+        $idQuery = "SELECT IdentificationNumber FROM CollegeStudents WHERE ID IN ($placeholders)";
+        $idStmt = $conn->prepare($idQuery);
         
-        // Dynamically bind parameters
-        $stmt->bind_param(str_repeat('i', count($student_ids)), ...$student_ids);
+        // Dynamically bind parameters for student IDs
+        $idStmt->bind_param(str_repeat('i', count($student_ids)), ...$student_ids);
+        $idStmt->execute();
+        $result = $idStmt->get_result();
+        $identificationNumbers = [];
+        while ($row = $result->fetch_assoc()) {
+            $identificationNumbers[] = $row['IdentificationNumber'];
+        }
+        $idStmt->close();
         
-        if ($stmt->execute()) {
-            echo json_encode(array('status' => 'success', 'message' => 'Students deleted successfully'));
+        // Proceed with deleting the students from the database
+        $deleteStmt = $conn->prepare("DELETE FROM CollegeStudents WHERE ID IN ($placeholders)");
+        
+        // Dynamically bind parameters for student IDs again
+        $deleteStmt->bind_param(str_repeat('i', count($student_ids)), ...$student_ids);
+        
+        if ($deleteStmt->execute()) {
+            // Delete QR codes for each student
+            foreach ($identificationNumbers as $idNum) {
+                $qrCodePath = 'qr_codes/' . $idNum . '.png';
+                if (file_exists($qrCodePath)) {
+                    unlink($qrCodePath); // Delete the QR code file
+                }
+            }
+            
+            echo json_encode(array('status' => 'success', 'message' => 'Students and their QR codes deleted successfully'));
             http_response_code(200); // OK
         } else {
             echo json_encode(array('error' => 'Failed to delete students'));
             http_response_code(500); // Internal Server Error
         }
+        $deleteStmt->close();
     } else {
         echo json_encode(array('error' => 'Invalid student IDs'));
         http_response_code(400); // Bad Request
     }
-} else {
-    echo json_encode(array('error' => 'Invalid request'));
-    http_response_code(400); // Bad Request
 }
 
 
