@@ -44,6 +44,13 @@
         opacity: 0;
       } 
     }     
+
+    /* Custom CSS to adjust the size of SweetAlert dialog */
+    .swal2-popup {
+        font-size: 0.8rem; /* Adjust font size */
+        width: 20rem; /* Adjust width */
+    }
+
   </style>
 </head>
 <body>
@@ -306,7 +313,10 @@ function playSuccessSound() {
             title: 'Error',
             text: message,
             confirmButtonColor: '#3085d6',
-            confirmButtonText: 'OK'
+            confirmButtonText: 'OK',
+            customClass: {
+            popup: 'small-swal' // Apply custom class for styling
+        },
         });
 
         // Play error sound

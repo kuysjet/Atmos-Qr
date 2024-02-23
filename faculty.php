@@ -354,6 +354,9 @@ $('#importFacultyCsvForm').on('submit', function(e) {
       cancelButtonColor: "#3085d6",
       confirmButtonText: "Yes, delete it!",
       cancelButtonText: "No, cancel",
+      customClass: {
+            popup: 'small-swal' // Apply custom class for styling
+        },
     }).then((result) => {
       if (result.isConfirmed) {
         // User confirmed deletion, proceed with AJAX request

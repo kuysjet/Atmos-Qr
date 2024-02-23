@@ -254,7 +254,10 @@ $(document).ready(function() {
       showCancelButton: true,
       confirmButtonColor: "#d9534f",
       cancelButtonColor: "#3085d6",
-      confirmButtonText: "Yes, delete it!"
+      confirmButtonText: "Yes, delete it!",
+      customClass: {
+            popup: 'small-swal' // Apply custom class for styling
+        }
     }).then((result) => {
       if (result.isConfirmed) {
         // User confirmed deletion, proceed with AJAX request

@@ -58,4 +58,10 @@ window.onload = function() {
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
 
-
+  <style>
+    /* Custom CSS to adjust the size of SweetAlert dialog */
+.swal2-popup {
+    font-size: 0.8rem; /* Adjust font size */
+    width: 20rem; /* Adjust width */
+}
+  </style>

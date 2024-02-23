@@ -176,7 +176,10 @@ document.addEventListener('DOMContentLoaded', function () {
           title: 'User not found',
           text: 'Please check your username and try again.',
           confirmButtonColor: '#3085d6',
-          confirmButtonText: 'OK'
+          confirmButtonText: 'OK',
+          customClass: {
+            popup: 'small-swal' // Apply custom class for styling
+        }
         });
       }
     });
