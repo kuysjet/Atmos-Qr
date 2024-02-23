@@ -189,19 +189,23 @@ $(document).ready(function() {
         text: '<i class="fas fa-file-export"></i>',
         className: 'btn-sm btn-dark',
         buttons: [
-          'copy',
-          'csv',
+          {
+            extend: 'csv',
+            exportOptions: {
+              columns: [2, 3, 4, 5, 6, 7] 
+            }
+          },
           'excel',
           'pdf',
           'print'
-        ]
+        ],
       },
       {
         extend: 'colvis',
         text: '<i class="fas fa-eye"></i>',
         className: 'btn-sm',
       }
-    ]
+    ],
   });
 
   $(document).tooltip();

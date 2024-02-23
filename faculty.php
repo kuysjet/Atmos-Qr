@@ -69,8 +69,8 @@
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Email Address</th>
-                    <th>Course</th>
-                    <th>Level</th>
+                    <th>Department</th>
+                    <th>Position</th>
                     <th>Action</th>
                   </tr>
                   </thead>
@@ -84,8 +84,8 @@
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Email Address</th>
-                    <th>Course</th>
-                    <th>Level</th>
+                    <th>Department</th>
+                    <th>Position</th>
                     <th>Action</th>
                   </tr>
                   </tfoot>
@@ -188,8 +188,12 @@ $(document).ready(function() {
         text: '<i class="fas fa-file-export"></i>',
         className: 'btn-sm btn-dark',
         buttons: [
-          'copy',
-          'csv',
+          {
+            extend: 'csv',
+            exportOptions: {
+              columns: [2, 3, 4, 5, 6, 7] // Include only columns 2 to 7 (excluding the checkbox column)
+            }
+          },
           'excel',
           'pdf',
           'print'

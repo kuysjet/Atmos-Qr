@@ -191,8 +191,12 @@
           text: '<i class="fas fa-file-export"></i>',
           className: 'btn-sm btn-dark',
           buttons: [
-            'copy',
-            'csv',
+            {
+            extend: 'csv',
+            exportOptions: {
+              columns: [2, 3, 4, 5, 6, 7, 8]
+            }
+          },
             'excel',
             'pdf',
             'print'
