@@ -40,13 +40,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['academic_year'])) {
     // Extract form data
     $academicYear = $_POST['academic_year'];
 
-    // Call addAcademicYear function to insert data
-    if (addAcademicYear($conn, $academicYear)) {
-        // Insertion successful
-        $response = array("status" => "success");
+    // Check for duplicate entry
+    $duplicateCheckQuery = "SELECT COUNT(*) FROM academic_years WHERE academic_year = ?";
+    $stmtDuplicateCheck = $conn->prepare($duplicateCheckQuery);
+    $stmtDuplicateCheck->bind_param("s", $academicYear);
+    $stmtDuplicateCheck->execute();
+    $stmtDuplicateCheck->bind_result($duplicateCount);
+    $stmtDuplicateCheck->fetch();
+    $stmtDuplicateCheck->close();
+
+    if ($duplicateCount > 0) {
+        // Return JSON response indicating duplicate entry
+        $response = array("status" => "error", "message" => "duplicate");
     } else {
-        // Insertion failed
-        $response = array("status" => "error");
+        // Continue with the insertion
+        if (addAcademicYear($conn, $academicYear)) {
+            // Insertion successful
+            $response = array("status" => "success");
+        } else {
+            // Insertion failed
+            $response = array("status" => "error");
+        }
     }
 
     // Return JSON response

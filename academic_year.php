@@ -184,6 +184,9 @@ $(document).ready(function() {
           $('#addAcademicYearModal').modal('hide');
           // Show success message using SweetAlert
           Swal.fire("Success", "New academic year added successfully!", "success");
+        } else if (response.status === 'error' && response.message === 'duplicate') {
+          // Show duplicate entry message using SweetAlert
+          Swal.fire("Error", "Academic year already exists. Please choose a different year.", "error");
         } else {
           // Show error message using SweetAlert
           Swal.fire("Error", "Failed to add academic year", "error");
