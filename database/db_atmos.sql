@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 22, 2024 at 12:52 AM
+-- Generation Time: Feb 24, 2024 at 03:31 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -40,7 +40,7 @@ CREATE TABLE `academic_years` (
 --
 
 INSERT INTO `academic_years` (`id`, `academic_year`, `status`, `created_at`, `updated_at`) VALUES
-(14, '2024-2025', 'active', '2024-02-18 16:54:21', '2024-02-21 09:26:05');
+(50, '2024-2025', 'active', '2024-02-24 02:25:12', '2024-02-24 02:25:12');
 
 -- --------------------------------------------------------
 
@@ -60,25 +60,6 @@ CREATE TABLE `collegestudents` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `collegestudents`
---
-
-INSERT INTO `collegestudents` (`ID`, `IdentificationNumber`, `FirstName`, `LastName`, `Email`, `Course`, `Level`, `created_at`, `updated_at`) VALUES
-(1, '20002849500', 'Jetro', 'Bagasala', 'jet@gmail.com', 'BSCS', '2', '2024-02-16 10:42:21', '2024-02-21 01:57:42'),
-(2, '20000wrew', 'KuysJet', 'Dalisay', 'sco@gmail.com', 'BSCS', '2', '2024-02-16 10:45:42', '2024-02-16 10:45:42'),
-(4, '300', 'Anica', 'Ross', 'ani@gmail.com', 'ENTREP', '3', '2024-02-16 11:06:17', '2024-02-16 11:06:17'),
-(6, '22212', 'Cardo', 'Dalisay', 'xad@gmail', 'ENTREP', '1', '2024-02-16 11:14:18', '2024-02-16 15:13:56'),
-(7, 'aaa', 'jet', 'aa', 'admin@mail.com', 'ACT', '1', '2024-02-16 11:31:08', '2024-02-20 02:20:10'),
-(9, 'dfsf', 'maria', 'labo', 'sdf@gmail', 'BSCS', '3', '2024-02-16 12:52:51', '2024-02-20 08:56:07'),
-(73, '12121212', 'haadf', 'dfhhgjh', 'asd@swsw', 'BSCS', '2', '2024-02-20 15:45:14', '2024-02-20 15:45:14'),
-(78, '98989898', 'Jetetet', 'Babababa', 'wew@dsd', 'BSCS', '3', '2024-02-21 01:32:13', '2024-02-21 01:32:13'),
-(80, '7789678', 'Jetrsdfo', 'Bagassdfala', 'jet@gmsdail.com', 'BSCS', '2', '2024-02-21 01:38:33', '2024-02-21 01:38:33'),
-(81, '744789678', 'ddff', 'dddfdf', 'jet@gmsdrrail.com', 'ACT', '2', '2024-02-21 01:38:33', '2024-02-21 01:38:33'),
-(82, '1000229999', 'Vhong ', 'Navarro', 'navarro@gmail.com', 'ACT', '2', '2024-02-21 05:44:47', '2024-02-21 05:44:47'),
-(83, '200003004999', 'Anne', 'Curtis', 'anne@gmail.com', 'ENTREP', '2', '2024-02-21 05:45:40', '2024-02-21 05:45:40'),
-(84, '444444', 'fgdfgdf', 'dfgdfg', 'jhlhjk@fhjgh', 'BSCS', '2', '2024-02-21 13:20:16', '2024-02-21 13:20:16');
-
 -- --------------------------------------------------------
 
 --
@@ -97,9 +78,9 @@ CREATE TABLE `departments` (
 --
 
 INSERT INTO `departments` (`ID`, `DepartmentName`, `created_at`, `updated_at`) VALUES
-(1, 'College Department', '2024-02-17 01:45:03', '2024-02-17 02:06:18'),
-(2, 'Senior High Department', '2024-02-17 01:55:34', '2024-02-17 01:55:34'),
-(13, 'Technical Department', '2024-02-18 18:21:40', '2024-02-18 18:25:10');
+(14, 'College Department', '2024-02-22 00:16:36', '2024-02-22 00:19:50'),
+(15, 'Senior High Department', '2024-02-22 00:16:47', '2024-02-22 00:20:02'),
+(16, 'Technical Department', '2024-02-22 00:20:28', '2024-02-22 00:20:28');
 
 -- --------------------------------------------------------
 
@@ -152,16 +133,6 @@ CREATE TABLE `faculties` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `faculties`
---
-
-INSERT INTO `faculties` (`ID`, `IdentificationNumber`, `FirstName`, `LastName`, `Email`, `DepartmentID`, `PositionID`, `created_at`, `updated_at`) VALUES
-(1, '200', 'Jetro', 'Bagasala', 'jet@hshshs', 1, 1, '2024-02-17 03:37:44', '2024-02-17 11:31:00'),
-(13, 'wq3we', 'qwe', 'qwe', 'qwe@wedfws', 2, 1, '2024-02-18 18:01:05', '2024-02-18 18:01:05'),
-(18, '30000001', 'Jetro', 'Bagasala', 'jet@gmail.comms', 1, 1, '2024-02-21 06:03:48', '2024-02-21 06:03:48'),
-(19, '2000003', 'amma', 'adada', 'anan@anann', 2, 1, '2024-02-21 06:03:48', '2024-02-21 06:03:48');
 
 -- --------------------------------------------------------
 
@@ -218,15 +189,6 @@ CREATE TABLE `seniorhighstudents` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `seniorhighstudents`
---
-
-INSERT INTO `seniorhighstudents` (`ID`, `IdentificationNumber`, `FirstName`, `LastName`, `Email`, `Strand`, `Grade`, `Section`, `created_at`, `updated_at`) VALUES
-(53, '123456', 'cardo', 'edfdef', 'cardo@gmail.com', 'GAS', 'grade_11', 'C', '2024-02-21 16:25:17', '2024-02-21 16:25:17'),
-(54, '654321', 'manuel', 'sdfs', 'manuel@gmail.com', 'GAS', 'grade_12', 'C', '2024-02-21 16:25:17', '2024-02-21 16:25:17'),
-(55, '789098', 'ced', 'sdf', 'ced@gmail.com', 'ABM', 'grade_12', 'B', '2024-02-21 16:25:17', '2024-02-21 16:25:17');
-
 -- --------------------------------------------------------
 
 --
@@ -250,7 +212,8 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `firstname`, `lastname`, `username`, `password`, `user_type_id`, `created_at`, `updated_at`) VALUES
 (1, 'Jetro', 'Bagasala', 'Admin', 'Admin123', 1, '2024-02-14 06:53:14', NULL),
-(2, 'Cedrick', 'Embestro', 'Registrar', 'Registrar123', 2, '2024-02-14 06:54:55', NULL);
+(2, 'Cedrick', 'Embestro', 'Registrar', 'Registrar123', 2, '2024-02-14 06:54:55', NULL),
+(3, 'Cardo', 'Dalisay', 'Cardo', 'Dalisay', 1, '2024-02-23 17:10:50', '2024-02-23 17:10:50');
 
 -- --------------------------------------------------------
 
@@ -281,7 +244,8 @@ INSERT INTO `user_types` (`id`, `name`, `created_at`, `updated_at`) VALUES
 -- Indexes for table `academic_years`
 --
 ALTER TABLE `academic_years`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `academic_year` (`academic_year`);
 
 --
 -- Indexes for table `collegestudents`
@@ -366,19 +330,19 @@ ALTER TABLE `user_types`
 -- AUTO_INCREMENT for table `academic_years`
 --
 ALTER TABLE `academic_years`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- AUTO_INCREMENT for table `collegestudents`
 --
 ALTER TABLE `collegestudents`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=85;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=111;
 
 --
 -- AUTO_INCREMENT for table `departments`
 --
 ALTER TABLE `departments`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `events`
@@ -396,7 +360,7 @@ ALTER TABLE `event_attendees`
 -- AUTO_INCREMENT for table `faculties`
 --
 ALTER TABLE `faculties`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- AUTO_INCREMENT for table `positions`
@@ -414,13 +378,13 @@ ALTER TABLE `registrars`
 -- AUTO_INCREMENT for table `seniorhighstudents`
 --
 ALTER TABLE `seniorhighstudents`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=56;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=86;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `user_types`
