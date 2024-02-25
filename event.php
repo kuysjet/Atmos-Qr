@@ -47,7 +47,7 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="example1" class="display table table-bordered">
+                <table id="eventsTable" class="display table table-bordered">
                   <thead>
                   <tr>
                     <th>#</th>
@@ -58,7 +58,7 @@
                     <th>Start DateTime</th>
                     <th>End DateTime</th>
                     <th>Respondent</th>
-                    <th>Assigned Officer</th>
+                    <th>Assigned Registrar</th>
                     <th></th>
                   </tr>
                   </thead>
@@ -107,7 +107,7 @@
 
 <script>
 $(function () {
-  $("#example1").DataTable({
+  $("#eventsTable").DataTable({
     "responsive": true,
     "lengthChange": false, 
     "autoWidth": false,
@@ -120,7 +120,7 @@ $(function () {
         className: 'btn-sm',
       }
     ],
-  }).buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+  }).buttons().container().appendTo('#eventsTable_wrapper .col-md-6:eq(0)');
 });
 </script>
 

@@ -287,8 +287,12 @@ $(document).ready(function() {
       }
     });
   });
+
+
 });
 </script>
+
+
 
 
 <!-- Add Academic Year Modal -->
@@ -306,6 +310,7 @@ $(document).ready(function() {
           <div class="form-group">
             <label for="academic_year">Academic Year</label>
             <select class="form-control" id="academic_year" name="academic_year" required>
+              <option value="">Select Academic Year</option>
               <?php
               // Get the current year
               $currentYear = date("Y");
@@ -326,12 +331,37 @@ $(document).ready(function() {
               ?>
             </select>
           </div>
-          <button type="submit" class="btn btn-primary btn-sm">Add Academic Year</button>
-        </form>
       </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary btn-sm" id="addAcademicYearBtn" disabled>Add Academic Year</button>
+      </div>
+      </form>
     </div>
   </div>
 </div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    // Get references to the select element and the button
+    var selectElement = document.getElementById("academic_year");
+    var addButton = document.getElementById("addAcademicYearBtn");
+    
+    // Add event listener to the select element
+    selectElement.addEventListener("change", function() {
+      // Enable/disable the button based on the selected value
+      addButton.disabled = selectElement.value === "";
+    });
+    
+    // Add event listener to the form submission event
+    var form = document.getElementById("addAcademicYearForm");
+    form.addEventListener("submit", function() {
+      // Disable the button upon form submission
+      addButton.disabled = true;
+    });
+  });
+</script>
+
+
 
 
 

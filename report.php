@@ -101,7 +101,7 @@
                     </div>
                   </div>
                 </div>
-                <table id="example1" class="display table table-bordered">
+                <table id="reportTable" class="display table table-bordered">
                   <thead>
                   <tr>
                     <th>#</th>
@@ -224,7 +224,7 @@
 
 <script>
 $(function () {
-    const table = $("#example1").DataTable({
+    const table = $("#reportTable").DataTable({
         "responsive": true,
         "lengthChange": false,
         "autoWidth": false,
@@ -245,7 +245,7 @@ $(function () {
         ]
     });
 
-    table.buttons().container().appendTo('#example1_wrapper .col-md-6:eq(0)');
+    table.buttons().container().appendTo('#reportTable_wrapper .col-md-6:eq(0)');
 
     // Create chart
     const chart = Highcharts.chart('demo-output', {
