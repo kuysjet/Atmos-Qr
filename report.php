@@ -178,20 +178,6 @@
                     <td></td>
                   </tr>
                   </tbody>
-                  <tfoot>
-                  <tr>
-                    <th>#</th>
-                    <th>Name</th>
-                    <th>Course</th>
-                    <th>Level</th>
-                    <th>Strand</th>
-                    <th>Grade</th>
-                    <th>Section</th>
-                    <th>Position</th>
-                    <th>Time In</th>
-                    <th>Time Out</th>
-                  </tr>
-                  </tfoot>
                 </table>
               </div>
               <!-- /.card-body -->

@@ -64,14 +64,6 @@
                   </thead>
                   <tbody>
                   </tbody>
-                  <tfoot>
-                  <tr>
-                    <th>No.</th>
-                    <th>Academic Year</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                  </tr>
-                  </tfoot>
                 </table>
               </div>
               <!-- /.card-body -->
@@ -334,7 +326,7 @@ $(document).ready(function() {
               ?>
             </select>
           </div>
-          <button type="submit" class="btn btn-primary">Add Academic Year</button>
+          <button type="submit" class="btn btn-primary btn-sm">Add Academic Year</button>
         </form>
       </div>
     </div>

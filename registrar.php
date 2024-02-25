@@ -64,15 +64,6 @@
                   </thead>
                   <tbody>
                   </tbody>
-                  <tfoot>
-                  <tr>
-                    <th>No.</th>
-                    <th>First Name</th>
-                    <th>Last Name</th>
-                    <th>Email Address</th>
-                    <th>Action</th>
-                  </tr>
-                  </tfoot>
                 </table>
               </div>
               <!-- /.card-body -->

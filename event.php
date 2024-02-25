@@ -63,33 +63,7 @@
                   </tr>
                   </thead>
                   <tbody>
-                  <!-- <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr> -->
                   </tbody>
-                  <tfoot>
-                  <tr>
-                    <th>#</th>
-                    <th>Academic Year</th>
-                    <th>Event Name</th>
-                    <th>Venue</th>
-                    <th>Description</th>
-                    <th>Start DateTime</th>
-                    <th>End DateTime</th>
-                    <th>Respondent</th>
-                    <th>Assigned Officer</th>
-                    <th></th>
-                  </tr>
-                  </tfoot>
                 </table>
               </div>
               <!-- /.card-body -->

@@ -63,13 +63,6 @@
                   </thead>
                   <tbody>
                   </tbody>
-                  <tfoot>
-                  <tr>
-                    <th>No.</th>
-                    <th>Position</th>
-                    <th>Action</th>
-                  </tr>
-                  </tfoot>
                 </table>
               </div>
               <!-- /.card-body -->
