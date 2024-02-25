@@ -55,35 +55,22 @@
                 <table id="example1" class="display table table-bordered">
                   <thead>
                   <tr>
-                    <th>#</th>
+                    <th>No.</th>
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Email Address</th>
-                    <th>User Name</th>
-                    <th>Password</th>
-                    <th></th>
+                    <th>Action</th>
                   </tr>
                   </thead>
                   <tbody>
-                  <!-- <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                  </tr> -->
                   </tbody>
                   <tfoot>
                   <tr>
-                    <th>#</th>
+                    <th>No.</th>
                     <th>First Name</th>
                     <th>Last Name</th>
                     <th>Email Address</th>
-                    <th>User Name</th>
-                    <th>Password</th>
-                    <th></th>
+                    <th>Action</th>
                   </tr>
                   </tfoot>
                 </table>

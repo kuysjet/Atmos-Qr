@@ -162,11 +162,6 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
 
-    // JavaScript to toggle loading class
-function toggleLoader() {
-    var loaderWrapper = document.getElementById("loader-wrapper");
-    loaderWrapper.classList.toggle("loading");
-}
 
 </script>
 

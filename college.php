@@ -675,7 +675,7 @@ function dataURLtoBlob(dataURL) {
               </div>
             </div>
           </div>
-          <button type="submit" class="btn btn-primary">Submit</button>
+          <button type="submit" class="btn btn-primary btn-sm">Submit</button>
         </form>
       </div>
     </div>
@@ -789,7 +789,7 @@ function dataURLtoBlob(dataURL) {
           </div>
           </div>
           </div>
-          <button type="submit" class="btn btn-primary">Save Changes</button>
+          <button type="submit" class="btn btn-primary btn-sm">Save Changes</button>
         </form>
       </div>
     </div>
@@ -802,7 +802,7 @@ function dataURLtoBlob(dataURL) {
 <div class="modal fade" id="importCsvModal" tabindex="-1" role="dialog" aria-labelledby="importCsvModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
-      <div class="modal-header bg-primary">
+      <div class="modal-header bg-success">
         <h5 class="modal-title" id="importCsvModalLabel">Import CSV File</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -814,7 +814,7 @@ function dataURLtoBlob(dataURL) {
             <label for="csvFile">Choose CSV File</label>
             <input type="file" class="form-control-file" id="csvFile" name="csvFile" accept=".csv" required>
           </div>
-          <button type="submit" class="btn btn-primary">Import</button>
+          <button type="submit" class="btn btn-primary btn-sm">Import</button>
         </form>
       </div>
     </div>
@@ -839,11 +839,11 @@ function dataURLtoBlob(dataURL) {
           <img src="dist/img/Card.png" class="card-img" alt="Background Image">
           <div class="card-img-overlay d-flex flex-column justify-content-center align-items-center">
             <!-- Logo above the QR Code -->
-            <img src="dist/img/aclc_complete_logo.png" alt="Logo" style="max-width: 36%; margin-bottom: 20px;">
+            <img src="dist/img/aclc_complete_logo.png" alt="Logo" style="max-width: 50%;">
             <!-- QR Code Image -->
-            <img id="qrCodeImage" alt="QR Code" style="max-width: 60%;">
+            <img id="qrCodeImage" alt="QR Code" style="width: 150px; height: 150px;">
             <!-- Student Name -->
-            <div id="studentName" class="mt-3"></div>
+            <div id="studentName" class="font-weight-bold" style="font-size: small;"></div>
           </div>
         </div>
       </div>
