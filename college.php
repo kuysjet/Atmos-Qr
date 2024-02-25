@@ -662,8 +662,10 @@ function dataURLtoBlob(dataURL) {
               </div>
             </div>
           </div>
-          <button type="submit" class="btn btn-primary btn-sm">Submit</button>
         </form>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary btn-sm" form="addCollegeForm">Submit</button>
       </div>
     </div>
   </div>
@@ -776,8 +778,10 @@ function dataURLtoBlob(dataURL) {
           </div>
           </div>
           </div>
-          <button type="submit" class="btn btn-primary btn-sm">Save Changes</button>
         </form>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary btn-sm" form="editStudentForm">Save Changes</button>
       </div>
     </div>
   </div>
@@ -801,8 +805,10 @@ function dataURLtoBlob(dataURL) {
             <label for="csvFile">Choose CSV File</label>
             <input type="file" class="form-control-file" id="csvFile" name="csvFile" accept=".csv" required>
           </div>
-          <button type="submit" class="btn btn-primary btn-sm">Import</button>
         </form>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary btn-sm" form="importCsvForm">Import</button>
       </div>
     </div>
   </div>

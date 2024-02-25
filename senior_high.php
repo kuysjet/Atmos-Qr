@@ -695,8 +695,10 @@ function dataURLtoBlob(dataURL) {
             </div>
             </div>
             </div>
-            <button type="submit" class="btn btn-primary btn-sm">Submit</button>
           </form>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary btn-sm" form="addSeniorHighForm">Submit</button>
         </div>
       </div>
     </div>
@@ -844,8 +846,10 @@ function dataURLtoBlob(dataURL) {
             </div>
             </div>
             </div>
-            <button type="submit" class="btn btn-primary btn-sm">Save Changes</button>
           </form>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-primary btn-sm" form="editSeniorHighForm">Save Changes</button>
         </div>
       </div>
     </div>
@@ -854,26 +858,30 @@ function dataURLtoBlob(dataURL) {
 
   <!-- Import CSV Modal -->
   <div class="modal fade" id="importSeniorHighCsvModal" tabindex="-1" role="dialog" aria-labelledby="importSeniorHighCsvModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
-      <div class="modal-content">
-        <div class="modal-header bg-success">
-          <h5 class="modal-title" id="importSeniorHighCsvModalLabel">Import CSV File</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-          <form id="importSeniorHighCsvForm" enctype="multipart/form-data">
-            <div class="form-group">
-              <label for="csvFile">Choose CSV File</label>
-              <input type="file" class="form-control-file" id="csvFile" name="csvFile" accept=".csv" required>
-            </div>
-            <button type="submit" class="btn btn-primary btn-sm">Import</button>
-          </form>
-        </div>
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-success">
+        <h5 class="modal-title" id="importSeniorHighCsvModalLabel">Import CSV File</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <form id="importSeniorHighCsvForm" enctype="multipart/form-data">
+          <div class="form-group">
+            <label for="csvFile">Choose CSV File</label>
+            <input type="file" class="form-control-file" id="csvFile" name="csvFile" accept=".csv" required>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary btn-sm" form="importSeniorHighCsvForm">Import</button>
       </div>
     </div>
   </div>
+</div>
+  
+
 
 <!-- View QR Code Modal -->
 <div class="modal fade" id="viewQrCodeModal" tabindex="-1" aria-labelledby="viewQrCodeModalLabel" aria-hidden="true">

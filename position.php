@@ -285,8 +285,10 @@ $(document).ready(function() {
             <label for="position">Position Name</label>
             <input type="text" class="form-control" id="position" name="position" required autocomplete="off">
           </div>
-          <button type="submit" class="btn btn-primary">Submit</button>
         </form>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary btn-sm" form="addPositionForm">Submit</button>
       </div>
     </div>
   </div>
@@ -310,8 +312,10 @@ $(document).ready(function() {
             <label for="editPositionName">Position</label>
             <input type="text" class="form-control" id="editPositionName" name="editPositionName" required>
           </div>
-          <button type="submit" class="btn btn-primary">Save Changes</button>
         </form>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary btn-sm" form="editPositionForm">Save Changes</button>
       </div>
     </div>
   </div>

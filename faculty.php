@@ -47,10 +47,10 @@
               </div>
               <div class="card-header m-0">
                 <button type="button" class="btn btn-info float-end btn-sm" data-toggle="modal" data-target="#addFacultyModal">
-                  <i class="fas fa-plus"></i> Add New
+                  <i class="fas fa-user-plus"></i> Add New
                 </button>
                 <button type="button" class="btn btn-success float-end btn-sm" data-toggle="modal" data-target="#importFacultyCsvModal">
-                    <i class="fas fa-file-import"></i> Import CSV
+                  <i class="fas fa-file-import"></i> Import CSV
                 </button>
               </div>
               <!-- /.card-header -->
@@ -650,8 +650,10 @@ function dataURLtoBlob(dataURL) {
           </div>
           </div>
           </div>
-          <button type="submit" class="btn btn-primary btn-sm">Submit</button>
         </form>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary btn-sm" form="addFacultyForm">Submit</button>
       </div>
     </div>
   </div>
@@ -749,8 +751,10 @@ function dataURLtoBlob(dataURL) {
           </div>
           </div>
           </div>
-          <button type="submit" class="btn btn-primary btn-sm">Save Changes</button>
         </form>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary btn-sm" form="editFacultyForm">Submit</button>
       </div>
     </div>
   </div>
@@ -773,8 +777,10 @@ function dataURLtoBlob(dataURL) {
             <label for="csvFile">Choose CSV File</label>
             <input type="file" class="form-control-file" id="csvFile" name="csvFile" accept=".csv" required>
           </div>
-          <button type="submit" class="btn btn-primary btn-sm">Import</button>
         </form>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary btn-sm" form="importFacultyCsvForm">Import</button>
       </div>
     </div>
   </div>

@@ -285,12 +285,15 @@ $(document).ready(function() {
             <label for="department">Department Name</label>
             <input type="text" class="form-control" id="department" name="department" required autocomplete="off">
           </div>
-          <button type="submit" class="btn btn-primary">Submit</button>
         </form>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary btn-sm" form="addDepartmentForm">Submit</button>
       </div>
     </div>
   </div>
 </div>
+
 
 
 <!-- Add Edit Department Modal -->
@@ -310,12 +313,15 @@ $(document).ready(function() {
             <label for="editDepartmentName">Department</label>
             <input type="text" class="form-control" id="editDepartmentName" name="editDepartmentName" required>
           </div>
-          <button type="submit" class="btn btn-primary">Save Changes</button>
         </form>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary btn-sm" form="editDepartmentForm">Save Changes</button>
       </div>
     </div>
   </div>
 </div>
+
 
 
 </body>
