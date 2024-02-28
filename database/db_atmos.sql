@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 24, 2024 at 03:31 AM
+-- Generation Time: Feb 28, 2024 at 09:48 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -40,7 +40,7 @@ CREATE TABLE `academic_years` (
 --
 
 INSERT INTO `academic_years` (`id`, `academic_year`, `status`, `created_at`, `updated_at`) VALUES
-(50, '2024-2025', 'active', '2024-02-24 02:25:12', '2024-02-24 02:25:12');
+(86, '2024-2025', 'active', '2024-02-25 17:57:48', '2024-02-28 20:26:45');
 
 -- --------------------------------------------------------
 
@@ -167,8 +167,19 @@ CREATE TABLE `registrars` (
   `lastName` varchar(255) NOT NULL,
   `emailAddress` varchar(255) NOT NULL,
   `userName` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL
+  `password` varchar(255) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `registrars`
+--
+
+INSERT INTO `registrars` (`id`, `firstName`, `lastName`, `emailAddress`, `userName`, `password`, `created_at`, `updated_at`) VALUES
+(1, 'Cardo', 'Dalisay', 'cardo@gmakjfd.df', 'Cardo', 'Cardo123', '2024-02-26 02:21:19', '2024-02-26 02:21:19'),
+(9, 'KuysJet', 'Dalisay', 'jethgen.26@gmail.com', 'kuysjet', 'dsadada', '2024-02-26 14:21:21', '2024-02-26 14:21:21'),
+(11, 'asdasd', 'Dalisay', 'asda@yjtyj', 'kuysjetd', 'dfsdfsdf', '2024-02-26 14:21:37', '2024-02-26 14:21:37');
 
 -- --------------------------------------------------------
 
@@ -189,6 +200,13 @@ CREATE TABLE `seniorhighstudents` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `seniorhighstudents`
+--
+
+INSERT INTO `seniorhighstudents` (`ID`, `IdentificationNumber`, `FirstName`, `LastName`, `Email`, `Strand`, `Grade`, `Section`, `created_at`, `updated_at`) VALUES
+(123, 'grg', 'sdfsd', 'sdfs', 'dfsdf@wef', 'ABM', 'grade_11', 'B', '2024-02-28 20:46:47', '2024-02-28 20:46:47');
+
 -- --------------------------------------------------------
 
 --
@@ -199,21 +217,25 @@ CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `firstname` varchar(255) NOT NULL,
   `lastname` varchar(255) NOT NULL,
+  `email` varchar(100) NOT NULL,
   `username` varchar(255) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `user_type_id` int(11) DEFAULT NULL,
+  `status` enum('active','inactive') NOT NULL,
+  `user_type_id` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `firstname`, `lastname`, `username`, `password`, `user_type_id`, `created_at`, `updated_at`) VALUES
-(1, 'Jetro', 'Bagasala', 'Admin', 'Admin123', 1, '2024-02-14 06:53:14', NULL),
-(2, 'Cedrick', 'Embestro', 'Registrar', 'Registrar123', 2, '2024-02-14 06:54:55', NULL),
-(3, 'Cardo', 'Dalisay', 'Cardo', 'Dalisay', 1, '2024-02-23 17:10:50', '2024-02-23 17:10:50');
+INSERT INTO `users` (`id`, `firstname`, `lastname`, `email`, `username`, `password`, `status`, `user_type_id`, `created_at`, `updated_at`) VALUES
+(1, 'Jetro', 'Bagasala', 'jethgen.26@gmail.com', 'Admin', 'Admin123', 'active', 1, '2024-02-14 06:53:14', '2024-02-28 20:35:24'),
+(2, 'Cedrick', 'Embestro', 'ced@gmail.com', 'Registrar', 'Registrar123', 'active', 2, '2024-02-14 06:54:55', '2024-02-28 20:46:11'),
+(4, 'anne', 'curtis', 'anne@gmail.com', 'anne', 'annee', 'active', 2, '2024-02-27 00:27:27', '2024-02-28 20:45:32'),
+(5, 'vhong', 'navarro', 'vhong@gmail.com', 'vhong', 'jdfjdhsfjkd', 'active', 2, '2024-02-27 02:31:19', '2024-02-28 20:45:35'),
+(17, 'dfsdfs', 'sdf', 'sdfs@gfdg', 'dfgdfgdf', 'dfgdfg', 'active', 2, '2024-02-28 20:47:25', '2024-02-28 20:47:25');
 
 -- --------------------------------------------------------
 
@@ -298,7 +320,8 @@ ALTER TABLE `positions`
 -- Indexes for table `registrars`
 --
 ALTER TABLE `registrars`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uc_userName` (`userName`);
 
 --
 -- Indexes for table `seniorhighstudents`
@@ -330,19 +353,19 @@ ALTER TABLE `user_types`
 -- AUTO_INCREMENT for table `academic_years`
 --
 ALTER TABLE `academic_years`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
 
 --
 -- AUTO_INCREMENT for table `collegestudents`
 --
 ALTER TABLE `collegestudents`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=111;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=130;
 
 --
 -- AUTO_INCREMENT for table `departments`
 --
 ALTER TABLE `departments`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `events`
@@ -360,31 +383,31 @@ ALTER TABLE `event_attendees`
 -- AUTO_INCREMENT for table `faculties`
 --
 ALTER TABLE `faculties`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
 
 --
 -- AUTO_INCREMENT for table `positions`
 --
 ALTER TABLE `positions`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT for table `registrars`
 --
 ALTER TABLE `registrars`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `seniorhighstudents`
 --
 ALTER TABLE `seniorhighstudents`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=86;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=124;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `user_types`
