@@ -20,25 +20,29 @@
 ?>
 
 
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <div class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 class="m-0">Reports</h1>
-          </div><!-- /.col -->
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="admin_dashboard.php">Home</a></li>
-              <li class="breadcrumb-item active">Report Page</li>
-            </ol>
-          </div><!-- /.col -->
-        </div><!-- /.row -->
-      </div><!-- /.container-fluid -->
-    </div>
-    <!-- /.content-header -->
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h3>Report</h3>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+          <div class="row">
+            <div class="col-sm-12 text-sm-right">
+              <div class="mr-4 small"><b>Philippine Standard Time</b></div>
+            </div>
+            <div class="col-sm-12 text-sm-right">
+              <div id="philippine-date-time" class="small"></div>
+            </div>
+          </div>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+  <!-- /.content-header -->
 
     <!-- Main content -->
     <div class="content">
@@ -66,6 +70,14 @@
                       <option value="Event 2">Event 2</option>
                       <!-- Add more options as needed -->
                     </select>
+                  </div>
+                  <div class="col-md-2">
+                      <label for="userTypeFilter">Select Attendees Type:</label>
+                      <select id="userTypeFilter" class="form-control">
+                          <option value="college">College</option>
+                          <option value="high_school">Senior High School</option>
+                          <option value="faculty">Faculty</option>
+                      </select>
                   </div>
                 </div>
                 <div class="card shadow-md">
@@ -220,6 +232,7 @@
 <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 <!-- AdminLTE App -->
 <script src="dist/js/adminlte.min.js"></script>
+<script src="dist/js/datetime.js"></script>
 
 
 <script>
@@ -244,6 +257,92 @@ $(function () {
             }
         ]
     });
+
+        // Handle user type change
+        $('#userTypeFilter').change(function() {
+        var userType = $(this).val();
+        updateTableColumns(userType);
+    });
+
+    // Function to update DataTable columns and data based on user type
+    function updateTableColumns(userType) {
+        var columns = [];
+        var data = [];
+
+        // Define columns and data based on user type
+        if (userType === "college") {
+            columns = [
+                { title: '#' },
+                { title: 'Name' },
+                { title: 'Course' },
+                { title: 'Level' },
+                { title: 'Strand', visible: false },
+                { title: 'Grade', visible: false },
+                { title: 'Section', visible: false },
+                { title: 'Position', visible: false },
+                { title: 'Time In' },
+                { title: 'Time Out' }
+            ];
+            data = [
+                ['1', 'Cedrick Embestro', 'BSCS', '4', '', '', '', '', '', ''],
+                ['2', 'Manuel Monge', 'BSCS', '2', '', '', '', '', '', ''],
+                ['3', 'Carlos Tanay', 'Entrep', '4', '', '', '', '', '', ''],
+                ['4', 'Cynel Taduran', 'ACT', '4', '', '', '', '', '', ''],
+                ['5', 'Jetro Bagasala', 'BSCS', '4', '', '', '', '', '', '']
+            ];
+        } else if (userType === "high_school") {
+            columns = [
+                { title: '#' },
+                { title: 'Name' },
+                { title: '', visible: false },
+                { title: '', visible: false },
+                { title: 'Strand' },
+                { title: 'Grade' },
+                { title: 'Section' },
+                { title: '', visible: false },
+                { title: 'Time In' },
+                { title: 'Time Out' }
+            ];
+            data = [
+                ['1', 'John Doe', '', '', 'STEM', '11', 'A', '', '', ''],
+                ['2', 'Jane Smith', '', '', 'ABM', '12', 'B', '', '', ''],
+                ['3', 'Mark Johnson', '', '', 'HUMSS', '11', 'C', '', '', ''],
+                ['4', 'Sarah Williams', '', '', 'GAS', '12', 'D', '', '', ''],
+                ['5', 'Michael Brown', '', '', 'TVL', '10', 'E', '', '', '']
+            ];
+        } else if (userType === "faculty") {
+            columns = [
+                { title: '#' },
+                { title: 'Name' },
+                { title: '', visible: false },
+                { title: '', visible: false },
+                { title: '', visible: false },
+                { title: '', visible: false },
+                { title: '', visible: false },
+                { title: 'Position' },
+                { title: 'Time In' },
+                { title: 'Time Out' }
+            ];
+            data = [
+                ['1', 'Dr. John Doe', '', '', '', '', '', 'Professor', '', ''],
+                ['2', 'Prof. Jane Smith', '', '', '', '', '', 'Assistant Professor', '', ''],
+                ['3', 'Mr. Mark Johnson', '', '', '', '', '', 'Instructor', '', ''],
+                ['4', 'Ms. Sarah Williams', '', '', '', '', '', 'Lecturer', '', ''],
+                ['5', 'Dr. Michael Brown', '', '', '', '', '', 'Adjunct Professor', '', '']
+            ];
+        }
+
+        // Clear existing DataTable columns and data
+        table.clear();
+
+        // Add columns and data to DataTable
+        columns.forEach(function(column, index) {
+            table.column(index).visible(column.visible !== false); // Hide columns if specified
+            table.column(index).header().innerHTML = column.title; // Set column titles
+        });
+        table.rows.add(data).draw(); // Add rows and redraw DataTable
+    }
+
 
     table.buttons().container().appendTo('#reportTable_wrapper .col-md-6:eq(0)');
 

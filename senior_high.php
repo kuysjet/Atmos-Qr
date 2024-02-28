@@ -25,13 +25,17 @@
         <div class="container-fluid">
           <div class="row mb-2">
             <div class="col-sm-6">
-              <h1 class="m-0">Senior High Students</h1>
+              <h3>Senior High</h3>
             </div><!-- /.col -->
             <div class="col-sm-6">
-              <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="admin_dashboard.php">Home</a></li>
-                <li class="breadcrumb-item active">Senior High Page</li>
-              </ol>
+              <div class="row">
+                <div class="col-sm-12 text-sm-right">
+                  <div class="mr-4 small"><b>Philippine Standard Time</b></div>
+                </div>
+                <div class="col-sm-12 text-sm-right">
+                  <div id="philippine-date-time" class="small"></div>
+                </div>
+              </div>
             </div><!-- /.col -->
           </div><!-- /.row -->
         </div><!-- /.container-fluid -->
@@ -117,12 +121,13 @@
   <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
   <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
   <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-<!-- Enable downloading for qr code -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
-<!-- Include html2canvas library -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
+  <!-- Enable downloading for qr code -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <!-- Include html2canvas library -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.3.2/html2canvas.min.js"></script>
   <!-- AdminLTE App -->
   <script src="dist/js/adminlte.min.js"></script>
+  <script src="dist/js/datetime.js"></script>
 
 
   <script>

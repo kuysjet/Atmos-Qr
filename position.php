@@ -19,25 +19,29 @@
 ?>
 
 
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <div class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h1 class="m-0">Positions</h1>
-          </div><!-- /.col -->
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><a href="admin_dashboard.php">Home</a></li>
-              <li class="breadcrumb-item active">Position Page</li>
-            </ol>
-          </div><!-- /.col -->
-        </div><!-- /.row -->
-      </div><!-- /.container-fluid -->
-    </div>
-    <!-- /.content-header -->
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h3>Position</h3>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+          <div class="row">
+            <div class="col-sm-12 text-sm-right">
+              <div class="mr-4 small"><b>Philippine Standard Time</b></div>
+            </div>
+            <div class="col-sm-12 text-sm-right">
+              <div id="philippine-date-time" class="small"></div>
+            </div>
+          </div>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+  <!-- /.content-header -->
 
     <!-- Main content -->
     <div class="content">
@@ -104,6 +108,7 @@
 <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 <!-- AdminLTE App -->
 <script src="dist/js/adminlte.min.js"></script>
+<script src="dist/js/datetime.js"></script>
 
 
 <!-- Include SweetAlert2 JS -->

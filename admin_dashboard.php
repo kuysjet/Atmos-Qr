@@ -13,26 +13,29 @@
 ?>
 
 
-  <!-- Content Wrapper. Contains page content -->
-  <div class="content-wrapper">
-    <!-- Content Header (Page header) -->
-    <div class="content-header">
-      <div class="container-fluid">
-        <div class="row mb-2">
-          <div class="col-sm-6">
-            <h3 class="m-0">Dashboard</h3>
-          </div><!-- /.col -->
-          <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-              <li class="breadcrumb-item"><span id="day"></span></li>
-              <li class="breadcrumb-item"><span id="date"></span></li>
-              <li class="breadcrumb-item"><span id="time"></span></li>
-            </ol>
-          </div><!-- /.col -->
-        </div><!-- /.row -->
-      </div><!-- /.container-fluid -->
-    </div>
-    <!-- /.content-header -->
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h3>Dashboard</h3>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+          <div class="row">
+            <div class="col-sm-12 text-sm-right">
+              <div class="mr-4 small"><b>Philippine Standard Time</b></div>
+            </div>
+            <div class="col-sm-12 text-sm-right">
+              <div id="philippine-date-time" class="small"></div>
+            </div>
+          </div>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
+  <!-- /.content-header -->
 
     <!-- Main content -->
     <div class="content">
@@ -120,10 +123,10 @@
 <script>
 function updateClock() {
   var now = new Date();
-  var days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+  var days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']; // Abbreviated day names
   var months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   
-  var dayOfWeek = days[now.getDay()];
+  var dayOfWeek = days[now.getDay()]; // Get abbreviated day name
   var month = months[now.getMonth()];
   var date = now.getDate();
   var year = now.getFullYear();
@@ -138,17 +141,16 @@ function updateClock() {
   // Convert hours to 12-hour format
   hours = hours % 12 || 12;
   
-  // Pad single digit minutes and seconds with leading zeros
-  minutes = (minutes < 10 ? "0" : "") + minutes;
-  seconds = (seconds < 10 ? "0" : "") + seconds;
+  // Pad single digit hours, minutes, and seconds with leading zeros
+  hours = hours < 10 ? "0" + hours : hours;
+  minutes = minutes < 10 ? "0" + minutes : minutes;
+  seconds = seconds < 10 ? "0" + seconds : seconds;
   
   // Format the time as HH:MM:SS AM/PM
   var timeString = hours + ":" + minutes + ":" + seconds + ' ' + meridiem;
   
-  // Update the day, date, and time display
-  document.getElementById('day').textContent = dayOfWeek;
-  document.getElementById('date').textContent = month + ' ' + date + ', ' + year;
-  document.getElementById('time').textContent = timeString;
+  // Update the Philippine Standard Time display
+  document.getElementById('philippine-date-time').innerHTML = dayOfWeek + ', ' + month + ' ' + date + ', ' + year + ' ' + timeString;
   
   // Update the clock every second
   setTimeout(updateClock, 1000);
@@ -157,6 +159,7 @@ function updateClock() {
 // Call the function for the first time to start the clock
 updateClock();
 </script>
+
 
 </body>
 </html>

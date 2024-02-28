@@ -4,7 +4,7 @@ include 'includes/header.php';
 ?>
 
 <!-- Include Bootstrap CSS -->
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"> -->
 
   <style>
 
@@ -97,14 +97,7 @@ include 'includes/header.php';
 </section>
 
 <!-- Include Bootstrap Bundle JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-
-<script>
-  document.getElementById('loginForm').addEventListener('submit', function(event) {
-    // Show loader when form is submitted
-    document.getElementById('loader').classList.remove('d-none');
-  });
-</script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script> -->
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- jQuery -->
 <script src="plugins/jquery/jquery.min.js"></script>
@@ -156,7 +149,7 @@ document.addEventListener('DOMContentLoaded', function () {
           confirmButtonColor: '#3085d6',
           confirmButtonText: 'OK',
           customClass: {
-            popup: 'small-swal' // Apply custom class for styling
+            popup: 'small-swal' 
         }
         });
       }

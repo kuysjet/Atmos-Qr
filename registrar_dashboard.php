@@ -1,5 +1,14 @@
 <?php
-session_start()
+session_start();
+
+// Check if the user is logged in based on their username and password
+if (!isset($_SESSION['username']) || !isset($_SESSION['password'])) {
+  // Redirect the user to the login page if they are not logged in
+  header("Location: index.php");
+  exit();
+}
+
+
 ?>
 
 <!DOCTYPE html>
@@ -101,7 +110,7 @@ session_start()
           <i class="fas fa-user-cog fa-lg mr-2 text-gray pl-1 mt-2"></i>
         </div>
         <div class="info">
-          <a href="#" class="d-block">Registrar</a>
+          <a href="#" class="d-block"><?php echo $_SESSION['firstname']; ?></a>
         </div>
       </div>
 
