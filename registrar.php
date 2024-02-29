@@ -63,12 +63,6 @@
                 <table id="usersTable" class="display table table-bordered">
                   <thead>
                   <tr>
-                    <th>
-                      <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
-                        <input name="select_all" value="1" id="select-all" type="checkbox">
-                        <i class="fas fa-trash-alt text-danger" id="bulkDeleteBtn" title="Bulk Delete""></i>
-                      </div>
-                    </th>
                     <th>No.</th>
                     <th>First Name</th>
                     <th>Last Name</th>
@@ -139,17 +133,6 @@ $(document).ready(function() {
     var table = $('#usersTable').DataTable({
         "ajax": "crud_registrar.php",
         "columns": [
-            {
-                data: null,
-                render: function(data, type, row) {
-                    return `
-                        <div style="text-align: center;">
-                            <input type="checkbox" class="dt-checkbox" value="${row.ID}">
-                        </div>`;
-                },
-                orderable: false,
-                className: 'dt-body-center',
-            },
             { "data": null, "render": function(data, type, row, meta) {
                 return meta.row + 1; // Add auto-increment number starting from 1
             }},
@@ -267,7 +250,7 @@ $('#usersTable').on('click', '.status-btn', function() {
                     // User added successfully
                     $('#addUserModal').modal('hide'); // Hide the modal
                     // Optionally, you can reset the form fields here
-                    // $('#addUserForm')[0].reset();
+                     $('#addUserForm')[0].reset();
                     // Show success message
                     Swal.fire("Success", "User added successfully", "success");
                     
@@ -285,10 +268,98 @@ $('#usersTable').on('click', '.status-btn', function() {
             }
         });
     });
+
+
+      // Function to populate the edit modal with user data
+  $('#usersTable').on('click', '.edit-btn', function() {
+    var rowData = table.row($(this).parents('tr')).data();
+    $('#editUserId').val(rowData.id);
+    $('#editFirstname').val(rowData.firstname);
+    $('#editLastname').val(rowData.lastname);
+    $('#editEmail').val(rowData.email);
+    $('#editUsername').val(rowData.username);
+    $('#editUserModal').modal('show');
   });
 
-</script>
+  // Handle form submission for editing user data
+  $('#editUserForm').submit(function(e) {
+    e.preventDefault();
+    var formData = $(this).serialize();
+    $.ajax({
+      url: 'crud_registrar.php', // PHP script to update user data
+      method: 'POST',
+      data: formData,
+      success: function(response) {
+        $('#editUserModal').modal('hide');
+        table.ajax.reload(); // Refresh DataTable
+        Swal.fire("Success", "User data updated successfully", "success");
+      },
+      error: function(xhr, status, error) {
+        console.error(xhr.responseText);
+        Swal.fire("Error", "Failed to update user data", "error");
+      }
+    });
+  });
 
+// Delete button click event handler
+$('#usersTable').on('click', '.delete-btn', function() {
+    var rowData = table.row($(this).parents('tr')).data();
+    var userId = rowData['id'];
+
+    // Show SweetAlert confirmation dialog
+    Swal.fire({
+        title: "Are you sure?",
+        text: "Once deleted, you will not be able to recover this user!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d9534f",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Yes, delete it!",
+        customClass: {
+            popup: 'small-swal' // Apply custom class for styling
+        },
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // User confirmed deletion, proceed with AJAX request
+            $.ajax({
+                url: 'crud_registrar.php',
+                method: 'POST',
+                dataType: 'json',
+                data: { userId: userId },
+                success: function(response) {
+                    if (response.status === 'success') {
+                        // Reload table upon successful deletion
+                        table.ajax.reload();
+                        // Show success message using SweetAlert
+                        Swal.fire("Success", response.message, "success");
+                    } else {
+                        // Show error message using SweetAlert
+                        Swal.fire("Error", response.message, "error");
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error(xhr.responseText);
+                    // Show error message using SweetAlert
+                    Swal.fire("Error", "Failed to delete user", "error");
+                }
+            });
+          } else {
+            // User canceled deletion
+            Swal.fire({
+                title: "Cancelled",
+                text: "User deletion cancelled.",
+                icon: "info",
+                customClass: {
+                    popup: 'small-swal' // Apply custom class for styling
+                },
+            });
+        }
+    });
+});
+
+});
+
+</script>
 
 
 
@@ -333,6 +404,47 @@ $('#usersTable').on('click', '.status-btn', function() {
     </div>
   </div>
 </div>
+
+
+
+
+<!-- Add a modal for editing user data -->
+<div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-success">
+        <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <!-- Form for editing user data -->
+        <form id="editUserForm">
+          <input type="hidden" id="editUserId" name="userId">
+          <div class="form-group">
+            <label for="editFirstname">First Name</label>
+            <input type="text" class="form-control" id="editFirstname" name="firstname" required>
+          </div>
+          <div class="form-group">
+            <label for="editLastname">Last Name</label>
+            <input type="text" class="form-control" id="editLastname" name="lastname" required>
+          </div>
+          <div class="form-group">
+            <label for="editEmail">Email</label>
+            <input type="email" class="form-control" id="editEmail" name="email" required>
+          </div>
+          <div class="form-group">
+            <label for="editUsername">Username</label>
+            <input type="text" class="form-control" id="editUsername" name="username" required>
+          </div>
+          <button type="submit" class="btn btn-primary float-right btn-sm">Submit</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 
 
 

@@ -2,7 +2,7 @@
 // Include database connection code
 include 'database/db.php';
 
-// Check if form data is received for adding a new user or updating user status
+// Check if form data is received for adding a new user, updating user status, updating user data, or deleting a user
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check if form data is received for adding a new user
     if (isset($_POST['firstname']) && isset($_POST['lastname']) && isset($_POST['email']) && isset($_POST['username']) && isset($_POST['password'])) {
@@ -62,6 +62,48 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             // Update failed
             echo json_encode(array("status" => "error", "message" => "Failed to update user status"));
+        }
+
+        // Close statement
+        $stmt->close();
+    } elseif (isset($_POST['userId']) && isset($_POST['firstname']) && isset($_POST['lastname']) && isset($_POST['email']) && isset($_POST['username'])) {
+        // Check if form data is received for updating user data
+        // Extract user ID and updated user information from the POST data
+        $userId = $_POST['userId'];
+        $firstname = $_POST['firstname'];
+        $lastname = $_POST['lastname'];
+        $email = $_POST['email'];
+        $username = $_POST['username'];
+
+        // Prepare and execute UPDATE statement
+        $stmt = $conn->prepare("UPDATE users SET firstname = ?, lastname = ?, email = ?, username = ? WHERE id = ?");
+        $stmt->bind_param("ssssi", $firstname, $lastname, $email, $username, $userId);
+
+        if ($stmt->execute()) {
+            // Update successful
+            echo json_encode(array("status" => "success"));
+        } else {
+            // Update failed
+            echo json_encode(array("status" => "error", "message" => "Failed to update user data"));
+        }
+
+        // Close statement
+        $stmt->close();
+    } elseif ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['userId'])) {
+        // Check if form data is received for deleting a user
+        // Extract user ID from the POST data
+        $userId = $_POST['userId'];
+
+        // Prepare and execute DELETE statement
+        $stmt = $conn->prepare("DELETE FROM users WHERE id = ?");
+        $stmt->bind_param("i", $userId);
+
+        if ($stmt->execute()) {
+            // Deletion successful
+            echo json_encode(array("status" => "success", "message" => "User deleted successfully"));
+        } else {
+            // Deletion failed
+            echo json_encode(array("status" => "error", "message" => "Failed to delete user: " . $stmt->error));
         }
 
         // Close statement

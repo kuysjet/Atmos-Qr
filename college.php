@@ -392,11 +392,18 @@ $('#importCsvForm').on('submit', function(e) {
           }
         });
       } else {
-        // User canceled deletion
-        Swal.fire("Student deletion canceled!", "", "info");
-      }
+          // User canceled deletion
+          Swal.fire({
+              title: "Cancelled",
+              text: "Student deletion cancelled.",
+              icon: "info",
+              customClass: {
+                  popup: 'small-swal' // Apply custom class for styling
+              },
+          });
+        }
     });
-  });
+});
 
 
     // Bulk delete button click event
