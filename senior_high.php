@@ -180,38 +180,42 @@
         {
           extend: 'collection',
           text: '<i class="fas fa-file-export"></i>',
-          className: 'btn-sm btn-dark',
+          className: 'btn-sm btn-light border mr-1',
           buttons: [
-            {
-            extend: 'csv',
-            exportOptions: {
-              columns: [2, 3, 4, 5, 6, 7, 8]
-            }
-          },
-          {
-            extend: 'excel',
-            exportOptions: {
-              columns: [1, 2, 3, 4, 5, 6, 7, 8]
-            }
-          },
-          {
-            extend: 'pdf',
-            exportOptions: {
-              columns: [1, 2, 3, 4, 5, 6, 7, 8] 
-            }
-          },
-          {
-            extend: 'print',
-            exportOptions: {
-              columns: [1, 2, 3, 4, 5, 6, 7, 8]
-            }
-          },
-          ]
-        },
+                  {
+                      extend: 'csv',
+                      text: '<i class="fas fa-file-csv"></i> CSV',
+                      exportOptions: {
+                          columns: [2, 3, 4, 5, 6, 7, 8]
+                      }
+                  },
+                  {
+                      extend: 'excel',
+                      text: '<i class="far fa-file-excel"></i> Excel',
+                      exportOptions: {
+                          columns: [1, 2, 3, 4, 5, 6, 7, 8]
+                      }
+                  },
+                  {
+                      extend: 'pdf',
+                      text: '<i class="far fa-file-pdf"></i> PDF',
+                      exportOptions: {
+                          columns: [1, 2, 3, 4, 5, 6, 7, 8]
+                      }
+                  },
+                  {
+                      extend: 'print',
+                      text: '<i class="fas fa-print"></i> Print',
+                      exportOptions: {
+                          columns: [1, 2, 3, 4, 5, 6, 7, 8]
+                      }
+                  }
+              ]
+            },
         {
           extend: 'colvis',
           text: '<i class="fas fa-eye"></i>',
-          className: 'btn-sm',
+          className: 'btn-sm btn-light border',
         }
       ]
     });

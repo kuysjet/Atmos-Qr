@@ -244,18 +244,31 @@ $(function () {
         "orderable": true,
         "dom": 'Bfrtip', // Ensure the buttons container is included
         "buttons": [
+    {
+        extend: 'collection',
+        text: '<i class="fas fa-file-export"></i>',
+        className: 'btn-sm btn-light border mr-1',
+        buttons: [
             {
-                extend: 'collection',
-                text: 'Export',
-                className: 'btn-sm',
-                buttons: ['csv', 'excel', 'pdf', 'print']
+                extend: 'excel',
+                text: '<i class="far fa-file-excel"></i> Excel'
             },
             {
-              extend: 'colvis',
-              text: 'Column visibility',
-              className: 'btn-sm',
+                extend: 'pdf',
+                text: '<i class="far fa-file-pdf"></i> PDF'
+            },
+            {
+                extend: 'print',
+                text: '<i class="fas fa-print"></i> Print'
             }
         ]
+    },
+    {
+        extend: 'colvis',
+        text: '<i class="fas fa-eye"></i>',
+        className: 'btn-sm btn-light border'
+    }
+]
     });
 
         // Handle user type change

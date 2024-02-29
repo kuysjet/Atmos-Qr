@@ -175,41 +175,46 @@ $(document).ready(function() {
     "autoWidth": false,
     "dom": 'Bfrtip', 
     "buttons": [
-      {
-        extend: 'collection',
-        text: '<i class="fas fa-file-export"></i>',
-        className: 'btn-sm btn-dark',
-        buttons: [
-          {
-            extend: 'csv',
-            exportOptions: {
-              columns: [2, 3, 4, 5, 6, 7]
-            }
+            {
+              extend: 'collection',
+              text: '<i class="fas fa-file-export"></i>',
+              className: 'btn-sm btn-light border mr-1',
+              buttons: [
+                {
+              extend: 'csv',
+              text: '<i class="fas fa-file-csv"></i> CSV',
+              exportOptions: {
+                  columns: [2, 3, 4, 5, 6, 7]
+              }
           },
           {
-            extend: 'excel',
-            exportOptions: {
-              columns: [1, 2, 3, 4, 5, 6, 7]
-            }
+              extend: 'excel',
+              text: '<i class="far fa-file-excel"></i> Excel',
+              exportOptions: {
+                  columns: [1, 2, 3, 4, 5, 6, 7]
+              }
           },
           {
-            extend: 'pdf',
-            exportOptions: {
-              columns: [1, 2, 3, 4, 5, 6, 7] 
-            }
+              extend: 'pdf',
+              text: '<i class="far fa-file-pdf"></i> PDF',
+              exportOptions: {
+                  columns: [1, 2, 3, 4, 5, 6, 7]
+              }
           },
           {
-            extend: 'print',
-            exportOptions: {
-              columns: [1, 2, 3, 4, 5, 6, 7]
-            }
+              extend: 'print',
+              text: '<i class="fas fa-print"></i> Print',
+              exportOptions: {
+                  columns: [1, 2, 3, 4, 5, 6, 7]
+              }
           }
+
         ]
       },
       {
         extend: 'colvis',
         text: '<i class="fas fa-eye"></i>',
-        className: 'btn-sm',
+        className: 'btn-sm btn-light border',
       }
     ]
   });

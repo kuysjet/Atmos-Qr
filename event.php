@@ -63,7 +63,7 @@
                     <th>End DateTime</th>
                     <th>Respondent</th>
                     <th>Assigned Registrar</th>
-                    <th></th>
+                    <th>Action</th>
                   </tr>
                   </thead>
                   <tbody>
@@ -121,8 +121,8 @@ $(function () {
     "buttons": [
       {
         extend: 'colvis',
-        text: 'Column visibility',
-        className: 'btn-sm',
+        text: '<i class="fas fa-eye"></i>',
+        className: 'btn-sm btn-light border',
       }
     ],
   }).buttons().container().appendTo('#eventsTable_wrapper .col-md-6:eq(0)');

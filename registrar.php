@@ -166,7 +166,7 @@ $(document).ready(function() {
             {
                 extend: 'colvis',
                 text: '<i class="fas fa-eye"></i>', 
-                className: 'btn-sm',
+                className: 'btn-sm btn-light border',
             }
         ]
     });
