@@ -263,11 +263,19 @@ $(document).ready(function() {
           }
         });
       } else {
-        // User canceled deletion
-        Swal.fire("Department deletion canceled!");
-      }
+          // User canceled deletion
+          Swal.fire({
+              title: "Cancelled",
+              text: "Department deletion cancelled.",
+              icon: "info",
+              customClass: {
+                  popup: 'small-swal' // Apply custom class for styling
+              },
+          });
+        }
     });
-  });
+});
+
 });
 </script>
 

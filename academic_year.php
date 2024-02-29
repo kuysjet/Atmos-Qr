@@ -153,7 +153,7 @@ $(document).ready(function() {
       {
         extend: 'colvis',
         text: '<i class="fas fa-eye"></i>',
-        className: 'btn-sm',
+        className: 'btn-sm btn-light border',
       }
     ]
   });
@@ -287,11 +287,19 @@ $(document).ready(function() {
           }
         });
       } else {
-        // User canceled deletion
-        Swal.fire("Academic Year deletion canceled!", "", "info");
-      }
+          // User canceled deletion
+          Swal.fire({
+              title: "Cancelled",
+              text: "Academic Year deletion cancelled.",
+              icon: "info",
+              customClass: {
+                  popup: 'small-swal' // Apply custom class for styling
+              },
+          });
+        }
     });
-  });
+});
+
 
 
 });

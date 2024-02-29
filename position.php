@@ -264,11 +264,19 @@ $(document).ready(function() {
           }
         });
       } else {
-        // User canceled deletion
-        Swal.fire("Position deletion canceled!");
-      }
+          // User canceled deletion
+          Swal.fire({
+              title: "Cancelled",
+              text: "Position deletion cancelled.",
+              icon: "info",
+              customClass: {
+                  popup: 'small-swal' // Apply custom class for styling
+              },
+          });
+        }
     });
-  });
+});
+
 });
 </script>
 
