@@ -28,33 +28,13 @@
             <span class="float-right text-muted text-sm"></span>
           </a>
           <div class="dropdown-divider"></div>
-          <a href="logout.php" class="dropdown-item" data-toggle="modal" data-target="#logoutModal">
+          <a href="#" class="dropdown-item" onclick="confirmLogout()">
             <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray"></i> Logout
-            <span class="float-right text-muted text-sm"></span>
+              <span class="float-right text-muted text-sm"></span>
           </a>
+
         </div>
       </li>
     </ul>
   </nav>
   <!-- /.navbar -->
-
-  <!-- Logout Modal -->
-<div class="modal fade" id="logoutModal" tabindex="-1" aria-labelledby="logoutModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="logoutModalLabel">Logout Confirmation</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        Are you sure you want to logout?
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-        <a href="logout.php" class="btn btn-primary">Yes, Logout</a>
-      </div>
-    </div>
-  </div>
-</div>

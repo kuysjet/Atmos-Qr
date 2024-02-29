@@ -1,9 +1,9 @@
   <!-- Main Sidebar Container -->
   <aside class="main-sidebar sidebar-dark-primary elevation-4">
     <!-- Brand Logo -->
-    <a href="https://www.facebook.com/ACLCCollegeIRIGA/" class="brand-link">
-      <img src="dist/img/amalogo.png" alt="ACLC Logo" class="brand-image img-circle elevation-2" style="opacity: .8; width: 30px;">
-      <span class="brand-text" style="font-size:small;">ACLC COLLEGE IRIGA INC.</span>
+    <a href="https://www.facebook.com/ACLCCollegeIRIGA/" class="brand-link"">
+      <img src="dist/img/amalogo.png" alt="ACLC Logo" class="brand-image img-circle elevation-2" style="opacity: .8; width: 32px;">
+      <span class="brand-text" style="font-size: small;"><b>ACLC COLLEGE IRIGA INC.</b></span>
     </a>
 
     <!-- active link change -->

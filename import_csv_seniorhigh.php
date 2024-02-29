@@ -20,7 +20,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["csvFile"])) {
 
         // Define valid strands, grades and sections
         $validStrands = array('ABM', 'GAS', 'HUMMS', 'STEM', 'HE', 'IA', 'ICT');
-        $validGrades = array('grade_11', 'grade_12');
+        $validGrades = array('11', '12');
         $validSections = array('A', 'B', 'C', 'D');
 
         while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
