@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 28, 2024 at 09:48 PM
+-- Generation Time: Feb 29, 2024 at 04:29 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -40,7 +40,7 @@ CREATE TABLE `academic_years` (
 --
 
 INSERT INTO `academic_years` (`id`, `academic_year`, `status`, `created_at`, `updated_at`) VALUES
-(86, '2024-2025', 'active', '2024-02-25 17:57:48', '2024-02-28 20:26:45');
+(86, '2024-2025', 'active', '2024-02-25 17:57:48', '2024-02-29 03:42:26');
 
 -- --------------------------------------------------------
 
@@ -80,7 +80,7 @@ CREATE TABLE `departments` (
 INSERT INTO `departments` (`ID`, `DepartmentName`, `created_at`, `updated_at`) VALUES
 (14, 'College Department', '2024-02-22 00:16:36', '2024-02-22 00:19:50'),
 (15, 'Senior High Department', '2024-02-22 00:16:47', '2024-02-22 00:20:02'),
-(16, 'Technical Department', '2024-02-22 00:20:28', '2024-02-22 00:20:28');
+(16, 'Technical Department', '2024-02-22 00:20:28', '2024-02-29 15:20:36');
 
 -- --------------------------------------------------------
 
@@ -90,14 +90,18 @@ INSERT INTO `departments` (`ID`, `DepartmentName`, `created_at`, `updated_at`) V
 
 CREATE TABLE `events` (
   `id` int(11) NOT NULL,
-  `academic_year_id` int(11) DEFAULT NULL,
+  `academic_year_id` int(11) NOT NULL,
   `event_name` varchar(100) NOT NULL,
   `event_venue` varchar(255) NOT NULL,
   `description` text DEFAULT NULL,
   `start_datetime` datetime NOT NULL,
   `end_datetime` datetime NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `college_student_id` int(11) DEFAULT NULL,
+  `senior_high_student_id` int(11) DEFAULT NULL,
+  `faculty_id` int(11) DEFAULT NULL,
+  `registrar_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -158,32 +162,6 @@ INSERT INTO `positions` (`ID`, `PositionName`, `created_at`, `updated_at`) VALUE
 -- --------------------------------------------------------
 
 --
--- Table structure for table `registrars`
---
-
-CREATE TABLE `registrars` (
-  `id` int(11) NOT NULL,
-  `firstName` varchar(255) NOT NULL,
-  `lastName` varchar(255) NOT NULL,
-  `emailAddress` varchar(255) NOT NULL,
-  `userName` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `registrars`
---
-
-INSERT INTO `registrars` (`id`, `firstName`, `lastName`, `emailAddress`, `userName`, `password`, `created_at`, `updated_at`) VALUES
-(1, 'Cardo', 'Dalisay', 'cardo@gmakjfd.df', 'Cardo', 'Cardo123', '2024-02-26 02:21:19', '2024-02-26 02:21:19'),
-(9, 'KuysJet', 'Dalisay', 'jethgen.26@gmail.com', 'kuysjet', 'dsadada', '2024-02-26 14:21:21', '2024-02-26 14:21:21'),
-(11, 'asdasd', 'Dalisay', 'asda@yjtyj', 'kuysjetd', 'dfsdfsdf', '2024-02-26 14:21:37', '2024-02-26 14:21:37');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `seniorhighstudents`
 --
 
@@ -193,19 +171,12 @@ CREATE TABLE `seniorhighstudents` (
   `FirstName` varchar(100) NOT NULL,
   `LastName` varchar(100) NOT NULL,
   `Email` varchar(100) NOT NULL,
-  `Strand` enum('ABM','GAS','HUMMS','STEM','HE','IA','ICT') DEFAULT NULL,
-  `Grade` enum('grade_11','grade_12') DEFAULT NULL,
-  `Section` enum('A','B','C','D') DEFAULT NULL,
+  `Strand` enum('ABM','GAS','HUMMS','STEM','HE','IA','ICT') NOT NULL,
+  `Grade` enum('11','12') NOT NULL,
+  `Section` enum('A','B','C','D') NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Dumping data for table `seniorhighstudents`
---
-
-INSERT INTO `seniorhighstudents` (`ID`, `IdentificationNumber`, `FirstName`, `LastName`, `Email`, `Strand`, `Grade`, `Section`, `created_at`, `updated_at`) VALUES
-(123, 'grg', 'sdfsd', 'sdfs', 'dfsdf@wef', 'ABM', 'grade_11', 'B', '2024-02-28 20:46:47', '2024-02-28 20:46:47');
 
 -- --------------------------------------------------------
 
@@ -232,10 +203,7 @@ CREATE TABLE `users` (
 
 INSERT INTO `users` (`id`, `firstname`, `lastname`, `email`, `username`, `password`, `status`, `user_type_id`, `created_at`, `updated_at`) VALUES
 (1, 'Jetro', 'Bagasala', 'jethgen.26@gmail.com', 'Admin', 'Admin123', 'active', 1, '2024-02-14 06:53:14', '2024-02-28 20:35:24'),
-(2, 'Cedrick', 'Embestro', 'ced@gmail.com', 'Registrar', 'Registrar123', 'active', 2, '2024-02-14 06:54:55', '2024-02-28 20:46:11'),
-(4, 'anne', 'curtis', 'anne@gmail.com', 'anne', 'annee', 'active', 2, '2024-02-27 00:27:27', '2024-02-28 20:45:32'),
-(5, 'vhong', 'navarro', 'vhong@gmail.com', 'vhong', 'jdfjdhsfjkd', 'active', 2, '2024-02-27 02:31:19', '2024-02-28 20:45:35'),
-(17, 'dfsdfs', 'sdf', 'sdfs@gfdg', 'dfgdfgdf', 'dfgdfg', 'active', 2, '2024-02-28 20:47:25', '2024-02-28 20:47:25');
+(28, 'Ced', 'Embestro', 'ced@gmail.com', 'Cedrick', 'Cedrick123', 'active', 2, '2024-02-29 03:43:08', '2024-02-29 03:43:08');
 
 -- --------------------------------------------------------
 
@@ -289,7 +257,11 @@ ALTER TABLE `departments`
 --
 ALTER TABLE `events`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `academic_year_id` (`academic_year_id`);
+  ADD KEY `academic_year_id` (`academic_year_id`),
+  ADD KEY `college_student_id` (`college_student_id`),
+  ADD KEY `senior_high_student_id` (`senior_high_student_id`),
+  ADD KEY `faculty_id` (`faculty_id`),
+  ADD KEY `registrar_id` (`registrar_id`);
 
 --
 -- Indexes for table `event_attendees`
@@ -315,13 +287,6 @@ ALTER TABLE `faculties`
 ALTER TABLE `positions`
   ADD PRIMARY KEY (`ID`),
   ADD UNIQUE KEY `PositionName` (`PositionName`);
-
---
--- Indexes for table `registrars`
---
-ALTER TABLE `registrars`
-  ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `uc_userName` (`userName`);
 
 --
 -- Indexes for table `seniorhighstudents`
@@ -353,19 +318,19 @@ ALTER TABLE `user_types`
 -- AUTO_INCREMENT for table `academic_years`
 --
 ALTER TABLE `academic_years`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=98;
 
 --
 -- AUTO_INCREMENT for table `collegestudents`
 --
 ALTER TABLE `collegestudents`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=130;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=134;
 
 --
 -- AUTO_INCREMENT for table `departments`
 --
 ALTER TABLE `departments`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
 
 --
 -- AUTO_INCREMENT for table `events`
@@ -383,7 +348,7 @@ ALTER TABLE `event_attendees`
 -- AUTO_INCREMENT for table `faculties`
 --
 ALTER TABLE `faculties`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
 
 --
 -- AUTO_INCREMENT for table `positions`
@@ -392,22 +357,16 @@ ALTER TABLE `positions`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
--- AUTO_INCREMENT for table `registrars`
---
-ALTER TABLE `registrars`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
-
---
 -- AUTO_INCREMENT for table `seniorhighstudents`
 --
 ALTER TABLE `seniorhighstudents`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=124;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=149;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT for table `user_types`
@@ -423,7 +382,11 @@ ALTER TABLE `user_types`
 -- Constraints for table `events`
 --
 ALTER TABLE `events`
-  ADD CONSTRAINT `events_ibfk_1` FOREIGN KEY (`academic_year_id`) REFERENCES `academic_years` (`id`);
+  ADD CONSTRAINT `events_ibfk_1` FOREIGN KEY (`academic_year_id`) REFERENCES `academic_years` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `events_ibfk_2` FOREIGN KEY (`senior_high_student_id`) REFERENCES `seniorhighstudents` (`ID`),
+  ADD CONSTRAINT `events_ibfk_3` FOREIGN KEY (`college_student_id`) REFERENCES `collegestudents` (`ID`),
+  ADD CONSTRAINT `events_ibfk_4` FOREIGN KEY (`faculty_id`) REFERENCES `faculties` (`ID`),
+  ADD CONSTRAINT `events_ibfk_5` FOREIGN KEY (`registrar_id`) REFERENCES `registrars` (`id`);
 
 --
 -- Constraints for table `event_attendees`
