@@ -33,6 +33,8 @@ function setPageTitle() {
     pageTitle = "ATMOS | Department";
   } else if (path.endsWith("/position.php")) {
     pageTitle = "ATMOS | Position";
+  }else if (path.endsWith("/registrar.php")) {
+    pageTitle = "ATMOS | Registrar";
   }
 
   // Update the document title
@@ -59,9 +61,13 @@ window.onload = function() {
 
 
   <style>
-    /* Custom CSS to adjust the size of SweetAlert dialog */
-.swal2-popup {
-    font-size: 0.8rem; /* Adjust font size */
-    width: 20rem; /* Adjust width */
-}
+  /* Custom CSS to adjust the size of SweetAlert dialog */
+  .swal2-popup {
+      font-size: 0.8rem; /* Adjust font size */
+      width: 20rem; /* Adjust width */
+  }
+
+  .dataTables_wrapper {
+      overflow-x: auto; /* Enable horizontal scrolling for DataTables */
+  }
   </style>
