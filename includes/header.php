@@ -70,4 +70,16 @@ window.onload = function() {
   .dataTables_wrapper {
       overflow-x: auto; /* Enable horizontal scrolling for DataTables */
   }
+
+  /* Adjust the font size and padding for all pagination buttons */
+  .dataTables_wrapper .dataTables_paginate .paginate_button {
+    font-size: 14px; /* Adjust the font size as needed */
+    padding: 4px 8px; /* Adjust the padding as needed */
+  }
+
+  /* Remove padding for the pagination button numbers */
+  .dataTables_wrapper .dataTables_paginate .paginate_button.current, 
+  .dataTables_wrapper .dataTables_paginate .paginate_button:not(.current) {
+    padding: 2px; /* Remove padding */
+  }
   </style>
