@@ -34,7 +34,7 @@
         <div class="col-sm-6">
           <div class="row">
             <div class="col-sm-12 text-sm-right">
-              <div class="mr-4 small"><b>Philippine Standard Time</b></div>
+              <div class="mr-2 small"><b>Philippine Standard Time</b></div>
             </div>
             <div class="col-sm-12 text-sm-right">
               <div id="philippine-date-time" class="small"></div>
@@ -55,7 +55,7 @@
               </div>
               <div class="card-header m-0">
               <button type="button" class="btn btn-info float-end btn-sm" data-toggle="modal" data-target="#addUserModal">
-                <i class="fas fa-user-plus"></i> Add User
+                <i class="fas fa-user-plus"></i> Add New
               </button>
               </div>
               <!-- /.card-header -->

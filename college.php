@@ -30,7 +30,7 @@
         <div class="col-sm-6">
           <div class="row">
             <div class="col-sm-12 text-sm-right">
-              <div class="mr-4 small"><b>Philippine Standard Time</b></div>
+              <div class="mr-2 small"><b>Philippine Standard Time</b></div>
             </div>
             <div class="col-sm-12 text-sm-right">
               <div id="philippine-date-time" class="small"></div>
