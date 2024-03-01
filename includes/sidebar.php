@@ -37,14 +37,14 @@
           </li>
           <li class="nav-item">
             <a href="academic_year.php" class="nav-link <?= $page == 'academic_year.php' ? 'active text-white' : '' ?>">
-              <i class="nav-icon fas fa-calendar-day"></i>
+              <i class="nav-icon fas fa-calendar-alt"></i>
               <p>
                 Academic Year
               </p>
             </a>
           </li>
-          <li class="nav-item <?= ($page == 'faculty.php' || $page == 'senior_high.php' || $page == 'college.php' || $page == 'department.php' || $page == 'position.php') ? 'menu-open' : '' ?>">
-    <a href="#" class="nav-link">
+          <li class="nav-item <?= ($page == 'faculty.php' || $page == 'senior_high.php' || $page == 'college.php' || $page == 'department.php' || $page == 'position.php') ? 'menu-open active' : '' ?>">
+    <a href="#" class="nav-link <?= ($page == 'faculty.php' || $page == 'senior_high.php' || $page == 'college.php' || $page == 'department.php' || $page == 'position.php') ? 'bg-primary' : '' ?>">
         <i class="nav-icon fas fa-users"></i>
         <p>
             Registrants
@@ -60,13 +60,13 @@
         </li>
         <li class="nav-item">
             <a href="senior_high.php" class="nav-link <?= $page == 'senior_high.php' ? 'active text-black' : '' ?>">
-                <i class="fas fa-user-plus nav-icon"></i>
+                <i class="fas fa-user-graduate nav-icon"></i>
                 <p class="pl-4">Senior High</p>
             </a>
         </li>
         <li class="nav-item">
             <a href="college.php" class="nav-link <?= $page == 'college.php' ? 'active text-black' : '' ?>">
-                <i class="fas fa-user-plus nav-icon"></i>
+                <i class="fas fa-user-graduate nav-icon"></i>
                 <p class="pl-4">College</p>
             </a>
         </li>
@@ -103,7 +103,7 @@
           </li>
           <li class="nav-item">
             <a href="registrar.php" class="nav-link <?= $page == 'registrar.php' ? 'active text-white' : '' ?>">
-              <i class="fas fa-user nav-icon"></i>
+              <i class="fas fa-user-secret nav-icon"></i>
               <p>Registrars</p>
             </a>
           </li>
