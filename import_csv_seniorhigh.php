@@ -15,13 +15,32 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["csvFile"])) {
         $headerSkipped = false; // Variable to track if the header row has been skipped
 
         // Prepare statement outside the loop for better performance
-        $stmt = $conn->prepare("INSERT INTO SeniorHighStudents (IdentificationNumber, FirstName, LastName, Email, Strand, Grade, Section) VALUES (?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("sssssss", $identificationNumber, $firstName, $lastName, $email, $strand, $grade, $section);
+        $stmt = $conn->prepare("INSERT INTO SeniorHighStudents (IdentificationNumber, FirstName, LastName, Email, StrandID, GradeID, SectionID) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssiii", $identificationNumber, $firstName, $lastName, $email, $strandId, $gradeId, $sectionId);
 
-        // Define valid strands, grades and sections
-        $validStrands = array('ABM', 'GAS', 'HUMMS', 'STEM', 'HE', 'IA', 'ICT');
-        $validGrades = array('11', '12');
-        $validSections = array('A', 'B', 'C', 'D');
+        // Fetch valid strands from the Strands table
+        $strandQuery = "SELECT ID, strand_name FROM Strands";
+        $strandResult = $conn->query($strandQuery);
+        $validStrands = array();
+        while ($row = $strandResult->fetch_assoc()) {
+            $validStrands[$row['ID']] = $row['strand_name'];
+        }
+
+        // Fetch valid grades from the Grades table
+        $gradeQuery = "SELECT ID, grade_name FROM Grades";
+        $gradeResult = $conn->query($gradeQuery);
+        $validGrades = array();
+        while ($row = $gradeResult->fetch_assoc()) {
+            $validGrades[$row['ID']] = $row['grade_name'];
+        }
+
+        // Fetch valid sections from the Sections table
+        $sectionQuery = "SELECT ID, section_name FROM Sections";
+        $sectionResult = $conn->query($sectionQuery);
+        $validSections = array();
+        while ($row = $sectionResult->fetch_assoc()) {
+            $validSections[$row['ID']] = $row['section_name'];
+        }
 
         while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
             // Skip the header row
@@ -41,21 +60,26 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["csvFile"])) {
             $firstName = isset($data[1]) ? trim($data[1]) : '';
             $lastName = isset($data[2]) ? trim($data[2]) : '';
             $email = isset($data[3]) ? trim($data[3]) : '';
-            $strand = isset($data[4]) ? trim($data[4]) : '';
-            $grade = isset($data[5]) ? trim($data[5]) : '';
-            $section = isset($data[6]) ? trim($data[6]) : '';
+            $strandName = isset($data[4]) ? trim($data[4]) : '';
+            $gradeName = isset($data[5]) ? trim($data[5]) : '';
+            $sectionName = isset($data[6]) ? trim($data[6]) : '';
 
             // Check if any required field is empty
-            if (empty($identificationNumber) || empty($firstName) || empty($lastName) || empty($email) || empty($strand) || empty($grade) || empty($section)) {
+            if (empty($identificationNumber) || empty($firstName) || empty($lastName) || empty($email) || empty($strandName) || empty($gradeName) || empty($sectionName)) {
                 $errorCount++;
                 continue; // Skip this row if any required field is empty
             }
 
-            // Check if the strand, grade and section are valid
-            if (!in_array($strand, $validStrands) || !in_array($grade, $validGrades) || !in_array($section, $validSections)) {
+            // Check if the strand, grade, and section are valid
+            if (!in_array($strandName, $validStrands) || !in_array($gradeName, $validGrades) || !in_array($sectionName, $validSections)) {
                 $errorCount++;
-                continue; // Skip this row if the strand, grade and section is invalid
+                continue; // Skip this row if the strand, grade, and section is invalid
             }
+
+            // Get StrandID, GradeID, and SectionID
+            $strandId = array_search($strandName, $validStrands);
+            $gradeId = array_search($gradeName, $validGrades);
+            $sectionId = array_search($sectionName, $validSections);
 
             // Check if the student already exists in the database
             $existingStmt = $conn->prepare("SELECT COUNT(*) FROM SeniorHighStudents WHERE IdentificationNumber = ? OR Email = ?");

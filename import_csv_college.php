@@ -15,12 +15,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["csvFile"])) {
         $headerSkipped = false; // Variable to track if the header row has been skipped
 
         // Prepare statement outside the loop for better performance
-        $stmt = $conn->prepare("INSERT INTO CollegeStudents (IdentificationNumber, FirstName, LastName, Email, Course, Level) VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssssss", $identificationNumber, $firstName, $lastName, $email, $course, $level);
+        $stmt = $conn->prepare("INSERT INTO CollegeStudents (IdentificationNumber, FirstName, LastName, Email, CourseID, LevelID) VALUES (?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssii", $identificationNumber, $firstName, $lastName, $email, $courseId, $levelId);
 
-        // Define valid courses and levels
-        $validCourses = array('ACT', 'BSCS', 'ENTREP', 'BSAIS');
-        $validLevels = array('1', '2', '3', '4');
+        // Fetch valid courses from the Courses table
+        $courseQuery = "SELECT ID, course_name FROM courses";
+        $courseResult = $conn->query($courseQuery);
+        $validCourses = array();
+        while ($row = $courseResult->fetch_assoc()) {
+            $validCourses[$row['ID']] = $row['course_name'];
+        }
+
+        // Fetch valid levels from the Levels table
+        $levelQuery = "SELECT ID, level_name FROM levels";
+        $levelResult = $conn->query($levelQuery);
+        $validLevels = array();
+        while ($row = $levelResult->fetch_assoc()) {
+            $validLevels[$row['ID']] = $row['level_name'];
+        }
 
         while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
             // Skip the header row
@@ -40,20 +52,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["csvFile"])) {
             $firstName = isset($data[1]) ? trim($data[1]) : '';
             $lastName = isset($data[2]) ? trim($data[2]) : '';
             $email = isset($data[3]) ? trim($data[3]) : '';
-            $course = isset($data[4]) ? trim($data[4]) : '';
-            $level = isset($data[5]) ? trim($data[5]) : '';
+            $courseName = isset($data[4]) ? trim($data[4]) : '';
+            $levelName = isset($data[5]) ? trim($data[5]) : '';
 
             // Check if any required field is empty
-            if (empty($identificationNumber) || empty($firstName) || empty($lastName) || empty($email) || empty($course) || empty($level)) {
+            if (empty($identificationNumber) || empty($firstName) || empty($lastName) || empty($email) || empty($courseName) || empty($levelName)) {
                 $errorCount++;
                 continue; // Skip this row if any required field is empty
             }
 
             // Check if the course and level are valid
-            if (!in_array($course, $validCourses) || !in_array($level, $validLevels)) {
+            if (!in_array($courseName, $validCourses) || !in_array($levelName, $validLevels)) {
                 $errorCount++;
                 continue; // Skip this row if the course or level is invalid
             }
+
+            // Get CourseID and LevelID
+            $courseId = array_search($courseName, $validCourses);
+            $levelId = array_search($levelName, $validLevels);
 
             // Check if the student already exists in the database
             $existingStmt = $conn->prepare("SELECT COUNT(*) FROM CollegeStudents WHERE IdentificationNumber = ? OR Email = ?");
