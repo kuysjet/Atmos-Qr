@@ -60,7 +60,7 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="usersTable" class="display table table-bordered">
+                <table id="usersTable" class="display table table-bordered" style="display: none;">
                   <thead>
                   <tr>
                     <th>No.</th>
@@ -124,6 +124,8 @@
 
 <script>
 $(document).ready(function() {
+    // Show the table after the page reloads and the DataTable is initialized
+    $('#usersTable').show();
     // Destroy existing DataTable instance
     if ($.fn.DataTable.isDataTable('#usersTable')) {
         $('#usersTable').DataTable().destroy();
@@ -151,14 +153,30 @@ $(document).ready(function() {
               }
             },
             {
-                "data": null,
-                "render": function(data, type, row) {
-                    return '<i class="fas fa-edit edit-btn text-success mr-2" title="Edit"></i>' +
-                           '<i class="fas fa-trash-alt delete-btn text-danger mr-2" title="Delete"></i>';
-                }
-            }
+              "data": null,
+              "render": function(data, type, row) {
+                return '<div class="btn-group">' +
+                        '<button type="button" class="btn btn-success btn-sm edit-btn mr-1"><i class="fas fa-edit"></i></button>' +
+                        '<button type="button" class="btn btn-danger btn-sm delete-btn"><i class="fas fa-trash-alt"></i></button>' +
+                      '</div>';
+              }
+          }
         ],
-        "responsive": true,
+        "responsive": {
+          details: {
+            renderer: function(api, rowIdx, columns) {
+              var data = $.map(columns, function(col, i) {
+                return col.hidden ?
+                  '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
+                  '<td>' + col.title + ':' + '</td> ' +
+                  '<td>' + col.data + '</td>' +
+                  '</tr>' :
+                  '';
+              }).join('');
+              return data ? $('<table/>').append(data) : false;
+            }
+          }
+        },
         "lengthChange": false, 
         "autoWidth": false,
         "dom": 'Bfrtip', 
@@ -424,7 +442,7 @@ $('#usersTable').on('click', '.delete-btn', function() {
           <input type="hidden" id="editUserId" name="userId">
           <div class="form-group">
             <label for="editFirstname">First Name</label>
-            <input type="text" class="form-control" id="editFirstname" name="firstname" required>
+            <input type="text" class="form-control" id="editFirstname" name="firstname" required autocomplete="off">
           </div>
           <div class="form-group">
             <label for="editLastname">Last Name</label>
@@ -438,7 +456,7 @@ $('#usersTable').on('click', '.delete-btn', function() {
             <label for="editUsername">Username</label>
             <input type="text" class="form-control" id="editUsername" name="username" required>
           </div>
-          <button type="submit" class="btn btn-primary float-right btn-sm">Submit</button>
+          <button type="submit" class="btn btn-primary float-right btn-sm">Save Changes</button>
         </form>
       </div>
     </div>

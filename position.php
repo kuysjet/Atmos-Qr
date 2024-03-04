@@ -57,7 +57,7 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="positionTable" class="display table table-bordered">
+                <table id="positionTable" class="display table table-bordered" style="display: none;">
                   <thead>
                   <tr>
                     <th>No.</th>
@@ -116,6 +116,8 @@
 
 <script>
 $(document).ready(function() {
+  // Show the table after the page reloads and the DataTable is initialized
+  $('#positionTable').show();
   // Destroy existing DataTable instance
   if ($.fn.DataTable.isDataTable('#positionTable')) {
     $('#positionTable').DataTable().destroy();
@@ -133,12 +135,28 @@ $(document).ready(function() {
       {
         "data": null,
         "render": function(data, type, row) {
-          return '<i class="fas fa-edit edit-btn text-success mr-2" title="Edit"></i>' +
-                '<i class="fas fa-trash-alt delete-btn text-danger" title="Delete"></i>';
+          return '<div class="btn-group">' +
+                  '<button type="button" class="btn btn-success btn-sm edit-btn mr-1"><i class="fas fa-edit"></i></button>' +
+                  '<button type="button" class="btn btn-danger btn-sm delete-btn"><i class="fas fa-trash-alt"></i></button>' +
+                '</div>';
         }
       }
     ],
-    "responsive": true,
+    "responsive": {
+        details: {
+          renderer: function(api, rowIdx, columns) {
+            var data = $.map(columns, function(col, i) {
+              return col.hidden ?
+                '<tr data-dt-row="' + col.rowIndex + '" data-dt-column="' + col.columnIndex + '">' +
+                '<td>' + col.title + ':' + '</td> ' +
+                '<td>' + col.data + '</td>' +
+                '</tr>' :
+                '';
+            }).join('');
+            return data ? $('<table/>').append(data) : false;
+          }
+        }
+      },
     "lengthChange": false, 
     "autoWidth": false,
     "dom": 'Bfrtip', 
