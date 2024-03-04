@@ -65,7 +65,7 @@
                     <th>
                       <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
                         <input name="select_all" value="1" id="select-all" type="checkbox">
-                        <i class="fas fa-trash-alt text-danger" id="bulkDeleteBtn" title="Bulk Delete""></i>
+                        <i class="fas fa-trash-alt text-danger" id="bulkDeleteBtn"></i>
                       </div>
                     </th>
                     <th>No.</th>
@@ -164,9 +164,9 @@ $(document).ready(function() {
       {
         "data": null,
         "render": function(data, type, row) {
-          return '<i class="fas fa-edit edit-btn text-success mr-2" title="Edit"></i>' +
-                '<i class="fas fa-trash-alt delete-btn text-danger mr-2" title="Delete"></i>' +
-                '<i class="fas fa-qrcode view-qr-btn text-info" title="View QR" data-id="' + row.IdentificationNumber + '"></i>';
+          return '<button type="button" class="btn btn-success btn-sm edit-btn"><i class="fas fa-edit"></i></button>' +
+                '<button type="button" class="btn btn-danger btn-sm delete-btn mx-1"><i class="fas fa-trash-alt"></i></button>' +
+                '<button type="button" class="btn btn-info btn-sm view-qr-btn" data-id="' + row.IdentificationNumber + '"><i class="fas fa-qrcode"></i></button>';
         }
       }
     ],
@@ -785,7 +785,7 @@ function dataURLtoBlob(dataURL) {
         </form>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary btn-sm" form="editFacultyForm">Submit</button>
+        <button type="submit" class="btn btn-primary btn-sm" form="editFacultyForm">Save Changes</button>
       </div>
     </div>
   </div>
