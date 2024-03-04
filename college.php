@@ -59,7 +59,7 @@
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="collegeStudentsTable" class="display table table-bordered">
+                <table id="collegeStudentsTable" class="display table table-bordered" style="display: none;">
                   <thead>
                   <tr>
                     <th>
@@ -131,6 +131,8 @@
 
 <script>
 $(document).ready(function() {
+  // Show the table after the page reloads and the DataTable is initialized
+  $('#collegeStudentsTable').show();
   // Destroy existing DataTable instance
   if ($.fn.DataTable.isDataTable('#collegeStudentsTable')) {
     $('#collegeStudentsTable').DataTable().destroy();
