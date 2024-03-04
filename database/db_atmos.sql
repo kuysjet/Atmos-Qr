@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 29, 2024 at 04:29 PM
+-- Generation Time: Mar 04, 2024 at 07:22 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -54,11 +54,32 @@ CREATE TABLE `collegestudents` (
   `FirstName` varchar(100) NOT NULL,
   `LastName` varchar(100) NOT NULL,
   `Email` varchar(100) NOT NULL,
-  `Course` enum('ACT','BSCS','ENTREP','BSAIS') NOT NULL,
-  `Level` enum('1','2','3','4') NOT NULL,
+  `CourseID` int(11) NOT NULL,
+  `LevelID` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `courses`
+--
+
+CREATE TABLE `courses` (
+  `id` int(11) NOT NULL,
+  `course_name` varchar(60) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `courses`
+--
+
+INSERT INTO `courses` (`id`, `course_name`) VALUES
+(1, 'ACT'),
+(2, 'BSCS'),
+(3, 'ENTREP'),
+(4, 'BSAIS');
 
 -- --------------------------------------------------------
 
@@ -92,30 +113,17 @@ CREATE TABLE `events` (
   `id` int(11) NOT NULL,
   `academic_year_id` int(11) NOT NULL,
   `event_name` varchar(100) NOT NULL,
-  `event_venue` varchar(255) NOT NULL,
-  `description` text DEFAULT NULL,
+  `event_venue` varchar(100) NOT NULL,
+  `description` varchar(100) NOT NULL,
   `start_datetime` datetime NOT NULL,
   `end_datetime` datetime NOT NULL,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
-  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
-  `college_student_id` int(11) DEFAULT NULL,
-  `senior_high_student_id` int(11) DEFAULT NULL,
-  `faculty_id` int(11) DEFAULT NULL,
-  `registrar_id` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `event_attendees`
---
-
-CREATE TABLE `event_attendees` (
-  `id` int(11) NOT NULL,
-  `event_id` int(11) NOT NULL,
-  `respondent_id` int(11) NOT NULL,
-  `time_in` datetime DEFAULT NULL,
-  `time_out` datetime DEFAULT NULL,
+  `course_id` int(11) DEFAULT NULL,
+  `level_id` int(11) DEFAULT NULL,
+  `strand_id` int(11) DEFAULT NULL,
+  `grade_id` int(11) DEFAULT NULL,
+  `section_id` int(11) DEFAULT NULL,
+  `position_id` int(11) DEFAULT NULL,
+  `registrar_id` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -141,6 +149,46 @@ CREATE TABLE `faculties` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `grades`
+--
+
+CREATE TABLE `grades` (
+  `id` int(11) NOT NULL,
+  `grade_name` enum('11','12') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `grades`
+--
+
+INSERT INTO `grades` (`id`, `grade_name`) VALUES
+(1, '11'),
+(2, '12');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `levels`
+--
+
+CREATE TABLE `levels` (
+  `id` int(11) NOT NULL,
+  `level_name` enum('1','2','3','4') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `levels`
+--
+
+INSERT INTO `levels` (`id`, `level_name`) VALUES
+(1, '1'),
+(2, '2'),
+(3, '3'),
+(4, '4');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `positions`
 --
 
@@ -162,6 +210,27 @@ INSERT INTO `positions` (`ID`, `PositionName`, `created_at`, `updated_at`) VALUE
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `sections`
+--
+
+CREATE TABLE `sections` (
+  `id` int(11) NOT NULL,
+  `section_name` enum('A','B','C','D') NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `sections`
+--
+
+INSERT INTO `sections` (`id`, `section_name`) VALUES
+(1, 'A'),
+(2, 'B'),
+(3, 'C'),
+(4, 'D');
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `seniorhighstudents`
 --
 
@@ -171,12 +240,34 @@ CREATE TABLE `seniorhighstudents` (
   `FirstName` varchar(100) NOT NULL,
   `LastName` varchar(100) NOT NULL,
   `Email` varchar(100) NOT NULL,
-  `Strand` enum('ABM','GAS','HUMMS','STEM','HE','IA','ICT') NOT NULL,
-  `Grade` enum('11','12') NOT NULL,
-  `Section` enum('A','B','C','D') NOT NULL,
+  `StrandID` int(11) NOT NULL,
+  `GradeID` int(11) NOT NULL,
+  `SectionID` int(11) NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `strands`
+--
+
+CREATE TABLE `strands` (
+  `id` int(11) NOT NULL,
+  `strand_name` varchar(60) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `strands`
+--
+
+INSERT INTO `strands` (`id`, `strand_name`) VALUES
+(1, 'ABM'),
+(2, 'GAS'),
+(3, 'STEM'),
+(4, 'HUMMS'),
+(5, 'TVL');
 
 -- --------------------------------------------------------
 
@@ -242,8 +333,14 @@ ALTER TABLE `academic_years`
 --
 ALTER TABLE `collegestudents`
   ADD PRIMARY KEY (`ID`),
-  ADD UNIQUE KEY `IdentificationNumber` (`IdentificationNumber`),
-  ADD UNIQUE KEY `Email` (`Email`);
+  ADD KEY `fk_course_id` (`CourseID`),
+  ADD KEY `fk_level_id` (`LevelID`);
+
+--
+-- Indexes for table `courses`
+--
+ALTER TABLE `courses`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `departments`
@@ -258,18 +355,13 @@ ALTER TABLE `departments`
 ALTER TABLE `events`
   ADD PRIMARY KEY (`id`),
   ADD KEY `academic_year_id` (`academic_year_id`),
-  ADD KEY `college_student_id` (`college_student_id`),
-  ADD KEY `senior_high_student_id` (`senior_high_student_id`),
-  ADD KEY `faculty_id` (`faculty_id`),
+  ADD KEY `course_id` (`course_id`),
+  ADD KEY `level_id` (`level_id`),
+  ADD KEY `strand_id` (`strand_id`),
+  ADD KEY `grade_id` (`grade_id`),
+  ADD KEY `section_id` (`section_id`),
+  ADD KEY `position_id` (`position_id`),
   ADD KEY `registrar_id` (`registrar_id`);
-
---
--- Indexes for table `event_attendees`
---
-ALTER TABLE `event_attendees`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `event_id` (`event_id`),
-  ADD KEY `respondent_id` (`respondent_id`);
 
 --
 -- Indexes for table `faculties`
@@ -282,6 +374,18 @@ ALTER TABLE `faculties`
   ADD KEY `faculties_ibfk_2` (`PositionID`);
 
 --
+-- Indexes for table `grades`
+--
+ALTER TABLE `grades`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `levels`
+--
+ALTER TABLE `levels`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `positions`
 --
 ALTER TABLE `positions`
@@ -289,12 +393,25 @@ ALTER TABLE `positions`
   ADD UNIQUE KEY `PositionName` (`PositionName`);
 
 --
+-- Indexes for table `sections`
+--
+ALTER TABLE `sections`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `seniorhighstudents`
 --
 ALTER TABLE `seniorhighstudents`
   ADD PRIMARY KEY (`ID`),
-  ADD UNIQUE KEY `IdentificationNumber` (`IdentificationNumber`),
-  ADD UNIQUE KEY `Email` (`Email`);
+  ADD KEY `fk_grade_id` (`GradeID`),
+  ADD KEY `fk_section_id` (`SectionID`),
+  ADD KEY `fk_strand_id` (`StrandID`);
+
+--
+-- Indexes for table `strands`
+--
+ALTER TABLE `strands`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `users`
@@ -324,7 +441,13 @@ ALTER TABLE `academic_years`
 -- AUTO_INCREMENT for table `collegestudents`
 --
 ALTER TABLE `collegestudents`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=134;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+
+--
+-- AUTO_INCREMENT for table `courses`
+--
+ALTER TABLE `courses`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `departments`
@@ -339,16 +462,22 @@ ALTER TABLE `events`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT for table `event_attendees`
---
-ALTER TABLE `event_attendees`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `faculties`
 --
 ALTER TABLE `faculties`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=71;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=76;
+
+--
+-- AUTO_INCREMENT for table `grades`
+--
+ALTER TABLE `grades`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT for table `levels`
+--
+ALTER TABLE `levels`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `positions`
@@ -357,16 +486,28 @@ ALTER TABLE `positions`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
+-- AUTO_INCREMENT for table `sections`
+--
+ALTER TABLE `sections`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
 -- AUTO_INCREMENT for table `seniorhighstudents`
 --
 ALTER TABLE `seniorhighstudents`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=149;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=294;
+
+--
+-- AUTO_INCREMENT for table `strands`
+--
+ALTER TABLE `strands`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
 
 --
 -- AUTO_INCREMENT for table `user_types`
@@ -379,21 +520,24 @@ ALTER TABLE `user_types`
 --
 
 --
+-- Constraints for table `collegestudents`
+--
+ALTER TABLE `collegestudents`
+  ADD CONSTRAINT `fk_course_id` FOREIGN KEY (`CourseID`) REFERENCES `courses` (`id`),
+  ADD CONSTRAINT `fk_level_id` FOREIGN KEY (`LevelID`) REFERENCES `levels` (`id`);
+
+--
 -- Constraints for table `events`
 --
 ALTER TABLE `events`
   ADD CONSTRAINT `events_ibfk_1` FOREIGN KEY (`academic_year_id`) REFERENCES `academic_years` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `events_ibfk_2` FOREIGN KEY (`senior_high_student_id`) REFERENCES `seniorhighstudents` (`ID`),
-  ADD CONSTRAINT `events_ibfk_3` FOREIGN KEY (`college_student_id`) REFERENCES `collegestudents` (`ID`),
-  ADD CONSTRAINT `events_ibfk_4` FOREIGN KEY (`faculty_id`) REFERENCES `faculties` (`ID`),
-  ADD CONSTRAINT `events_ibfk_5` FOREIGN KEY (`registrar_id`) REFERENCES `registrars` (`id`);
-
---
--- Constraints for table `event_attendees`
---
-ALTER TABLE `event_attendees`
-  ADD CONSTRAINT `event_attendees_ibfk_1` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`),
-  ADD CONSTRAINT `event_attendees_ibfk_2` FOREIGN KEY (`respondent_id`) REFERENCES `respondents` (`id`);
+  ADD CONSTRAINT `events_ibfk_2` FOREIGN KEY (`course_id`) REFERENCES `courses` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `events_ibfk_3` FOREIGN KEY (`strand_id`) REFERENCES `strands` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `events_ibfk_4` FOREIGN KEY (`position_id`) REFERENCES `positions` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `events_ibfk_5` FOREIGN KEY (`grade_id`) REFERENCES `grades` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `events_ibfk_6` FOREIGN KEY (`level_id`) REFERENCES `levels` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `events_ibfk_7` FOREIGN KEY (`section_id`) REFERENCES `sections` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `events_ibfk_8` FOREIGN KEY (`registrar_id`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `faculties`
@@ -401,6 +545,14 @@ ALTER TABLE `event_attendees`
 ALTER TABLE `faculties`
   ADD CONSTRAINT `faculties_ibfk_1` FOREIGN KEY (`DepartmentID`) REFERENCES `departments` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `faculties_ibfk_2` FOREIGN KEY (`PositionID`) REFERENCES `positions` (`ID`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Constraints for table `seniorhighstudents`
+--
+ALTER TABLE `seniorhighstudents`
+  ADD CONSTRAINT `fk_grade_id` FOREIGN KEY (`GradeID`) REFERENCES `grades` (`id`),
+  ADD CONSTRAINT `fk_section_id` FOREIGN KEY (`SectionID`) REFERENCES `sections` (`id`),
+  ADD CONSTRAINT `fk_strand_id` FOREIGN KEY (`StrandID`) REFERENCES `strands` (`id`);
 
 --
 -- Constraints for table `users`
