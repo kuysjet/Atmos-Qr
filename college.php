@@ -161,8 +161,8 @@ $(document).ready(function() {
       { "data": "FirstName" },
       { "data": "LastName" },
       { "data": "Email" },
-      { "data": "Course" },
-      { "data": "Level" },
+      { "data": "course_name" },
+      { "data": "level_name" },
       {
         "data": null,
         "render": function(data, type, row) {
@@ -335,18 +335,19 @@ $('#importCsvForm').on('submit', function(e) {
 
 
 
-  // Edit button click event handler
-  $('#collegeStudentsTable').on('click', '.edit-btn', function() {
+// Edit button click event handler
+$('#collegeStudentsTable').on('click', '.edit-btn', function() {
     var rowData = table.row($(this).parents('tr')).data();
     $('#editStudentId').val(rowData['ID']);
     $('#editIdentificationNumber').val(rowData['IdentificationNumber']);
     $('#editFirstName').val(rowData['FirstName']);
     $('#editLastName').val(rowData['LastName']);
     $('#editEmail').val(rowData['Email']);
-    $('#editCourse').val(rowData['Course']);
-    $('#editLevel').val(rowData['Level']);
+    $('#editCourse').val(rowData['course_name']); 
+    $('#editLevel').val(rowData['level_name']); 
     $('#editStudentModal').modal('show');
-  });
+});
+
 
   // Submit form for editing college student
   $('#editStudentForm').on('submit', function(e) {
@@ -635,26 +636,15 @@ function dataURLtoBlob(dataURL) {
                   // Database connection code
                   include 'database/db.php';
 
-                  // Query to fetch ENUM values of 'Course' column from the 'CollegeStudents' table
-                  $query = "SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'CollegeStudents' AND COLUMN_NAME = 'Course'";
-                  $result = mysqli_query($conn, $query);
+                  // Query to fetch courses from the courses table
+                  $queryCourse = "SELECT id, course_name FROM courses";
+                  $stmtCourse = $conn->prepare($queryCourse);
+                  $stmtCourse->execute();
+                  $resultCourse = $stmtCourse->get_result();
 
-                  // Check if query was successful
-                  if ($result) {
-                    $row = mysqli_fetch_assoc($result);
-                    // Extract ENUM values from the result
-                    $enum_str = $row['COLUMN_TYPE'];
-                    // Extract ENUM values from the string
-                    preg_match_all("/'(.*?)'/", $enum_str, $matches);
-                    $enums = $matches[1];
-
-                    // Generate options for each ENUM value
-                    foreach ($enums as $enum) {
-                      echo '<option value="' . $enum . '">' . $enum . '</option>';
-                    }
-                  } else {
-                    // If query fails, display an error option
-                    echo '<option value="">Error fetching data</option>';
+                  // Generate options for each course
+                  while ($rowCourse = $resultCourse->fetch_assoc()) {
+                    echo '<option value="' . $rowCourse['id'] . '">' . $rowCourse['course_name'] . '</option>';
                   }
 
                   // Close database connection
@@ -667,32 +657,21 @@ function dataURLtoBlob(dataURL) {
                 <select class="form-control" id="level" name="level" required>
                   <option value="">Select Level</option> <!-- Blank option -->
                   <?php
-                  // Database connection code
+                  // Database connection code (already included above)
                   include 'database/db.php';
 
-                  // Query to fetch ENUM values of 'Level' column from the 'CollegeStudents' table
-                  $query = "SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'CollegeStudents' AND COLUMN_NAME = 'Level'";
-                  $result = mysqli_query($conn, $query);
+                  // Query to fetch levels from the levels table
+                  $queryLevel = "SELECT id, level_name FROM levels";
+                  $stmtLevel = $conn->prepare($queryLevel);
+                  $stmtLevel->execute();
+                  $resultLevel = $stmtLevel->get_result();
 
-                  // Check if query was successful
-                  if ($result) {
-                    $row = mysqli_fetch_assoc($result);
-                    // Extract ENUM values from the result
-                    $enum_str = $row['COLUMN_TYPE'];
-                    // Extract ENUM values from the string
-                    preg_match_all("/'(.*?)'/", $enum_str, $matches);
-                    $enums = $matches[1];
-
-                    // Generate options for each ENUM value
-                    foreach ($enums as $enum) {
-                      echo '<option value="' . $enum . '">' . $enum . '</option>';
-                    }
-                  } else {
-                    // If query fails, display an error option
-                    echo '<option value="">Error fetching data</option>';
+                  // Generate options for each level
+                  while ($rowLevel = $resultLevel->fetch_assoc()) {
+                    echo '<option value="' . $rowLevel['id'] . '">' . $rowLevel['level_name'] . '</option>';
                   }
 
-                  // Close database connection
+                  // Close database connection (already included above)
                   mysqli_close($conn);
                   ?>
                 </select>
@@ -723,97 +702,82 @@ function dataURLtoBlob(dataURL) {
       </div>
       <div class="modal-body">
         <form id="editStudentForm">
-        <div class="row">
-          <div class="col-md-6">
-          <input type="hidden" id="editStudentId" name="editStudentId">
-          <div class="form-group">
-            <label for="editIdentificationNumber">Identification Number</label>
-            <input type="text" class="form-control" id="editIdentificationNumber" name="editIdentificationNumber" required>
-          </div>
-          <div class="form-group">
-            <label for="editFirstName">First Name</label>
-            <input type="text" class="form-control" id="editFirstName" name="editFirstName" required>
-          </div>
-          <div class="form-group">
-            <label for="editLastName">Last Name</label>
-            <input type="text" class="form-control" id="editLastName" name="editLastName" required>
-          </div>
-          </div>
-          <div class="col-md-6">
-          <div class="form-group">
-            <label for="editEmail">Email</label>
-            <input type="email" class="form-control" id="editEmail" name="editEmail" required>
-          </div>
-          <div class="form-group">
-            <label for="editCourse">Course</label>
-            <select class="form-control" id="editCourse" name="editCourse" required>
-                <?php
-                // Database connection code
-                include 'database/db.php';
+          <div class="row">
+            <div class="col-md-6">
+              <input type="hidden" id="editStudentId" name="editStudentId">
+              <div class="form-group">
+                <label for="editIdentificationNumber">Identification Number</label>
+                <input type="text" class="form-control" id="editIdentificationNumber" name="editIdentificationNumber" required>
+              </div>
+              <div class="form-group">
+                <label for="editFirstName">First Name</label>
+                <input type="text" class="form-control" id="editFirstName" name="editFirstName" required>
+              </div>
+              <div class="form-group">
+                <label for="editLastName">Last Name</label>
+                <input type="text" class="form-control" id="editLastName" name="editLastName" required>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="editEmail">Email</label>
+                <input type="email" class="form-control" id="editEmail" name="editEmail" required>
+              </div>
+              <div class="form-group">
+                <label for="editCourse">Course</label>
+                <select class="form-control" id="editCourse" name="editCourse" required>
+                    <?php
+                    // Database connection code
+                    include 'database/db.php';
 
-                // Query to fetch ENUM values of 'Course' column from the 'CollegeStudents' table
-                $query = "SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'CollegeStudents' AND COLUMN_NAME = 'Course'";
-                $result = mysqli_query($conn, $query);
+                    // Query to fetch course names from the Courses table
+                    $query = "SELECT course_name FROM courses";
+                    $result = mysqli_query($conn, $query);
 
-                // Check if query was successful
-                if ($result) {
-                    $row = mysqli_fetch_assoc($result);
-                    // Extract ENUM values from the result
-                    $enum_str = $row['COLUMN_TYPE'];
-                    // Extract ENUM values from the string
-                    preg_match_all("/'(.*?)'/", $enum_str, $matches);
-                    $enums = $matches[1];
-
-                    // Generate options for each ENUM value
-                    foreach ($enums as $enum) {
-                        echo '<option value="' . $enum . '">' . $enum . '</option>';
+                    // Check if query was successful
+                    if ($result && mysqli_num_rows($result) > 0) {
+                        // Fetch course names and generate options
+                        while ($row = mysqli_fetch_assoc($result)) {
+                            echo '<option value="' . $row['course_name'] . '">' . $row['course_name'] . '</option>';
+                        }
+                    } else {
+                        // If query fails or no courses found, display an error option
+                        echo '<option value="">No courses found</option>';
                     }
-                } else {
-                    // If query fails, display an error option
-                    echo '<option value="">Error fetching data</option>';
-                }
 
-                // Close database connection
-                mysqli_close($conn);
-                ?>
-            </select>
-          </div>
+                    // Close database connection
+                    mysqli_close($conn);
+                    ?>
+                </select>
+              </div>
+              <div class="form-group">
+                <label for="editLevel">Level</label>
+                  <select class="form-control" id="editLevel" name="editLevel" required>
+                  <?php
+                  // Database connection code
+                  include 'database/db.php';
 
-          <div class="form-group">
-            <label for="editLevel">Level</label>
-            <select class="form-control" id="editLevel" name="editLevel" required>
-                <?php
-                // Database connection code
-                include 'database/db.php';
+                  // Query to fetch level name from the Levels table
+                  $query = "SELECT level_name FROM levels";
+                  $result = mysqli_query($conn, $query);
 
-                // Query to fetch ENUM values of 'Level' column from the 'CollegeStudents' table
-                $query = "SELECT COLUMN_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'CollegeStudents' AND COLUMN_NAME = 'Level'";
-                $result = mysqli_query($conn, $query);
+                  // Check if query was successful
+                  if ($result && mysqli_num_rows($result) > 0) {
+                      // Fetch level name and generate options
+                      while ($row = mysqli_fetch_assoc($result)) {
+                          echo '<option value="' . $row['level_name'] . '">' . $row['level_name'] . '</option>';
+                      }
+                  } else {
+                      // If query fails or no levels found, display an error option
+                      echo '<option value="">No levels found</option>';
+                  }
 
-                // Check if query was successful
-                if ($result) {
-                    $row = mysqli_fetch_assoc($result);
-                    // Extract ENUM values from the result
-                    $enum_str = $row['COLUMN_TYPE'];
-                    // Extract ENUM values from the string
-                    preg_match_all("/'(.*?)'/", $enum_str, $matches);
-                    $enums = $matches[1];
-
-                    // Generate options for each ENUM value
-                    foreach ($enums as $enum) {
-                        echo '<option value="' . $enum . '">' . $enum . '</option>';
-                    }
-                } else {
-                    // If query fails, display an error option
-                    echo '<option value="">Error fetching data</option>';
-                }
-
-                // Close database connection
-                mysqli_close($conn);
-                ?>
-            </select>
-          </div>
-          </div>
+                  // Close database connection
+                  mysqli_close($conn);
+                  ?>
+                  </select>
+              </div>
+            </div>
           </div>
         </form>
       </div>
@@ -823,6 +787,11 @@ function dataURLtoBlob(dataURL) {
     </div>
   </div>
 </div>
+
+
+
+
+
 
 
 
