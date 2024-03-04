@@ -170,7 +170,28 @@ $(document).ready(function() {
         }
       }
     ],
-    "responsive": true,
+    "responsive": {
+        details: {
+            renderer: function ( api, rowIdx, columns ) {
+                var data = $.map( columns, function ( col, i ) {
+                    if(i != 0 && i != 1 && i != 7){ // Exclude columns 0 (checkbox), 1 (auto-increment), and 7 (actions)
+                        return col.hidden ?
+                            '<tr data-dt-row="'+col.rowIndex+'" data-dt-column="'+col.columnIndex+'">'+
+                                '<td>'+col.title+':'+'</td> '+
+                                '<td>'+col.data+'</td>'+
+                            '</tr>' :
+                            '';
+                    } else {
+                        return '';
+                    }
+                } ).join('');
+
+                return data ?
+                    $('<table/>').append( data ) :
+                    false;
+            }
+        }
+    },
     "lengthChange": false, 
     "autoWidth": false,
     "dom": 'Bfrtip', 
