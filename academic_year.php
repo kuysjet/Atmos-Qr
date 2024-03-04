@@ -238,7 +238,14 @@ $(document).ready(function() {
         });
       } else {
         // User canceled status change
-        Swal.fire("Academic Year status change canceled!", "", "info");
+        Swal.fire({
+          title: "Cancelled",
+          text: "Academic Year status change canceled.",
+          icon: "info",
+          customClass: {
+                  popup: 'small-swal' // Apply custom class for styling
+              },
+        });
       }
     });
   });
