@@ -1,4 +1,9 @@
-<?php include 'includes/header.php'; ?>
+<?php 
+include 'database/db.php'; 
+
+include 'includes/header.php'; 
+
+?>
 
   <!-- DataTables -->
   <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
@@ -6,6 +11,26 @@
   <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.jqueryui.min.css">
+  <!-- Multiselect option cdn-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/css/bootstrap-multiselect.css" />
+
+<style>
+/* Custom CSS for multiselect options */
+.multiselect-container li a:hover {
+    background-color: #007bff !important; /* Primary color */
+    color: #fff !important; /* Text color */
+    width: 100%; /* Max width */
+    display: block; /* Ensure full width */
+}
+
+.multiselect-container li.active a {
+    background-color: #007bff !important; /* Primary color */
+    color: #fff !important; /* Text color */
+    width: 100%; /* Max width */
+    display: block; /* Ensure full width */
+}
+
+</style>
 
 </head>
 <body class="hold-transition sidebar-mini">
@@ -30,7 +55,7 @@
         <div class="col-sm-6">
           <div class="row">
             <div class="col-sm-12 text-sm-right">
-              <div class="mr-4 small"><b>Philippine Standard Time</b></div>
+              <div class="mr-2 small"><b>Philippine Standard Time</b></div>
             </div>
             <div class="col-sm-12 text-sm-right">
               <div id="philippine-date-time" class="small"></div>
@@ -60,14 +85,10 @@
                   <thead>
                   <tr>
                     <th>No.</th>
-                    <!-- <th>Academic Year</th> -->
                     <th>Event Name</th>
                     <th>Venue</th>
-                    <!-- <th>Description</th> -->
                     <th>Start DateTime</th>
                     <th>End DateTime</th>
-                    <!-- <th>Respondent</th>
-                    <th>Assigned Registrar</th> -->
                     <th>Action</th>
                   </tr>
                   </thead>
@@ -113,25 +134,108 @@
 <!-- AdminLTE App -->
 <script src="dist/js/adminlte.min.js"></script>
 <script src="dist/js/datetime.js"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-multiselect/0.9.13/js/bootstrap-multiselect.min.js"></script>
 
 <script>
-$(function () {
-  $("#eventsTable").DataTable({
-    "responsive": true,
-    "lengthChange": false, 
-    "autoWidth": false,
-    "orderable": true,
-    "dom": 'Bfrtip', 
-    "buttons": [
-      {
-        extend: 'colvis',
-        text: '<i class="fas fa-eye"></i>',
-        className: 'btn-sm btn-light border',
-      }
-    ],
+  $(document).ready(function() {
+    // Destroy existing DataTable instance
+    if ($.fn.DataTable.isDataTable('#eventsTable')) {
+      $('#eventsTable').DataTable().destroy();
+    }
+
+    // Initialize DataTable with new settings
+    var table = $('#eventsTable').DataTable({
+      "ajax": "crud_events.php",
+      "columns": [
+        { "data": null, "render": function(data, type, row, meta) {
+            return meta.row + 1; // Add auto-increment number starting from 1
+          }
+        },
+        { "data": "event_name" },
+        { "data": "event_venue" },
+        { "data": "start_datetime" },
+        { "data": "end_datetime" },
+        {
+          "data": null,
+          "render": function(data, type, row) {
+            return '<i class="fas fa-edit edit-btn text-success mr-2" title="Edit"></i>' +
+                  '<i class="fas fa-trash-alt delete-btn text-danger" title="Delete"></i>';
+          }
+        }
+      ],
+      "responsive": true,
+      "lengthChange": false, 
+      "autoWidth": false,
+      "dom": 'Bfrtip', 
+      "buttons": [
+        {
+          extend: 'colvis',
+          text: '<i class="fas fa-eye"></i>',
+          className: 'btn-sm btn-light border',
+        }
+      ]
   }).buttons().container().appendTo('#eventsTable_wrapper .col-md-6:eq(0)');
+
+
+// Handle form submission
+$('#addEventForm').submit(function(event) {
+    event.preventDefault(); // Prevent default form submission
+
+    // Serialize form data
+    var formData = $(this).serialize();
+
+    // Send Ajax request to add the event
+    $.ajax({
+        url: 'add_event.php', // PHP script to handle insertion
+        method: 'POST',
+        data: formData,
+        dataType: 'json', // Expect JSON response
+        success: function(response) {
+            // Check if insertion was successful
+            if (response.status === 'success') {
+                // Clear form fields
+                $('#addEventForm')[0].reset();
+                // Close the modal
+                $('#addEventModal').modal('hide');
+                // Reload DataTable to display the new event
+                $('#eventTable').DataTable().ajax.reload();
+                // Show success message using SweetAlert
+                Swal.fire({
+                    title: 'Success',
+                    text: 'Event added successfully!',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
+            } else {
+                // Show error message using SweetAlert
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Failed to add event.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            }
+        },
+        error: function(xhr, status, error) {
+            // Show error message using SweetAlert
+            Swal.fire({
+                title: 'Error',
+                text: 'Failed to add event. Error: ' + error,
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    });
 });
+
+
+
+
+
+});
+
+
+
 </script>
 
 
@@ -152,34 +256,24 @@ $(function () {
           <div class="row mb-3">
             <div class="col-md-6">
               <label for="academicYear" class="form-label">Academic Year</label>
-              <select class="form-control col-md-12" id="academicYear" name="academicYear">
+              <select class="form-control col-md-12" id="academicYear" name="academicYear" required>
+                  <option value="">Select Academic Year</option>
                   <?php
-                  // Establish a connection to the database
-                  include 'database/db.php'; 
+                  // Query to select academic years
+                  $query = "SELECT * FROM academic_years";
 
-                  // Check if the connection is successful
-                  if ($conn) {
-                      // Query to select academic years
-                      $query = "SELECT * FROM academic_years";
+                  // Execute the query
+                  $result = mysqli_query($conn, $query);
 
-                      // Execute the query
-                      $result = mysqli_query($conn, $query);
-
-                      // Check if records are found
-                      if (mysqli_num_rows($result) > 0) {
-                          // Loop through each academic year
-                          while ($row = mysqli_fetch_assoc($result)) {
-                              // Output an option for each academic year
-                              echo "<option value='" . $row['id'] . "'>" . $row['academic_year'] . "</option>";
-                          }
-                      } else {
-                          echo "<option value=''>No academic years found</option>";
+                  // Check if records are found
+                  if ($result && mysqli_num_rows($result) > 0) {
+                      // Loop through each academic year
+                      while ($row = mysqli_fetch_assoc($result)) {
+                          // Output an option for each academic year
+                          echo "<option value='" . $row['id'] . "'>" . $row['academic_year'] . "</option>";
                       }
-
-                      // Close the database connection
-                      mysqli_close($conn);
                   } else {
-                      echo "<option value=''>Connection failed</option>";
+                      echo "<option value=''>No academic years found</option>";
                   }
                   ?>
               </select>
@@ -187,14 +281,14 @@ $(function () {
 
             <div class="col-md-6">
               <label for="eventName" class="form-label">Event Name</label>
-              <input type="text" class="form-control" id="eventName" name="eventName">
+              <input type="text" class="form-control" id="eventName" name="eventName" required>
             </div>
           </div>
 
           <div class="row mb-3">
             <div class="col-md-6">
-              <label for="venue" class="form-label">Venue</label>
-              <textarea class="form-control" id="venue" name="venue"></textarea>
+              <label for="venue" class="form-label">Event Venue</label>
+              <textarea class="form-control" id="venue" name="venue" required></textarea>
             </div>
 
             <div class="col-md-6">
@@ -206,68 +300,23 @@ $(function () {
           <div class="row mb-3">
             <div class="col-md-6">
               <label for="startDatetime" class="form-label">Start Datetime</label>
-              <input type="datetime-local" class="form-control" id="startDatetime" name="startDatetime">
+              <input type="datetime-local" class="form-control" id="startDatetime" name="startDatetime" required>
             </div>
 
             <div class="col-md-6">
               <label for="endDatetime" class="form-label">End Datetime</label>
-              <input type="datetime-local" class="form-control" id="endDatetime" name="endDatetime">
+              <input type="datetime-local" class="form-control" id="endDatetime" name="endDatetime" required>
             </div>
           </div>
 
-          <!-- Respondents and Registrar Select Dropdowns -->
+          <!-- Registrar Select Dropdown -->
           <div class="row mb-3">
-            <div class="col-md-6">
-              <label class="form-label">Respondents</label>
-              <!-- Dropdown list with checkboxes for selecting respondents -->
-              <select class="form-control col-md-12" id="respondents" name="respondents[]" multiple>
-              <?php
-                    // Establish a connection to the database
-                    include 'database/db.php'; 
-
-                    // Check if the connection is successful
-                    if ($conn) {
-                        // Query to select courses and levels from college_students
-                        $query = "SELECT DISTINCT Course, Level FROM CollegeStudents";
-                        $result = mysqli_query($conn, $query);
-                        while ($row = mysqli_fetch_assoc($result)) {
-                            echo "<option value='college:{$row['Course']}:{$row['Level']}'>{$row['Course']} - Level {$row['Level']}</option>";
-                        }
-
-                        // Query to select strands, grades, and sections from seniorhigh_students
-                        $query = "SELECT DISTINCT Strand, Grade, Section FROM SeniorHighStudents";
-                        $result = mysqli_query($conn, $query);
-                        while ($row = mysqli_fetch_assoc($result)) {
-                            echo "<option value='seniorhigh:{$row['Strand']}:{$row['Grade']}:{$row['Section']}'>{$row['Strand']} - Grade {$row['Grade']} - Section {$row['Section']}</option>";
-                        }
-
-                        // Query to select departments from faculties
-                        $query = "SELECT DISTINCT DepartmentID FROM faculties";
-                        $result = mysqli_query($conn, $query);
-                        while ($row = mysqli_fetch_assoc($result)) {
-                            // Assuming you have a table 'departments' to fetch department names
-                            $departmentQuery = "SELECT DepartmentName FROM Departments WHERE ID={$row['DepartmentID']}";
-                            $departmentResult = mysqli_query($conn, $departmentQuery);
-                            $departmentRow = mysqli_fetch_assoc($departmentResult);
-                            echo "<option value='faculty:{$departmentRow['DepartmentName']}'>{$departmentRow['DepartmentName']}</option>";
-                        }
-
-                        // Close the database connection
-                        mysqli_close($conn);
-                    } else {
-                        echo "<option value=''>Connection failed</option>";
-                    }
-                    ?>
-              </select>
-            </div>
             <div class="col-md-6">
               <label for="registrar" class="form-label">Registrar</label>
               <!-- Dropdown list for registrar -->
-              <select class="form-control" id="registrar" name="registrar">
+              <select class="form-control" id="registrar" name="registrar" required>
+                  <option value="">Select Registrar</option>
                   <?php
-                  // Establish a connection to the database
-                  include 'database/db.php'; 
-
                   // Check if the connection is successful
                   if ($conn) {
                       // Query to select registrars from the users table
@@ -275,7 +324,7 @@ $(function () {
                       $result = mysqli_query($conn, $query);
 
                       // Check if any registrars are found
-                      if (mysqli_num_rows($result) > 0) {
+                      if ($result && mysqli_num_rows($result) > 0) {
                           // Loop through each registrar
                           while ($row = mysqli_fetch_assoc($result)) {
                               echo "<option value='{$row['id']}'>{$row['name']}</option>";
@@ -283,16 +332,13 @@ $(function () {
                       } else {
                           echo "<option value=''>No registrars found</option>";
                       }
-
-                      // Close the database connection
-                      mysqli_close($conn);
                   } else {
                       echo "<option value=''>Connection failed</option>";
                   }
                   ?>
               </select>
+            </div>
           </div>
-        </form>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">
@@ -308,17 +354,29 @@ $(function () {
 
 
 
-<script>
-  // JavaScript code to show and hide modal
-  document.getElementById('openModalBtn').addEventListener('click', function() {
-    $('#addEventModal').modal('show');
-  });
 
-  // Optional: Close modal when Save button is clicked
-  document.getElementById('saveEventBtn').addEventListener('click', function() {
-    $('#addEventModal').modal('hide');
-  });
-</script>
+<!-- <script>
+$(document).ready(function() {
+    $('#respondents').multiselect({
+        buttonWidth: '100%', // Adjust as needed
+        maxHeight: 200, // Adjust as needed
+        onChange: function(option, checked) {
+            // Check if "Add All" option is selected
+            if ($(option).val() === 'all') {
+                if (checked) {
+                    // Select all other options
+                    $('#respondents option').not(':selected').prop('selected', true);
+                } else {
+                    // Deselect all other options
+                    $('#respondents option:selected').prop('selected', false);
+                }
+                // Update the multiselect
+                $('#respondents').multiselect('refresh');
+            }
+        }
+    });
+});
+</script> -->
 
 
 </body>

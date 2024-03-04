@@ -141,7 +141,7 @@ $(document).ready(function() {
       {
         "data": null,
         "render": function(data, type, row) {
-          return '<i class="fas fa-trash-alt delete-btn text-danger"></i>';
+          return '<button type="button" class="btn btn-sm btn-danger delete-btn"><i class="fas fa-trash-alt"></i></button>';
         }
       }
     ],
