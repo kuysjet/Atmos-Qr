@@ -96,15 +96,15 @@
 </li>
 
           <li class="nav-item">
-            <a href="event.php" class="nav-link <?= $page == 'event.php' ? 'active text-white' : '' ?>">
-              <i class="fas fa-th-list nav-icon"></i>
-              <p>Events</p>
-            </a>
-          </li>
-          <li class="nav-item">
             <a href="registrar.php" class="nav-link <?= $page == 'registrar.php' ? 'active text-white' : '' ?>">
               <i class="fas fa-user-secret nav-icon"></i>
               <p>Registrars</p>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="event.php" class="nav-link <?= $page == 'event.php' ? 'active text-white' : '' ?>">
+              <i class="fas fa-th-list nav-icon"></i>
+              <p>Events</p>
             </a>
           </li>
           <li class="nav-item">
