@@ -840,7 +840,7 @@ function dataURLtoBlob(dataURL) {
             <!-- Logo above the QR Code -->
             <img src="dist/img/aclc_complete_logo.png" alt="Logo" style="max-width: 50%;">
             <!-- QR Code Image -->
-            <img id="qrCodeImage" alt="QR Code" style="width: 150px; height: 150px;">
+            <img id="qrCodeImage" alt="QR Code" style="width: 70%; max-width: 200px; height: auto;">
             <!-- Student Name -->
             <div id="studentName" class="font-weight-bold" style="font-size: small;"></div>
           </div>
