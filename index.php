@@ -110,6 +110,7 @@ include 'includes/header.php';
 
 
 <script>
+  // Function to toggle password visibility
   function togglePassword(inputId) {
     var input = document.getElementById(inputId);
     var icon = document.querySelector('.password-toggle-icon');
@@ -125,38 +126,40 @@ include 'includes/header.php';
     }
   }
 
+  // Function to show alert messages
+  document.addEventListener('DOMContentLoaded', function () {
+    // Check if there is a parameter in the URL indicating an error
+    const urlParams = new URLSearchParams(window.location.search);
+    const errorParam = urlParams.get('error');
 
-
-//      // Sample script to show a SweetAlert
-document.addEventListener('DOMContentLoaded', function () {
-      // Check if there is a parameter in the URL indicating an error
-      const urlParams = new URLSearchParams(window.location.search);
-      const errorParam = urlParams.get('error');
-
-      if (errorParam === 'invalid_password') {
-        Swal.fire({
-          icon: 'error',
-          title: 'Invalid password',
-          text: 'Please enter the correct password.',
-          confirmButtonColor: '#3085d6',
-          confirmButtonText: 'OK'
-        });
-      } else if (errorParam === 'user_not_found') {
-        Swal.fire({
-          icon: 'error',
-          title: 'User not found',
-          text: 'Please check your username and try again.',
-          confirmButtonColor: '#3085d6',
-          confirmButtonText: 'OK',
-          customClass: {
-            popup: 'small-swal' 
-        }
-        });
-      }
-    });
-
-
+    if (errorParam === 'invalid_password') {
+      Swal.fire({
+        icon: 'error',
+        title: 'Invalid password',
+        text: 'Please enter the correct password.',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'OK'
+      });
+    } else if (errorParam === 'user_not_found') {
+      Swal.fire({
+        icon: 'error',
+        title: 'User not found',
+        text: 'Please check your username and try again.',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'OK'
+      });
+    } else if (errorParam === 'user_inactive') {
+      Swal.fire({
+        icon: 'warning',
+        title: 'Inactive user',
+        text: 'Your account is currently inactive. Please contact the administrator.',
+        confirmButtonColor: '#3085d6',
+        confirmButtonText: 'OK'
+      });
+    }
+  });
 </script>
+
 
 
 
