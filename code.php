@@ -16,19 +16,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $user = mysqli_fetch_assoc($result);
 
         if ($password == $user['password']) {
-            // Store user information in session variables
-            $_SESSION['username'] = $username;
-            $_SESSION['user_type_id'] = $user['user_type_id']; // Assuming 'user_type_id' is a column in the users table
-
-            // Redirect based on user type
-            switch ($user['user_type_id']) {
-                case 1: // Assuming user_type_id 1 represents 'Administrator'
-                    header('Location: admin_dashboard.php');
-                    exit(); // Stop further execution
-                case 2: // Assuming user_type_id 2 represents 'Registrar'
-                    header('Location: registrar_dashboard.php');
-                    exit(); // Stop further execution
-                // Add more cases for other user types as needed
+            // Check if user is active
+            if ($user['status'] == 'active') {
+                // Check user type
+                switch ($user['user_type_id']) {
+                    case 1: // Administrator
+                        $_SESSION['username'] = $username;
+                        $_SESSION['user_type_id'] = $user['user_type_id'];
+                        header('Location: admin_dashboard.php');
+                        exit(); // Stop further execution
+                    case 2: // Registrar
+                        $_SESSION['username'] = $username;
+                        $_SESSION['user_type_id'] = $user['user_type_id'];
+                        header('Location: registrar_dashboard.php');
+                        exit(); // Stop further execution
+                    default:
+                        // Unsupported user type, redirect to login page with error parameter
+                        header('Location: index.php?error=unsupported_user_type');
+                        exit(); // Stop further execution
+                }
+            } else {
+                // User is inactive, redirect to login page with error parameter
+                header('Location: index.php?error=user_inactive');
+                exit(); // Stop further execution
             }
         } else {
             // Password is incorrect, redirect to login page with error parameter
@@ -36,7 +46,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit(); // Stop further execution
         }
     } else {
-        // Username is incorrect, redirect to login page with error parameter
+        // Username not found, redirect to login page with error parameter
         header('Location: index.php?error=user_not_found');
         exit(); // Stop further execution
     }
