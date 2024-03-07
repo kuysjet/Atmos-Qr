@@ -1,8 +1,3 @@
-<?php
-session_start()
-
-?>
-
 
 <!DOCTYPE html>
 
@@ -33,9 +28,15 @@ function setPageTitle() {
     pageTitle = "ATMOS | Department";
   } else if (path.endsWith("/position.php")) {
     pageTitle = "ATMOS | Position";
+  } else if (path.endsWith("/event.php")) {
+    pageTitle = "ATMOS | Event";
   }else if (path.endsWith("/registrar.php")) {
     pageTitle = "ATMOS | Registrar";
+  }else if (path.endsWith("/report.php")) {
+    pageTitle = "ATMOS | Report";
   }
+
+
 
   // Update the document title
   document.title = pageTitle;
