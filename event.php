@@ -328,6 +328,39 @@ $('#eventsTable').on('click', '.delete-btn', function() {
 });
 
 
+  // Function to show or hide the events table based on the status of the selected academic year
+  function toggleEventsTable(status) {
+      if (status === 'active') {
+          $('#eventsTable').show(); // Show the events table if the academic year is active
+      } else {
+          $('#eventsTable').hide(); // Hide the events table if the academic year is inactive
+      }
+  }
+
+  // Event listener for changes in the selected academic year
+  $('#academicYear').on('change', function() {
+      var selectedYearId = $(this).val(); // Get the value of the selected academic year
+      // Send AJAX request to fetch the status of the selected academic year
+      $.ajax({
+          url: 'get_academic_year_status.php', // PHP script to retrieve academic year status
+          method: 'POST',
+          dataType: 'json',
+          data: { academic_year_id: selectedYearId },
+          success: function(response) {
+              if (response.status === 'success') {
+                  // Toggle visibility of the events table based on the status
+                  toggleEventsTable(response.data.status);
+              } else {
+                  console.error('Failed to fetch academic year status');
+              }
+          },
+          error: function(xhr, status, error) {
+              console.error(xhr.responseText);
+          }
+      });
+  });
+
+
 });
 
 
@@ -476,12 +509,9 @@ $('#eventsTable').on('click', '.delete-btn', function() {
                       if ($result && mysqli_num_rows($result) > 0) {
                           // Loop through each academic year
                           while ($row = mysqli_fetch_assoc($result)) {
-                            // Check if the academic year is active
-                            if ($row['status'] == 'Active') {
-                                // Output an option for each active academic year
-                                echo "<option value='" . $row['id'] . "'>" . $row['academic_year'] . "</option>";
-                            }
-                        }
+                              // Output an option for each academic year
+                              echo "<option value='" . $row['id'] . "'>" . $row['academic_year'] . "</option>";
+                          }
                       } else {
                           echo "<option value=''>No academic years found</option>";
                       }
