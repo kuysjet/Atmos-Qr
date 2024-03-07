@@ -16,34 +16,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $user = mysqli_fetch_assoc($result);
 
         if ($password == $user['password']) {
-            // Get user role
-            $userTypeId = $user['user_type_id'];
-            $roleQuery = "SELECT * FROM user_types WHERE id = $userTypeId";
-            $roleResult = mysqli_query($conn, $roleQuery);
-            $roleRow = mysqli_fetch_assoc($roleResult);
+            // Store user information in session variables
+            $_SESSION['username'] = $username;
+            $_SESSION['user_type_id'] = $user['user_type_id']; // Assuming 'user_type_id' is a column in the users table
 
-            // Redirect based on role
-            switch ($roleRow['name']) {
-                case 'Administrator':
+            // Redirect based on user type
+            switch ($user['user_type_id']) {
+                case 1: // Assuming user_type_id 1 represents 'Administrator'
                     header('Location: admin_dashboard.php');
-                    break;
-                case 'Registrar':
+                    exit(); // Stop further execution
+                case 2: // Assuming user_type_id 2 represents 'Registrar'
                     header('Location: registrar_dashboard.php');
-                    break;
+                    exit(); // Stop further execution
+                // Add more cases for other user types as needed
             }
         } else {
-            // Password is incorrect, keep username and clear password
-            $_SESSION['error'] = 'invalid_password';
-            $_SESSION['username'] = $username;
-            // Redirect to login page with error parameter
+            // Password is incorrect, redirect to login page with error parameter
             header('Location: index.php?error=invalid_password');
+            exit(); // Stop further execution
         }
     } else {
-        // Username is incorrect, clear both fields
-        $_SESSION['error'] = 'user_not_found';
-        unset($_SESSION['username']);
-        // Redirect to login page with error parameter
+        // Username is incorrect, redirect to login page with error parameter
         header('Location: index.php?error=user_not_found');
+        exit(); // Stop further execution
     }
 }
 ?>

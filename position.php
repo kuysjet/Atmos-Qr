@@ -1,4 +1,16 @@
-<?php include 'includes/header.php'; ?>
+<?php
+session_start();
+
+// Check if the user is not logged in or is not a registrar
+if (!isset($_SESSION['username']) || $_SESSION['user_type_id'] != 1) {
+    // Redirect to the login page
+    header('Location: index.php');
+    exit(); // Stop further execution
+}
+
+include 'database/db.php';
+include 'includes/header.php'; 
+?>
 
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
   <!-- DataTables -->
