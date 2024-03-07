@@ -1,8 +1,15 @@
-<?php 
-include 'database/db.php'; 
+<?php
+session_start();
 
+// Check if the user is not logged in or is not a registrar
+if (!isset($_SESSION['username']) || $_SESSION['user_type_id'] != 1) {
+    // Redirect to the login page
+    header('Location: index.php');
+    exit(); // Stop further execution
+}
+
+include 'database/db.php';
 include 'includes/header.php'; 
-
 ?>
 
   <!-- DataTables -->
@@ -469,9 +476,12 @@ $('#eventsTable').on('click', '.delete-btn', function() {
                       if ($result && mysqli_num_rows($result) > 0) {
                           // Loop through each academic year
                           while ($row = mysqli_fetch_assoc($result)) {
-                              // Output an option for each academic year
-                              echo "<option value='" . $row['id'] . "'>" . $row['academic_year'] . "</option>";
-                          }
+                            // Check if the academic year is active
+                            if ($row['status'] == 'Active') {
+                                // Output an option for each active academic year
+                                echo "<option value='" . $row['id'] . "'>" . $row['academic_year'] . "</option>";
+                            }
+                        }
                       } else {
                           echo "<option value=''>No academic years found</option>";
                       }
