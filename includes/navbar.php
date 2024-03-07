@@ -20,7 +20,7 @@
       <!-- Profile -->
       <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
-          <i class="fas fa-user fa-fw mr-2 text-gray"></i>
+          <i class="fas fa-user fa-fw text-gray"></i>
         </a>
         <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
           <a href="#" class="dropdown-item">
