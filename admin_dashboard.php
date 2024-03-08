@@ -10,6 +10,47 @@ if (!isset($_SESSION['username']) || $_SESSION['user_type_id'] != 1) {
 
 include 'database/db.php';
 include 'includes/header.php'; 
+
+// Fetch count of events from the database
+$query = "SELECT COUNT(*) AS eventCount FROM events";
+$result = mysqli_query($conn, $query);
+$row = mysqli_fetch_assoc($result);
+$eventCount = $row['eventCount'];
+
+// Fetch count of finished events based on current date
+$currentDate = date('Y-m-d');
+$queryFinishedEvents = "SELECT COUNT(*) AS finishedEventCount FROM events WHERE event_date < '$currentDate'";
+$resultFinishedEvents = mysqli_query($conn, $queryFinishedEvents);
+$rowFinishedEvents = mysqli_fetch_assoc($resultFinishedEvents);
+$finishedEventCount = $rowFinishedEvents['finishedEventCount'];
+
+// Fetch count of ongoing events based on current date
+$queryOngoingEvents = "SELECT COUNT(*) AS ongoingEventCount FROM events WHERE event_date = '$currentDate'";
+$resultOngoingEvents = mysqli_query($conn, $queryOngoingEvents);
+$rowOngoingEvents = mysqli_fetch_assoc($resultOngoingEvents);
+$ongoingEventCount = $rowOngoingEvents['ongoingEventCount'];
+
+// Fetch count of listed registrants for college students
+$queryCollege = "SELECT COUNT(*) AS collegeCount FROM collegestudents";
+$resultCollege = mysqli_query($conn, $queryCollege);
+$rowCollege = mysqli_fetch_assoc($resultCollege);
+$collegeCount = $rowCollege['collegeCount'];
+
+// Fetch count of listed registrants for senior high students
+$querySeniorHigh = "SELECT COUNT(*) AS seniorHighCount FROM seniorhighstudents";
+$resultSeniorHigh = mysqli_query($conn, $querySeniorHigh);
+$rowSeniorHigh = mysqli_fetch_assoc($resultSeniorHigh);
+$seniorHighCount = $rowSeniorHigh['seniorHighCount'];
+
+// Fetch count of listed registrants for faculties
+$queryFaculty = "SELECT COUNT(*) AS facultyCount FROM faculties";
+$resultFaculty = mysqli_query($conn, $queryFaculty);
+$rowFaculty = mysqli_fetch_assoc($resultFaculty);
+$facultyCount = $rowFaculty['facultyCount'];
+
+// Calculate total count of listed registrants
+$totalRegistrants = $collegeCount + $seniorHighCount + $facultyCount;
+
 ?>
 
 
@@ -59,7 +100,7 @@ include 'includes/header.php';
 
               <div class="info-box-content">
                 <span class="info-box-text">Events</span>
-                <span class="info-box-number">5</span>
+                <span class="info-box-number"><?php echo $eventCount; ?></span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -72,7 +113,7 @@ include 'includes/header.php';
 
               <div class="info-box-content">
                 <span class="info-box-text">Listed Registrants</span>
-                <span class="info-box-number">800</span>
+                <span class="info-box-number"><?php echo $totalRegistrants; ?></span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -89,7 +130,7 @@ include 'includes/header.php';
 
               <div class="info-box-content">
                 <span class="info-box-text">Finished Events</span>
-                <span class="info-box-number">7</span>
+                <span class="info-box-number"><?php echo $finishedEventCount; ?></span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -102,7 +143,7 @@ include 'includes/header.php';
 
               <div class="info-box-content">
                 <span class="info-box-text">On-Going Events</span>
-                <span class="info-box-number">0</span>
+                <span class="info-box-number"><?php echo $ongoingEventCount; ?></span>
               </div>
               <!-- /.info-box-content -->
             </div>
