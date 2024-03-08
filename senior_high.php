@@ -1,16 +1,44 @@
 <?php
 session_start();
 
-// Check if the user is not logged in or is not a registrar
+include 'database/db.php';
+
+// Check if the user is not logged in or is not an administrator
 if (!isset($_SESSION['username']) || $_SESSION['user_type_id'] != 1) {
-    // Redirect to the login page
+    // Redirect to the login page 
     header('Location: index.php');
-    exit(); // Stop further execution
+    // exit(); // Stop further execution
+    exit();
 }
 
-include 'database/db.php';
-include 'includes/header.php'; 
+// Fetch user details of the current administrator from the database
+$username = $_SESSION['username'];
+$query = "SELECT * FROM users WHERE username = '$username' AND user_type_id = 1";
+$result = mysqli_query($conn, $query);
+
+// Check if the query was successful
+if ($result) {
+    // Fetch the user data
+    $row = mysqli_fetch_assoc($result);
+    
+    // Assign user details to variables
+    $id = $row['id'];
+    $firstname = $row['firstname'];
+    $lastname = $row['lastname'];
+    $email = $row['email'];
+    $username = $row['username'];
+
+} else {
+    // Handle query error
+    echo "Error: " . mysqli_error($conn);
+}
+
+// Close the database connection
+mysqli_close($conn);
 ?>
+
+<?php include 'includes/header.php'; ?>
+
 <!-- DataTables -->
 <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
 <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
@@ -139,6 +167,7 @@ include 'includes/sidebar.php';
 <!-- AdminLTE App -->
 <script src="dist/js/adminlte.min.js"></script>
 <script src="dist/js/datetime.js"></script>
+<script src="dist/js/pro-pass-toggle.js"></script>
 
 
 <script>
