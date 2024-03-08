@@ -86,7 +86,7 @@ $result = mysqli_query($conn, $query);
   </style>
 
 </head>
-<body>
+<body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
 
 
