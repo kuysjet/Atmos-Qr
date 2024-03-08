@@ -515,26 +515,27 @@ $('#importFacultyCsvForm').on('submit', function(e) {
     });
   });
 
-  // Event listener for "View QR" button clicks
+// Event listener for "View QR" button clicks
 $('#facultyTable').on('click', '.view-qr-btn', function() {
-  // Retrieve the faculties Identification Number from the button's data attribute
+  // Retrieve the faculty's Identification Number from the button's data attribute
   var identificationNumber = $(this).data('id');
 
-  // Fetch the faculties information from the table row
-  var firstName = $(this).closest('tr').find('td:nth-child(4)').text().trim();
-  var lastName = $(this).closest('tr').find('td:nth-child(5)').text().trim();
+  // Fetch the faculty's information from the DataTable row
+  var rowData = table.row($(this).closest('tr')).data();
+  var firstName = rowData['FirstName'].trim();
+  var lastName = rowData['LastName'].trim();
 
-  // Construct the QR code path using the faculties Identification Number
+  // Construct the QR code path using the faculty's Identification Number
   var qrCodePath = 'qr_codes/' + identificationNumber + '.png';
 
   // Set the src attribute of the QR code image in the modal
   $('#qrCodeImage').attr('src', qrCodePath);
 
-  // Set the filename for downloading to the faculties first name and last name
-  var filename = firstName + '_' + lastName + '_qr_code.png'; // Using faculties first name and last name for filename
+  // Set the filename for downloading to the faculty's first name and last name
+  var filename = firstName + '_' + lastName + '_qr_code.png'; // Using faculty's first name and last name for filename
   $('#downloadQR').attr('download', filename);
 
-  // Display the faculty name inside the card
+  // Display the faculty's name inside the card
   $('#facultyName').text(firstName + ' ' + lastName);
 
   // Show the modal
@@ -807,7 +808,7 @@ function dataURLtoBlob(dataURL) {
 
 
 <!-- Import CSV Modal -->
-<div class="modal fade" id="importFacultyCsvModal" tabindex="-1" role="dialog" aria-labelledby="importSeniorHighCsvModalLabel" aria-hidden="true">
+<div class="modal fade" id="importFacultyCsvModal" tabindex="-1" role="dialog" aria-labelledby="importFacultyCsvModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
       <div class="modal-header bg-success">
@@ -843,17 +844,17 @@ function dataURLtoBlob(dataURL) {
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body text-center" id="modalBodyToDownload">
+      <div class="modal-body text-center d-flex flex-column align-items-center justify-content-center" id="modalBodyToDownload">
         <!-- Card with Background Image inside Modal Body with Medium Size -->
-        <div class="card" id="cardToDownload" style="max-width: 50%; margin: auto;">
-          <img src="dist/img/Card.png" class="card-img" alt="Background Image">
-          <div class="card-img-overlay d-flex flex-column justify-content-center align-items-center">
+        <div class="card" id="cardToDownload" style="width: 300px;">
+          <img src="dist/img/Card.png" class="card-img" alt="Background Image" style="width: 100%; height: auto;">
+          <div class="card-img-overlay d-flex flex-column justify-content-center align-items-center" style="height: 100%;">
             <!-- Logo above the QR Code -->
-            <img src="dist/img/aclc_complete_logo.png" alt="Logo" style="max-width: 50%;">
+            <img src="dist/img/aclc_complete_logo.png" alt="Logo" style="width: 150px; height: auto; margin-bottom: 20px;">
             <!-- QR Code Image -->
-            <img id="qrCodeImage" alt="QR Code" style="width: 70%; max-width: 200px; height: auto;">
+            <img id="qrCodeImage" alt="QR Code" style="width: 200px; height: auto;">
             <!-- Faculty Name -->
-            <div id="facultyName" class="font-weight-bold" style="font-size: small;"></div>
+            <div id="facultyName" class="font-weight-bold" style="font-size: 14px; margin-top: 20px;">Faculty Name</div>
           </div>
         </div>
       </div>
@@ -863,6 +864,7 @@ function dataURLtoBlob(dataURL) {
     </div>
   </div>
 </div>
+
 
 
 </body>

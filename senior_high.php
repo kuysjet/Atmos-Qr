@@ -512,28 +512,29 @@ $('#seniorhighStudentsTable').on('click', '.delete-btn', function() {
 
 // Event listener for "View QR" button clicks
 $('#seniorhighStudentsTable').on('click', '.view-qr-btn', function() {
-// Retrieve the student's Identification Number from the button's data attribute
-var identificationNumber = $(this).data('id');
+  // Retrieve the student's Identification Number from the button's data attribute
+  var identificationNumber = $(this).data('id');
 
-// Fetch the student's information from the table row
-var firstName = $(this).closest('tr').find('td:nth-child(4)').text().trim();
-var lastName = $(this).closest('tr').find('td:nth-child(5)').text().trim();
+  // Fetch the student's information from the DataTable row
+  var rowData = table.row($(this).closest('tr')).data();
+  var firstName = rowData['FirstName'].trim();
+  var lastName = rowData['LastName'].trim();
 
-// Construct the QR code path using the student's Identification Number
-var qrCodePath = 'qr_codes/' + identificationNumber + '.png';
+  // Construct the QR code path using the student's Identification Number
+  var qrCodePath = 'qr_codes/' + identificationNumber + '.png';
 
-// Set the src attribute of the QR code image in the modal
-$('#qrCodeImage').attr('src', qrCodePath);
+  // Set the src attribute of the QR code image in the modal
+  $('#qrCodeImage').attr('src', qrCodePath);
 
-// Set the filename for downloading to the student's first name and last name
-var filename = firstName + '_' + lastName + '_qr_code.png'; // Using student's first name and last name for filename
-$('#downloadQR').attr('download', filename);
+  // Set the filename for downloading to the student's first name and last name
+  var filename = firstName + '_' + lastName + '_qr_code.png'; // Using student's first name and last name for filename
+  $('#downloadQR').attr('download', filename);
 
-// Display the student's name inside the card
-$('#studentName').text(firstName + ' ' + lastName);
+  // Display the student's name inside the card
+  $('#studentName').text(firstName + ' ' + lastName);
 
-// Show the modal
-$('#viewQrCodeModal').modal('show');
+  // Show the modal
+  $('#viewQrCodeModal').modal('show');
 });
 
 
@@ -830,33 +831,33 @@ return new Blob([uInt8Array], { type: contentType });
 
 <!-- View QR Code Modal -->
 <div class="modal fade" id="viewQrCodeModal" tabindex="-1" aria-labelledby="viewQrCodeModalLabel" aria-hidden="true">
-<div class="modal-dialog">
-<div class="modal-content">
-  <div class="modal-header bg-info">
-    <h5 class="modal-title" id="viewQrCodeModalLabel">QR Code</h5>
-    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-      <span aria-hidden="true">&times;</span>
-    </button>
-  </div>
-  <div class="modal-body text-center" id="modalBodyToDownload">
-    <!-- Card with Background Image inside Modal Body with Medium Size -->
-    <div class="card" id="cardToDownload" style="max-width: 50%; margin: auto;">
-      <img src="dist/img/Card.png" class="card-img" alt="Background Image">
-      <div class="card-img-overlay d-flex flex-column justify-content-center align-items-center">
-        <!-- Logo above the QR Code -->
-        <img src="dist/img/aclc_complete_logo.png" alt="Logo" style="max-width: 50%;">
-        <!-- QR Code Image -->
-        <img id="qrCodeImage" alt="QR Code" style="width: 70%; max-width: 200px; height: auto;">
-        <!-- Student Name -->
-        <div id="studentName" class="font-weight-bold" style="font-size: small;"></div>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header bg-info">
+        <h5 class="modal-title" id="viewQrCodeModalLabel">QR Code</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body text-center d-flex flex-column align-items-center justify-content-center" id="modalBodyToDownload">
+        <!-- Card with Background Image inside Modal Body with Medium Size -->
+        <div class="card" id="cardToDownload" style="width: 300px;">
+          <img src="dist/img/Card.png" class="card-img" alt="Background Image" style="width: 100%; height: auto;">
+          <div class="card-img-overlay d-flex flex-column justify-content-center align-items-center" style="height: 100%;">
+            <!-- Logo above the QR Code -->
+            <img src="dist/img/aclc_complete_logo.png" alt="Logo" style="width: 150px; height: auto; margin-bottom: 20px;">
+            <!-- QR Code Image -->
+            <img id="qrCodeImage" alt="QR Code" style="width: 200px; height: auto;">
+            <!-- Student Name -->
+            <div id="studentName" class="font-weight-bold" style="font-size: 14px; margin-top: 20px;">Student Name</div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary btn-sm" id="downloadQR"><i class="fas fa-download"></i> Download</button>
       </div>
     </div>
   </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-primary btn-sm" id="downloadQR"><i class="fas fa-download"></i> Download</button>
-  </div>
-</div>
-</div>
 </div>
 
 
