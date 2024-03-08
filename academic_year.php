@@ -33,8 +33,7 @@ if ($result) {
     echo "Error: " . mysqli_error($conn);
 }
 
-// Close the database connection
-mysqli_close($conn);
+
 ?>
 
 
