@@ -17,7 +17,7 @@
           <i class="fas fa-user-cog fa-lg mr-2 text-gray pl-1 mt-2"></i>
         </div>
         <div class="info">
-          <a href="#" class="d-block">Administrator</a>
+          <a href="#" class="d-block"><?php echo "$firstname $lastname"; ?></a>
         </div>
       </div>
 
