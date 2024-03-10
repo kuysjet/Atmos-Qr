@@ -3,12 +3,12 @@
 include 'database/db.php';
 
 // Function to calculate the status of an event
-function calculateEventStatus($eventDate, $logoutTime) {
+function calculateEventStatus($eventDate, $loginTime, $logoutTime) {
     $currentDateTime = date('Y-m-d H:i:s');
 
     if ($eventDate > date('Y-m-d')) {
         return 'Pending';
-    } elseif ($eventDate == date('Y-m-d') && $logoutTime > $currentDateTime) {
+    } elseif ($eventDate == date('Y-m-d') && $loginTime <= $currentDateTime && $logoutTime > $currentDateTime) {
         return 'Ongoing';
     } else {
         return 'Done';
@@ -32,8 +32,8 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     // Prepare data to be sent as JSON
     $data = array();
     while ($row = mysqli_fetch_assoc($result)) {
-        // Calculate status based on event date and log_out time
-        $row['status'] = calculateEventStatus($row['event_date'], $row['log_out']);
+        // Calculate status based on event date, login time, and log_out time
+        $row['status'] = calculateEventStatus($row['event_date'], $row['log_in'], $row['log_out']);
         $data[] = $row;
     }
     
