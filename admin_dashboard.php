@@ -73,6 +73,55 @@ $facultyCount = $rowFaculty['facultyCount'];
 // Calculate total count of listed registrants
 $totalRegistrants = $collegeCount + $seniorHighCount + $facultyCount;
 
+// #Pie Chart
+// Fetch count of college students by courses from the database
+$queryCollegeCourses = "SELECT course_name, COUNT(*) AS count FROM collegestudents
+                        INNER JOIN courses ON collegestudents.CourseID = courses.id
+                        GROUP BY course_name";
+$resultCollegeCourses = mysqli_query($conn, $queryCollegeCourses);
+$collegeCoursesData = [];
+while ($row = mysqli_fetch_assoc($resultCollegeCourses)) {
+    $collegeCoursesData[$row['course_name']] = $row['count'];
+}
+
+// Fetch count of senior high students by strands from the database
+$querySeniorHighStrands = "SELECT strand_name, COUNT(*) AS count FROM seniorhighstudents
+                           INNER JOIN strands ON seniorhighstudents.StrandID = strands.id
+                           GROUP BY strand_name";
+$resultSeniorHighStrands = mysqli_query($conn, $querySeniorHighStrands);
+$seniorHighStrandsData = [];
+while ($row = mysqli_fetch_assoc($resultSeniorHighStrands)) {
+    $seniorHighStrandsData[$row['strand_name']] = $row['count'];
+}
+
+
+// Fetch count of listed registrants for college students by courses and levels
+$queryCollege = "SELECT courses.course_name, levels.level_name, COUNT(*) AS count 
+                FROM collegestudents 
+                INNER JOIN courses ON collegestudents.CourseID = courses.id 
+                INNER JOIN levels ON collegestudents.LevelID = levels.id 
+                GROUP BY courses.course_name, levels.level_name";
+$resultCollege = mysqli_query($conn, $queryCollege);
+$collegeData = [];
+while ($row = mysqli_fetch_assoc($resultCollege)) {
+    $collegeData[$row['course_name'] . ' - ' . $row['level_name']] = $row['count'];
+}
+
+// Fetch count of listed registrants for senior high students by strands and grades
+$querySeniorHigh = "SELECT strands.strand_name, grades.grade_name, COUNT(*) AS count 
+                    FROM seniorhighstudents 
+                    INNER JOIN strands ON seniorhighstudents.StrandID = strands.id 
+                    INNER JOIN grades ON seniorhighstudents.GradeID = grades.id 
+                    GROUP BY strands.strand_name, grades.grade_name";
+$resultSeniorHigh = mysqli_query($conn, $querySeniorHigh);
+$seniorHighData = [];
+while ($row = mysqli_fetch_assoc($resultSeniorHigh)) {
+    $seniorHighData[$row['strand_name'] . ' - ' . $row['grade_name']] = $row['count'];
+}
+
+// Calculate total count of listed registrants
+$totalRegistrants = array_sum($collegeData) + array_sum($seniorHighData);
+
 ?>
 
 <?php include 'includes/header.php'; ?>
@@ -173,60 +222,62 @@ $totalRegistrants = $collegeCount + $seniorHighCount + $facultyCount;
             <!-- /.info-box -->
           </div>
           <!-- /.col -->
-      <!-- Charts -->
-      <div class="col-12">
-        <div class="row">
-          <!-- Pie Chart -->
-          <div class="col-md-6">
-            <div class="card card-danger">
-              <div class="card-header">
-                <h3 class="card-title">Pie Chart</h3>
-                <div class="card-tools">
-                  <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                    <i class="fas fa-minus"></i>
-                  </button>
-                  <button type="button" class="btn btn-tool" data-card-widget="remove">
-                    <i class="fas fa-times"></i>
-                  </button>
+          <!-- Charts -->
+          <div class="col-12">
+            <div class="row">
+              <!-- Donut Chart -->
+              <div class="col-md-6">
+                <div class="card card-danger">
+                  <div class="card-header">
+                    <h3 class="card-title m-0">Courses and Strands</h3>
+                    <div class="card-tools">
+                      <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                      </button>
+                      <button type="button" class="btn btn-tool" data-card-widget="remove">
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <canvas id="donutChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                  </div>
+                  <!-- /.card-body -->
                 </div>
+                <!-- /.card -->
               </div>
-              <div class="card-body">
-                <canvas id="pieChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+              <!-- /.col-md-6 -->
+              <!-- Horizontal Bar Chart -->
+              <div class="col-md-6">
+                <div class="card card-success">
+                  <div class="card-header">
+                    <h3 class="card-title m-0">Levels and Grades</h3>
+                    <div class="card-tools">
+                      <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                        <i class="fas fa-minus"></i>
+                      </button>
+                      <button type="button" class="btn btn-tool" data-card-widget="remove">
+                        <i class="fas fa-times"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <div class="card-body">
+                    <canvas id="barChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                  </div>
+                  <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
               </div>
-              <!-- /.card-body -->
+              <!-- /.col-md-6 -->
             </div>
+            <!-- /.row -->
           </div>
-          
-          <!-- Bar Chart -->
-          <div class="col-md-6">
-            <div class="card card-success">
-              <div class="card-header">
-                <h3 class="card-title">Bar Chart</h3>
-                <div class="card-tools">
-                  <button type="button" class="btn btn-tool" data-card-widget="collapse">
-                    <i class="fas fa-minus"></i>
-                  </button>
-                  <button type="button" class="btn btn-tool" data-card-widget="remove">
-                    <i class="fas fa-times"></i>
-                  </button>
-                </div>
-              </div>
-              <div class="card-body">
-                <div class="chart">
-                  <canvas id="barChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
-                </div>
-              </div>
-              <!-- /.card-body -->
-            </div>
-          </div>
+          <!-- /.col-12 -->
         </div>
-      </div>
+        <!-- /.row -->
+      </div><!-- /.container-fluid -->
     </div>
-    <!-- /.row -->
-  </div><!-- /.container-fluid -->
-</div>
-<!-- /.content -->
-
+    <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
 
@@ -256,71 +307,90 @@ $totalRegistrants = $collegeCount + $seniorHighCount + $facultyCount;
 <!-- Page specific script -->
 <script>
   $(function () {
-    //-------------
-    //- PIE CHART -
-    //-------------
-    var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
-    var pieData        = {
-      labels: [
-          'BSCS',
-          'BSEnterp',
-          'BSAIS',
-          'ACT',
-          'ABM',
-          'HUMSS',
-          'GAS', 
-          'TVL'
-      ],
-      datasets: [
-        {
-          data: [700,500,400,600,300,100,200,80],
-          backgroundColor : ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de', '#8A2BE2', '#008B8B', '#BDB76B'],
-        }
-      ]
-    }
-    var pieOptions     = {
-      maintainAspectRatio : false,
-      responsive : true,
-    }
-    new Chart(pieChartCanvas, {
-      type: 'pie',
-      data: pieData,
-      options: pieOptions
-    })
+    // Fetch data for donut chart from PHP variables
+    var collegeCoursesData = <?php echo json_encode($collegeCoursesData); ?>;
+    var seniorHighStrandsData = <?php echo json_encode($seniorHighStrandsData); ?>;
 
     //-------------
-    //- BAR CHART -
+    //- DONUT CHART -
+    //-------------
+    var donutChartCanvas = $('#donutChart').get(0).getContext('2d');
+    var donutData = {
+      labels: Object.keys(collegeCoursesData).concat(Object.keys(seniorHighStrandsData)),
+      datasets: [{
+        data: Object.values(collegeCoursesData).concat(Object.values(seniorHighStrandsData)),
+        backgroundColor: ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de', '#8A2BE2', '#008B8B', '#BDB76B'],
+      }]
+    };
+    var donutOptions = {
+      maintainAspectRatio: false,
+      responsive: true,
+      cutoutPercentage: 65, // Adjust this value to control the size of the hole in the center of the donut
+    };
+    new Chart(donutChartCanvas, {
+      type: 'doughnut',
+      data: donutData,
+      options: donutOptions
+    });
+  });
+</script>
+
+<script>
+  $(function () {
+    // Fetch data for bar chart from PHP variables
+    var collegeData = <?php echo json_encode($collegeData); ?>;
+    var seniorHighData = <?php echo json_encode($seniorHighData); ?>;
+    // Automatic color generation for bar chart bars
+    var barChartColors = generateColors(Object.keys(collegeData).length + Object.keys(seniorHighData).length);
+
+    //-------------
+    //- HORIZONTAL BAR CHART -
     //-------------
     var barChartCanvas = $('#barChart').get(0).getContext('2d')
     var barChartData = {
-      labels  : ['BSCS', 'BSentrep', 'BSAIS', 'ACT', 'ABM', 'HUMSS', 'GAS'],
+      labels: Object.keys(collegeData).concat(Object.keys(seniorHighData)),
       datasets: [
         {
-          label               : 'Attendees',
-          backgroundColor     : 'rgba(60,141,188,0.9)',
-          borderColor         : 'rgba(60,141,188,0.8)',
-          data                : [28, 48, 40, 19, 86, 27, 90]
-        },
-        {
-          label               : 'Total Students',
-          backgroundColor     : 'rgba(210, 214, 222, 1)',
-          borderColor         : 'rgba(210, 214, 222, 1)',
-          data                : [65, 59, 80, 81, 56, 55, 40]
-        },
+          label: 'Registrants',
+          backgroundColor: barChartColors,
+          borderColor: barChartColors,
+          borderWidth: 1,
+          data: Object.values(collegeData).concat(Object.values(seniorHighData))
+        }
       ]
     }
     var barChartOptions = {
-      responsive              : true,
-      maintainAspectRatio     : false
+      maintainAspectRatio: false,
+      responsive: true,
+      legend: {
+        display: false
+      },
+      scales: {
+        xAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      }
     }
-
     new Chart(barChartCanvas, {
-      type: 'bar',
+      type: 'horizontalBar',
       data: barChartData,
       options: barChartOptions
-    })
-  })
+    });
+
+    // Function to generate minimal colors dynamically
+    function generateColors(numColors) {
+      var colors = [];
+      var minimalColors = ['#007bff', '#6610f2', '#6f42c1', '#e83e8c', '#fd7e14', '#28a745', '#20c997', '#17a2b8', '#ffc107', '#dc3545'];
+      for (var i = 0; i < numColors; i++) {
+        colors.push(minimalColors[i % minimalColors.length]);
+      }
+      return colors;
+    }
+  });
 </script>
+
 
 </body>
 </html>
