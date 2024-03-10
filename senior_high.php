@@ -207,7 +207,7 @@ var table = $('#seniorhighStudentsTable').DataTable({
     {
       "data": null,
       "render": function(data, type, row) {
-        return '<button type="button" class="btn btn-success btn-sm edit-btn"><i class="fas fa-edit"></i></button>' +
+        return '<button type="button" class="btn btn-primary btn-sm edit-btn"><i class="fas fa-edit"></i></button>' +
               '<button type="button" class="btn btn-danger btn-sm delete-btn mx-1"><i class="fas fa-trash-alt"></i></button>' +
               '<button type="button" class="btn btn-info btn-sm view-qr-btn" data-id="' + row.IdentificationNumber + '"><i class="fas fa-qrcode"></i></button>';
       }
@@ -722,7 +722,7 @@ return new Blob([uInt8Array], { type: contentType });
     </form>
   </div>
   <div class="modal-footer">
-    <button type="submit" class="btn btn-primary btn-sm" form="addSeniorHighForm">Submit</button>
+    <button type="submit" class="btn btn-primary btn-sm" form="addSeniorHighForm"><i class="fas fa-paper-plane"></i> Submit</button>
   </div>
 </div>
 </div>
@@ -733,7 +733,7 @@ return new Blob([uInt8Array], { type: contentType });
 <div class="modal fade" id="editSeniorHighModal" tabindex="-1" role="dialog" aria-labelledby="editSeniorHighModalLabel" aria-hidden="true">
 <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
 <div class="modal-content">
-  <div class="modal-header bg-success">
+  <div class="modal-header bg-primary">
     <h5 class="modal-title" id="editSeniorHighLabel">Edit SeniorHigh Student</h5>
     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
       <span aria-hidden="true">&times;</span>
@@ -824,7 +824,7 @@ return new Blob([uInt8Array], { type: contentType });
     </form>
   </div>
   <div class="modal-footer">
-    <button type="submit" class="btn btn-primary btn-sm" form="editSeniorHighForm">Save Changes</button>
+    <button type="submit" class="btn btn-primary btn-sm" form="editSeniorHighForm"><i class="fas fa-save"></i> Save Changes</button>
   </div>
 </div>
 </div>

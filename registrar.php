@@ -191,7 +191,7 @@ $(document).ready(function() {
               "data": null,
               "render": function(data, type, row) {
                 return '<div class="btn-group">' +
-                        '<button type="button" class="btn btn-success btn-sm edit-btn mr-1"><i class="fas fa-edit"></i></button>' +
+                        '<button type="button" class="btn btn-primary btn-sm edit-btn mr-1"><i class="fas fa-edit"></i></button>' +
                         '<button type="button" class="btn btn-danger btn-sm delete-btn"><i class="fas fa-trash-alt"></i></button>' +
                       '</div>';
               }
@@ -451,7 +451,7 @@ $('#usersTable').on('click', '.delete-btn', function() {
             <label for="password">Password</label>
             <input type="password" class="form-control" id="password" name="password" required autocomplete="off">
           </div>
-          <button type="submit" class="btn btn-primary float-right btn-sm">Submit</button>
+          <button type="submit" class="btn btn-primary float-right btn-sm"><i class="fas fa-paper-plane"></i> Submit</button>
         </form>
       </div>
     </div>
@@ -465,7 +465,7 @@ $('#usersTable').on('click', '.delete-btn', function() {
 <div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
-      <div class="modal-header bg-success">
+      <div class="modal-header bg-primary">
         <h5 class="modal-title" id="editUserModalLabel">Edit User</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -491,7 +491,7 @@ $('#usersTable').on('click', '.delete-btn', function() {
             <label for="editUsername">Username</label>
             <input type="text" class="form-control" id="editUsername" name="username" required>
           </div>
-          <button type="submit" class="btn btn-primary float-right btn-sm">Save Changes</button>
+          <button type="submit" class="btn btn-primary float-right btn-sm"><i class="fas fa-save"></i> Save Changes</button>
         </form>
       </div>
     </div>

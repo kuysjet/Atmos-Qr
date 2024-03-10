@@ -103,6 +103,7 @@ if ($result) {
                     <th>Event Date</th>
                     <th>Login Time</th>
                     <th>Logout Time</th>
+                    <th>Status</th>
                     <th>Action</th>
                   </tr>
                   </thead>
@@ -176,11 +177,29 @@ if ($result) {
         { "data": "event_date" },
         { "data": "log_in" },
         { "data": "log_out" },
+        { 
+          "data": null, 
+          "render": function(data, type, row) {
+              // Calculate status based on event date and log_out time
+              var status = calculateStatus(row.event_date, row.log_out);
+              // Determine badge color based on status
+              var badgeColor = '';
+              if (status === 'Pending') {
+                  badgeColor = 'badge-warning';
+              } else if (status === 'Ongoing') {
+                  badgeColor = 'badge-primary';
+              } else if (status === 'Done') {
+                  badgeColor = 'badge-success';
+              }
+              // Return status HTML with appropriate badge color
+              return '<span class="badge ' + badgeColor + '">' + status + '</span>';
+          } 
+      },
         {
           "data": null,
           "render": function(data, type, row) {
             return '<div class="btn-group">' +
-                    '<button type="button" class="btn btn-success btn-sm edit-btn mr-1"><i class="fas fa-edit"></i></button>' +
+                    '<button type="button" class="btn btn-primary btn-sm edit-btn mr-1"><i class="fas fa-edit"></i></button>' +
                     '<button type="button" class="btn btn-danger btn-sm delete-btn"><i class="fas fa-trash-alt"></i></button>' +
                   '</div>';
           }
@@ -385,6 +404,28 @@ $('#eventsTable').on('click', '.delete-btn', function() {
   });
 
 
+  // Function to calculate status based on event date and log_out time
+  function calculateStatus(eventDate, logoutTime) {
+  // Get current date and time
+  var currentDate = new Date();
+  // Parse event date and log_out time
+  var eventDateTime = new Date(eventDate + ' ' + logoutTime);
+
+  // Check if current date is after event date and log_out time
+  if (currentDate > eventDateTime) {
+    return 'Done';
+  } 
+  // Check if current date is between event date and log_out time
+  else if (currentDate >= new Date(eventDate) && currentDate <= eventDateTime) {
+    return 'Ongoing';
+  } 
+  // If event date and log_out time are in the future
+  else {
+    return 'Pending';
+  }
+}
+
+
 });
 
 
@@ -499,7 +540,7 @@ $('#eventsTable').on('click', '.delete-btn', function() {
             </div>
             <div class="modal-footer">
                 <button type="submit" class="btn btn-primary btn-sm" form="addEventForm">
-                    Submit
+                  <i class="fas fa-paper-plane"></i> Submit
                 </button>
             </div>
         </div>
@@ -510,7 +551,7 @@ $('#eventsTable').on('click', '.delete-btn', function() {
 <div class="modal fade" id="editEventModal" tabindex="-1" role="dialog" aria-labelledby="editEventModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content">
-      <div class="modal-header bg-success">
+      <div class="modal-header bg-primary">
         <h5 class="modal-title" id="editEventModalLabel">Edit Event</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -594,7 +635,7 @@ $('#eventsTable').on('click', '.delete-btn', function() {
         </form>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary btn-sm" form="editEventForm">Save Changes</button>
+        <button type="submit" class="btn btn-primary btn-sm" form="editEventForm"><i class="fas fa-save"></i> Save Changes</button>
       </div>
     </div>
   </div>

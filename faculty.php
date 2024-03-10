@@ -204,7 +204,7 @@ $(document).ready(function() {
       {
         "data": null,
         "render": function(data, type, row) {
-          return '<button type="button" class="btn btn-success btn-sm edit-btn"><i class="fas fa-edit"></i></button>' +
+          return '<button type="button" class="btn btn-primary btn-sm edit-btn"><i class="fas fa-edit"></i></button>' +
                 '<button type="button" class="btn btn-danger btn-sm delete-btn mx-1"><i class="fas fa-trash-alt"></i></button>' +
                 '<button type="button" class="btn btn-info btn-sm view-qr-btn" data-id="' + row.IdentificationNumber + '"><i class="fas fa-qrcode"></i></button>';
         }
@@ -725,7 +725,7 @@ function dataURLtoBlob(dataURL) {
         </form>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary btn-sm" form="addFacultyForm">Submit</button>
+        <button type="submit" class="btn btn-primary btn-sm" form="addFacultyForm"><i class="fas fa-paper-plane"></i> Submit</button>
       </div>
     </div>
   </div>
@@ -737,7 +737,7 @@ function dataURLtoBlob(dataURL) {
 <div class="modal fade" id="editFacultyModal" tabindex="-1" role="dialog" aria-labelledby="editFacultyModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content">
-      <div class="modal-header bg-success">
+      <div class="modal-header bg-primary">
         <h5 class="modal-title" id="editFacultyModalLabel">Edit Faculty</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -826,7 +826,7 @@ function dataURLtoBlob(dataURL) {
         </form>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary btn-sm" form="editFacultyForm">Save Changes</button>
+        <button type="submit" class="btn btn-primary btn-sm" form="editFacultyForm"><i class="fas fa-save"></i> Save Changes</button>
       </div>
     </div>
   </div>

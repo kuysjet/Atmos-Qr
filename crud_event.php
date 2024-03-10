@@ -2,10 +2,29 @@
 // Include database connection
 include 'database/db.php';
 
+// Function to calculate the status of an event
+function calculateEventStatus($eventDate, $loginTime, $logoutTime) {
+    $currentDateTime = date('Y-m-d H:i:s');
+
+    if ($eventDate > date('Y-m-d')) {
+        return 'Pending';
+    } elseif ($eventDate == date('Y-m-d') && $loginTime <= $currentDateTime && $logoutTime > $currentDateTime) {
+        return 'Ongoing';
+    } else {
+        return 'Done';
+    }
+}
+
 // Check request method and perform corresponding CRUD operation
 if ($_SERVER["REQUEST_METHOD"] == "GET") {
     // Query to fetch events from the database
-    $query = "SELECT * FROM events";
+    $query = "SELECT *, 
+                CASE
+                    WHEN (event_date > CURDATE()) THEN 'Pending'
+                    WHEN (event_date = CURDATE() AND log_out > NOW()) THEN 'Ongoing'
+                    ELSE 'Done'
+                END AS status
+              FROM events";
     
     // Perform the query
     $result = mysqli_query($conn, $query);
@@ -13,6 +32,8 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     // Prepare data to be sent as JSON
     $data = array();
     while ($row = mysqli_fetch_assoc($result)) {
+        // Calculate status based on event date, login time, and log_out time
+        $row['status'] = calculateEventStatus($row['event_date'], $row['log_in'], $row['log_out']);
         $data[] = $row;
     }
     
