@@ -173,7 +173,7 @@ if ($result) {
           "data": null,
           "render": function(data, type, row) {
             return '<div class="btn-group">' +
-                    '<button type="button" class="btn btn-success btn-sm edit-btn mr-1"><i class="fas fa-edit"></i></button>' +
+                    '<button type="button" class="btn btn-primary btn-sm edit-btn mr-1"><i class="fas fa-edit"></i></button>' +
                     '<button type="button" class="btn btn-danger btn-sm delete-btn"><i class="fas fa-trash-alt"></i></button>' +
                   '</div>';
           }
@@ -356,7 +356,7 @@ if ($result) {
           </form>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary btn-sm" form="addDepartmentForm">Submit</button>
+          <button type="submit" class="btn btn-primary btn-sm" form="addDepartmentForm"><i class="fas fa-paper-plane"></i> Submit</button>
         </div>
       </div>
     </div>
@@ -368,7 +368,7 @@ if ($result) {
   <div class="modal fade" id="editDepartmentModal" tabindex="-1" role="dialog" aria-labelledby="editDepartmentLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
-        <div class="modal-header bg-success">
+        <div class="modal-header bg-primary">
           <h5 class="modal-title" id="editDepartmentLabel">Edit Department</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
@@ -384,7 +384,7 @@ if ($result) {
           </form>
         </div>
         <div class="modal-footer">
-          <button type="submit" class="btn btn-primary btn-sm" form="editDepartmentForm">Save Changes</button>
+          <button type="submit" class="btn btn-primary btn-sm" form="editDepartmentForm"><i class="fas fa-save"></i> Save Changes</button>
         </div>
       </div>
     </div>
