@@ -173,11 +173,60 @@ $totalRegistrants = $collegeCount + $seniorHighCount + $facultyCount;
             <!-- /.info-box -->
           </div>
           <!-- /.col -->
+      <!-- Charts -->
+      <div class="col-12">
+        <div class="row">
+          <!-- Pie Chart -->
+          <div class="col-md-6">
+            <div class="card card-danger">
+              <div class="card-header">
+                <h3 class="card-title">Pie Chart</h3>
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                  <button type="button" class="btn btn-tool" data-card-widget="remove">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="card-body">
+                <canvas id="pieChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+              </div>
+              <!-- /.card-body -->
+            </div>
+          </div>
+          
+          <!-- Bar Chart -->
+          <div class="col-md-6">
+            <div class="card card-success">
+              <div class="card-header">
+                <h3 class="card-title">Bar Chart</h3>
+                <div class="card-tools">
+                  <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                    <i class="fas fa-minus"></i>
+                  </button>
+                  <button type="button" class="btn btn-tool" data-card-widget="remove">
+                    <i class="fas fa-times"></i>
+                  </button>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="chart">
+                  <canvas id="barChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                </div>
+              </div>
+              <!-- /.card-body -->
+            </div>
+          </div>
         </div>
-        <!-- /.row -->
-      </div><!-- /.container-fluid -->
+      </div>
     </div>
-    <!-- /.content -->
+    <!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+<!-- /.content -->
+
   </div>
   <!-- /.content-wrapper -->
 
@@ -198,7 +247,80 @@ $totalRegistrants = $collegeCount + $seniorHighCount + $facultyCount;
 <script src="dist/js/adminlte.min.js"></script>
 <script src="dist/js/datetime.js"></script>
 <script src="dist/js/pro-pass-toggle.js"></script>
+<!-- ChartJS -->
+<script src="plugins/chart.js/Chart.min.js"></script>
 
+
+
+
+<!-- Page specific script -->
+<script>
+  $(function () {
+    //-------------
+    //- PIE CHART -
+    //-------------
+    var pieChartCanvas = $('#pieChart').get(0).getContext('2d')
+    var pieData        = {
+      labels: [
+          'BSCS',
+          'BSEnterp',
+          'BSAIS',
+          'ACT',
+          'ABM',
+          'HUMSS',
+          'GAS', 
+          'TVL'
+      ],
+      datasets: [
+        {
+          data: [700,500,400,600,300,100,200,80],
+          backgroundColor : ['#f56954', '#00a65a', '#f39c12', '#00c0ef', '#3c8dbc', '#d2d6de', '#8A2BE2', '#008B8B', '#BDB76B'],
+        }
+      ]
+    }
+    var pieOptions     = {
+      maintainAspectRatio : false,
+      responsive : true,
+    }
+    new Chart(pieChartCanvas, {
+      type: 'pie',
+      data: pieData,
+      options: pieOptions
+    })
+
+    //-------------
+    //- BAR CHART -
+    //-------------
+    var barChartCanvas = $('#barChart').get(0).getContext('2d')
+    var barChartData = {
+      labels  : ['BSCS', 'BSentrep', 'BSAIS', 'ACT', 'ABM', 'HUMSS', 'GAS'],
+      datasets: [
+        {
+          label               : 'Attendees',
+          backgroundColor     : 'rgba(60,141,188,0.9)',
+          borderColor         : 'rgba(60,141,188,0.8)',
+          data                : [28, 48, 40, 19, 86, 27, 90]
+        },
+        {
+          label               : 'Total Students',
+          backgroundColor     : 'rgba(210, 214, 222, 1)',
+          borderColor         : 'rgba(210, 214, 222, 1)',
+          data                : [65, 59, 80, 81, 56, 55, 40]
+        },
+      ]
+    }
+    var barChartOptions = {
+      responsive              : true,
+      maintainAspectRatio     : false
+    }
+
+    new Chart(barChartCanvas, {
+      type: 'bar',
+      data: barChartData,
+      options: barChartOptions
+    })
+  })
+</script>
 
 </body>
 </html>
