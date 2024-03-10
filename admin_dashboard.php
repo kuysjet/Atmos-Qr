@@ -41,13 +41,14 @@ $eventCount = $row['eventCount'];
 
 // Fetch count of finished events based on current date
 $currentDate = date('Y-m-d');
-$queryFinishedEvents = "SELECT COUNT(*) AS finishedEventCount FROM events WHERE event_date < '$currentDate'";
+$currentDateTime = date('Y-m-d H:i:s');
+$queryFinishedEvents = "SELECT COUNT(*) AS finishedEventCount FROM events WHERE event_date <= '$currentDate' AND log_out < CURRENT_TIME()";
 $resultFinishedEvents = mysqli_query($conn, $queryFinishedEvents);
 $rowFinishedEvents = mysqli_fetch_assoc($resultFinishedEvents);
 $finishedEventCount = $rowFinishedEvents['finishedEventCount'];
 
-// Fetch count of ongoing events based on current date
-$queryOngoingEvents = "SELECT COUNT(*) AS ongoingEventCount FROM events WHERE event_date = '$currentDate'";
+// Fetch count of ongoing events based on current date and log_out time
+$queryOngoingEvents = "SELECT COUNT(*) AS ongoingEventCount FROM events WHERE event_date = '$currentDate' AND log_out > CURRENT_TIME()";
 $resultOngoingEvents = mysqli_query($conn, $queryOngoingEvents);
 $rowOngoingEvents = mysqli_fetch_assoc($resultOngoingEvents);
 $ongoingEventCount = $rowOngoingEvents['ongoingEventCount'];
@@ -222,7 +223,7 @@ $totalRegistrants = array_sum($collegeData) + array_sum($seniorHighData);
             <!-- /.info-box -->
           </div>
           <!-- /.col -->
-          <!-- Charts -->
+          <!--Donut Chart -->
           <div class="col-12">
             <div class="row">
               <!-- Donut Chart -->
