@@ -59,20 +59,20 @@
                 <!-- Profile View Form -->
                 <form id="viewProfileForm">
                     <div class="form-group">
-                        <label for="firstname">First Name</label>
-                        <input type="text" class="form-control" id="firstname" name="firstname" value="<?php echo $firstname; ?>" readonly>
+                        <label for="vfirstname">First Name</label>
+                        <input type="text" class="form-control" id="vfirstname" name="firstname" value="<?php echo $firstname; ?>" readonly>
                     </div>
                     <div class="form-group">
-                        <label for="lastname">Last Name</label>
-                        <input type="text" class="form-control" id="lastname" name="lastname" value="<?php echo $lastname; ?>" readonly>
+                        <label for="vlastname">Last Name</label>
+                        <input type="text" class="form-control" id="vlastname" name="lastname" value="<?php echo $lastname; ?>" readonly>
                     </div>
                     <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" value="<?php echo $email; ?>" readonly>
+                        <label for="vemail">Email</label>
+                        <input type="email" class="form-control" id="vemail" name="email" value="<?php echo $email; ?>" readonly>
                     </div>
                     <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" class="form-control" id="username" name="username" value="<?php echo $username; ?>" readonly>
+                        <label for="vusername">Username</label>
+                        <input type="text" class="form-control" id="vusername" name="username" value="<?php echo $username; ?>" readonly>
                     </div>
                 </form>
             </div>
