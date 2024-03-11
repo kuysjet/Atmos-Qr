@@ -20,8 +20,8 @@
       <!-- Dark mode toggle link -->
       <li class="nav-item">
         <a href="#" class="nav-link" id="darkModeToggleBtn">
-          <i class="fas fa-moon"></i>
-          <i class="fas fa-sun text-warning d-none"></i>
+          <i class="fas fa-sun text-warning"></i>
+          <i class="fas fa-moon d-none"></i>
         </a>
       </li>
       <!-- Profile -->
