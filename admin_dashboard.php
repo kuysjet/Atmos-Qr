@@ -187,7 +187,7 @@ $totalRegistrants = array_sum($collegeData) + array_sum($seniorHighData);
               <span class="info-box-icon bg-primary elevation-1"><i class="fas fa-users"></i></span>
 
               <div class="info-box-content">
-                <span class="info-box-text">Listed Registrants</span>
+                <span class="info-box-text">Listed Students</span>
                 <span class="info-box-number"><?php echo $totalRegistrants; ?></span>
               </div>
               <!-- /.info-box-content -->
