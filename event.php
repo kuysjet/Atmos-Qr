@@ -181,7 +181,7 @@ if ($result) {
           "data": null, 
           "render": function(data, type, row) {
               // Calculate status based on event date and log_out time
-              var status = calculateStatus(row.event_date, row.log_out);
+              var status = calculateStatus(row.event_date, row.log_in, row.log_out);
               // Determine badge color based on status
               var badgeColor = '';
               if (status === 'Pending') {
@@ -194,7 +194,7 @@ if ($result) {
               // Return status HTML with appropriate badge color
               return '<span class="badge ' + badgeColor + '">' + status + '</span>';
           } 
-      },
+        },
         {
           "data": null,
           "render": function(data, type, row) {
@@ -404,19 +404,24 @@ $('#eventsTable').on('click', '.delete-btn', function() {
   });
 
 
-  // Function to calculate status based on event date and log_out time
-  function calculateStatus(eventDate, logoutTime) {
+// Function to calculate status based on event date, log_in time, and log_out time
+function calculateStatus(eventDate, logInTime, logOutTime) {
   // Get current date and time
   var currentDate = new Date();
-  // Parse event date and log_out time
-  var eventDateTime = new Date(eventDate + ' ' + logoutTime);
+  // Parse event date, log_in time, and log_out time
+  var eventDateTime = new Date(eventDate + ' ' + logInTime);
+  var eventLogoutTime = new Date(eventDate + ' ' + logOutTime);
 
+  // Check if current date is before event date and log_in time
+  if (currentDate < eventDateTime) {
+    return 'Pending';
+  } 
   // Check if current date is after event date and log_out time
-  if (currentDate > eventDateTime) {
+  else if (currentDate > eventLogoutTime) {
     return 'Done';
   } 
   // Check if current date is between event date and log_out time
-  else if (currentDate >= new Date(eventDate) && currentDate <= eventDateTime) {
+  else if (currentDate >= eventDateTime && currentDate <= eventLogoutTime) {
     return 'Ongoing';
   } 
   // If event date and log_out time are in the future
