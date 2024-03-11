@@ -30,3 +30,42 @@ function confirmLogout() {
     });
 }
 </script>
+
+<!-- function for darkmode -->
+<script>
+  function initializeDarkModeToggle() {
+    // Check if dark mode is enabled in localStorage
+    const darkModeEnabled = localStorage.getItem('darkModeEnabled');
+
+    // If dark mode is enabled, add 'dark-mode' class to body
+    if (darkModeEnabled === 'true') {
+      document.body.classList.add('dark-mode');
+    }
+
+    // Toggle button click event
+    document.getElementById('darkModeToggleBtn').addEventListener('click', function() {
+      // Toggle dark mode class on body
+      document.body.classList.toggle('dark-mode');
+
+      // Toggle icons
+      toggleDarkModeIcons();
+
+      // Update localStorage with current dark mode status
+      localStorage.setItem('darkModeEnabled', document.body.classList.contains('dark-mode'));
+    });
+
+    // Set initial state of icons
+    toggleDarkModeIcons();
+  }
+
+  // Function to toggle the icons
+  function toggleDarkModeIcons() {
+    document.querySelector('#darkModeToggleBtn .fa-moon').classList.toggle('d-none');
+    document.querySelector('#darkModeToggleBtn .fa-sun').classList.toggle('d-none');
+  }
+
+  // Call the initialization function when the page loads
+  window.onload = function() {
+    initializeDarkModeToggle();
+  };
+</script>
