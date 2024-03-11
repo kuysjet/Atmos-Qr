@@ -12,31 +12,38 @@
 
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
-      <li class="nav-item">
+      <li class="nav-item mx-1">
         <a class="nav-link" data-widget="fullscreen" href="#" role="button">
           <i class="fas fa-expand-arrows-alt"></i>
+        </a>
+      </li>
+      <!-- Dark mode toggle link -->
+      <li class="nav-item">
+        <a href="#" class="nav-link" id="darkModeToggleBtn">
+          <i class="fas fa-moon"></i>
+          <i class="fas fa-sun text-warning d-none"></i>
         </a>
       </li>
       <!-- Profile -->
       <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
-          <i class="fas fa-user fa-fw text-gray"></i>
+          <i class="fas fa-user fa-fw"></i>
         </a>
         <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
           <a class="dropdown-item" id="profileDropdown" href="#" role="button" data-toggle="modal" data-target="#viewProfileModal">
-            <i class="fas fa-user-cog fa-sm fa-fw mr-2 text-gray"></i> Profile
-            <span class="float-right text-muted text-sm"></span>
+            <i class="fas fa-user-cog fa-sm fa-fw mr-2"></i> Profile
+            <span class="float-right text-sm"></span>
           </a>
+          <div class="dropdown-divider"></div>
           <a class="dropdown-item" id="changePasswordDropdown" href="#" role="button" data-toggle="modal" data-target="#changePasswordModal">
-            <i class="fas fa-key fa-sm fa-fw mr-2 text-gray"></i> Change Password
-            <span class="float-right text-muted text-sm"></span>
+            <i class="fas fa-key fa-sm fa-fw mr-2"></i> Change Password
+            <span class="float-right text-sm"></span>
           </a>
           <div class="dropdown-divider"></div>
           <a href="#" class="dropdown-item" onclick="confirmLogout()">
-            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray"></i> Logout
-              <span class="float-right text-muted text-sm"></span>
+            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2"></i> Logout
+              <span class="float-right text-sm"></span>
           </a>
-
         </div>
       </li>
     </ul>
