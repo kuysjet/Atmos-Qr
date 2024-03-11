@@ -43,8 +43,8 @@ $eventCount = $row['eventCount'];
 $currentDate = date('Y-m-d');
 $currentDateTime = date('Y-m-d H:i:s');
 
-// Query to count finished events based on current date and log_out time
-$queryFinishedEvents = "SELECT COUNT(*) AS finishedEventCount FROM events WHERE event_date <= '$currentDate' AND CONCAT(event_date, ' ', log_out) < '$currentDateTime'";
+// Query to count finished events based on event date and log_out time
+$queryFinishedEvents = "SELECT COUNT(*) AS finishedEventCount FROM events WHERE event_date < CURDATE() OR (event_date = CURDATE() AND log_out < NOW())";
 $resultFinishedEvents = mysqli_query($conn, $queryFinishedEvents);
 $rowFinishedEvents = mysqli_fetch_assoc($resultFinishedEvents);
 $finishedEventCount = $rowFinishedEvents['finishedEventCount'];
