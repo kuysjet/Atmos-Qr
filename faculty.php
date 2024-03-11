@@ -880,7 +880,7 @@ function dataURLtoBlob(dataURL) {
             <!-- QR Code Image -->
             <img id="qrCodeImage" alt="QR Code" style="width: 200px; height: auto;">
             <!-- Faculty Name -->
-            <div id="facultyName" class="font-weight-bold" style="font-size: 14px; margin-top: 20px;">Faculty Name</div>
+            <div id="facultyName" class="font-weight-bold" style="font-size: 14px; margin-top: 20px; color: black;">Faculty Name</div>
           </div>
         </div>
       </div>

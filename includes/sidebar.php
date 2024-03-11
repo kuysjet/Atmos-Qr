@@ -17,7 +17,7 @@
           <i class="fas fa-user-cog fa-lg mr-2 text-gray pl-1 mt-2"></i>
         </div>
         <div class="info">
-          <a href="#" class="d-block"><?php echo "$firstname $lastname"; ?></a>
+          <span class="d-block text-light"><?php echo "$firstname $lastname"; ?></span>
         </div>
       </div>
 
@@ -53,19 +53,19 @@
     </a>
     <ul class="nav nav-treeview">
         <li class="nav-item">
-            <a href="faculty.php" class="nav-link <?= $page == 'faculty.php' ? 'active text-black' : '' ?>">
+            <a href="faculty.php" class="nav-link <?= $page == 'faculty.php' ? 'active' : '' ?>">
                 <i class="fas fa-chalkboard-teacher nav-icon"></i>
                 <p class="pl-4">Faculty</p>
             </a>
         </li>
         <li class="nav-item">
-            <a href="senior_high.php" class="nav-link <?= $page == 'senior_high.php' ? 'active text-black' : '' ?>">
+            <a href="senior_high.php" class="nav-link <?= $page == 'senior_high.php' ? 'active' : '' ?>">
                 <i class="fas fa-user-graduate nav-icon"></i>
                 <p class="pl-4">Senior High</p>
             </a>
         </li>
         <li class="nav-item">
-            <a href="college.php" class="nav-link <?= $page == 'college.php' ? 'active text-black' : '' ?>">
+            <a href="college.php" class="nav-link <?= $page == 'college.php' ? 'active' : '' ?>">
                 <i class="fas fa-user-graduate nav-icon"></i>
                 <p class="pl-4">College</p>
             </a>
@@ -79,13 +79,13 @@
             </a>
             <ul class="nav nav-treeview">
                 <li class="nav-item">
-                    <a href="department.php" class="nav-link <?= $page == 'department.php' ? 'active text-black' : '' ?>">
+                    <a href="department.php" class="nav-link <?= $page == 'department.php' ? 'active' : '' ?>">
                         <i class="far fa-dot-circle nav-icon"></i>
                         <p class="pl-4">Department</p>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="position.php" class="nav-link <?= $page == 'position.php' ? 'active text-black' : '' ?>">
+                    <a href="position.php" class="nav-link <?= $page == 'position.php' ? 'active' : '' ?>">
                         <i class="far fa-dot-circle nav-icon"></i>
                         <p class="pl-4">Position</p>
                     </a>

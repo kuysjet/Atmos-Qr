@@ -877,7 +877,7 @@ return new Blob([uInt8Array], { type: contentType });
             <!-- QR Code Image -->
             <img id="qrCodeImage" alt="QR Code" style="width: 200px; height: auto;">
             <!-- Student Name -->
-            <div id="studentName" class="font-weight-bold" style="font-size: 14px; margin-top: 20px;">Student Name</div>
+            <div id="studentName" class="font-weight-bold" style="font-size: 14px; margin-top: 20px; color: black;">Student Name</div>
           </div>
         </div>
       </div>
