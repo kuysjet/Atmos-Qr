@@ -130,7 +130,7 @@ $totalRegistrants = array_sum($collegeData) + array_sum($seniorHighData);
 <?php include 'includes/header.php'; ?>
 
 </head>
-<body class="hold-transition sidebar-mini">
+<body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
 
 
