@@ -58,9 +58,32 @@
   }
 
     /* Dropdown list hover color in dark mode */
-    .dark-mode .dropdown-menu .dropdown-item:hover {
+  .dark-mode .dropdown-menu .dropdown-item:hover {
     background-color: #ffffff; /* White background color */
     color: #343a40; /* Dark text color */
+  }
+
+    /* Dark mode for DataTables buttons */
+  .dark-mode .dt-button.dropdown-toggle {
+      background-color: #343a40 !important; /* Dark background color */
+      border-color: #343a40 !important; /* Dark border color */
+  }
+
+  .dark-mode .dt-button.dropdown-toggle:hover {
+      background-color: #23272b !important; /* Dark background color on hover */
+      border-color: #23272b !important; /* Dark border color on hover */
+  }
+
+  .dark-mode .dt-button-collection .dropdown-menu {
+      background-color: #343a40 !important; /* Dark background color */
+  }
+
+  .dark-mode .dt-button-collection .dropdown-menu .dt-button {
+      color: #ffffff !important; /* Light text color */
+  }
+
+  .dark-mode .dt-button-collection .dropdown-menu .dt-button:hover {
+      color: #343a40 !important; /* Light text color on hover */
   }
   
   </style>
