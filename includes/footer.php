@@ -40,6 +40,13 @@ function confirmLogout() {
     // If dark mode is enabled, add 'dark-mode' class to body
     if (darkModeEnabled === 'true') {
       document.body.classList.add('dark-mode');
+      // Display moon icon in dark mode
+      document.querySelector('#darkModeToggleBtn .fa-moon').classList.remove('d-none');
+      document.querySelector('#darkModeToggleBtn .fa-sun').classList.add('d-none');
+    } else {
+      // Display sun icon in light mode
+      document.querySelector('#darkModeToggleBtn .fa-moon').classList.add('d-none');
+      document.querySelector('#darkModeToggleBtn .fa-sun').classList.remove('d-none');
     }
 
     // Toggle button click event
