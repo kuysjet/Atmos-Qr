@@ -234,6 +234,9 @@ $totalRegistrants = array_sum($collegeData) + array_sum($seniorHighData);
                   <div class="card-header">
                     <h3 class="card-title m-0">Courses and Strands</h3>
                     <div class="card-tools">
+                      <button type="button" class="btn btn-tool" data-card-widget="maximize">
+                        <i class="fas fa-expand"></i>
+                      </button>
                       <button type="button" class="btn btn-tool" data-card-widget="collapse">
                         <i class="fas fa-minus"></i>
                       </button>
@@ -256,6 +259,9 @@ $totalRegistrants = array_sum($collegeData) + array_sum($seniorHighData);
                   <div class="card-header">
                     <h3 class="card-title m-0">Levels and Grades</h3>
                     <div class="card-tools">
+                      <button type="button" class="btn btn-tool" data-card-widget="maximize">
+                        <i class="fas fa-expand"></i>
+                      </button>
                       <button type="button" class="btn btn-tool" data-card-widget="collapse">
                         <i class="fas fa-minus"></i>
                       </button>
