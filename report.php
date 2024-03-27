@@ -79,7 +79,7 @@ if ($eventsResult && mysqli_num_rows($eventsResult) > 0) {
   <link rel="stylesheet" href="//code.highcharts.com/css/highcharts.css">
 
 </head>
-<body class="hold-transition sidebar-mini">
+<body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
 
 
@@ -125,22 +125,22 @@ if ($eventsResult && mysqli_num_rows($eventsResult) > 0) {
               <div class="card-body">
                 <div class="row mb-2">
                   <div class="col-md-3">
-                    <label for="academicYearFilter">Academic Year:</label>
+                    <label class="m-0" for="academicYearFilter">Academic Year:</label>
                       <select id="academicYearFilter" class="form-control">`
                       <option value="" disabled selected>Select Academic Year</option>
                       <?php echo $academicYearsOptions; ?>
                       </select>
                   </div>
                   <div class="col-md-3">
-                      <label for="eventsFilter">Events:</label>
+                      <label class="m-0" for="eventsFilter">Events:</label>
                       <select id="eventsFilter" class="form-control">
                       <option value="" disabled selected>Select Event</option>
                       </select>
                   </div>
                   <div class="col-md-3">
-                      <label for="userTypeFilter">Filter by User Type:</label>
+                      <label class="m-0" for="userTypeFilter">Filter by Registrant Type:</label>
                       <select id="userTypeFilter" class="form-control">
-                          <option value="" disabled selected>Select User Type</option>
+                          <option value="" disabled selected>Select Registrant Type</option>
                           <option value="college">College</option>
                           <option value="high_school">Senior High</option>
                           <option value="faculty">Faculty</option>
@@ -222,14 +222,15 @@ if ($eventsResult && mysqli_num_rows($eventsResult) > 0) {
 <!-- REQUIRED SCRIPTS -->
 
 <!-- jQuery -->
+<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <script src="plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
 <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.js"></script>
+<!-- Include SweetAlert JS -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- DataTables  & Plugins -->
-<script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <script src="plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="//code.highcharts.com/highcharts.js"></script>
-<script src="https://code.highcharts.com/modules/accessibility.js"></script>
 <script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
 <script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
 <script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
@@ -241,8 +242,8 @@ if ($eventsResult && mysqli_num_rows($eventsResult) > 0) {
 <script src="plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
-<!-- Include SweetAlert JS -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="//code.highcharts.com/highcharts.js"></script>
+<!-- <script src="https://code.highcharts.com/modules/accessibility.js"></script> -->
 <!-- AdminLTE App -->
 <script src="dist/js/adminlte.min.js"></script>
 <script src="dist/js/datetime.js"></script>
