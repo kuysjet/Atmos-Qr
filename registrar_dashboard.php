@@ -194,6 +194,26 @@ $result = mysqli_query($conn, $query);
     <!-- Main content -->
     <div class="content">
         <div class="container-fluid">
+            <div class="row mb-3">
+              <div class="col-md-2 mt-2">
+                  <label for="academicYearFilter" class="form-label">Filter by Academic Year:</label>
+              </div>
+              <div class="col-md-2">
+                  <select id="academicYearFilter" class="form-control">
+                      <option value="">All</option>
+                      <?php
+                      // Fetch academic years from the database
+                      $academicYearQuery = "SELECT * FROM academic_years WHERE status = 'active'";
+                      $academicYearResult = mysqli_query($conn, $academicYearQuery);
+                      if ($academicYearResult && mysqli_num_rows($academicYearResult) > 0) {
+                          while ($academicYearRow = mysqli_fetch_assoc($academicYearResult)) {
+                              echo '<option value="' . $academicYearRow['id'] . '">' . $academicYearRow['academic_year'] . '</option>';
+                          }
+                      }
+                      ?>
+                  </select>
+                </div>
+            </div>
             <div class="row">
             <?php
             // Function to calculate the status of an event
@@ -219,7 +239,7 @@ $result = mysqli_query($conn, $query);
                     // Determine the status of the event using the provided function
                     $status = calculateEventStatus($row['event_date'], $row['log_in'], $row['log_out']);
                     ?>
-                    <div class="col-md-4">
+                    <div class="col-md-4 event-card" data-academic-year-id="<?php echo $row['academic_year_id']; ?>">
                         <div class="card collapsed-card card-outline <?php echo $status == 'Pending' ? 'card-warning' : ($status == 'Ongoing' ? 'card-primary' : 'card-success'); ?>">
                             <div class="card-header">
                                 <h3 class="card-title text-truncate" style="max-width: 170px;"><?php echo $row['event_name']; ?></h3>
@@ -371,6 +391,22 @@ $(document).ready(function() {
             }
         });
     });
+
+    
+    // Event listener for academic year filter
+    $('#academicYearFilter').change(function() {
+    var selectedAcademicYearId = $(this).val();
+
+    // Show or hide event cards based on the selected academic year
+    if (selectedAcademicYearId === "") {
+        // Show all events if no academic year is selected
+        $('.event-card').show();
+    } else {
+        // Hide events that do not match the selected academic year
+        $('.event-card').hide();
+        $('.event-card[data-academic-year-id="' + selectedAcademicYearId + '"]').show();
+    }
+});
 
 
 
