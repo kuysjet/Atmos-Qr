@@ -195,25 +195,28 @@ $result = mysqli_query($conn, $query);
     <div class="content">
         <div class="container-fluid">
             <div class="row mb-3">
-              <div class="col-md-2 mt-2">
-                  <label for="academicYearFilter" class="form-label">Filter by Academic Year:</label>
-              </div>
-              <div class="col-md-2">
-                  <select id="academicYearFilter" class="form-control">
-                      <option value="">All</option>
-                      <?php
-                      // Fetch academic years from the database
-                      $academicYearQuery = "SELECT * FROM academic_years WHERE status = 'active'";
-                      $academicYearResult = mysqli_query($conn, $academicYearQuery);
-                      if ($academicYearResult && mysqli_num_rows($academicYearResult) > 0) {
-                          while ($academicYearRow = mysqli_fetch_assoc($academicYearResult)) {
-                              echo '<option value="' . $academicYearRow['id'] . '">' . $academicYearRow['academic_year'] . '</option>';
-                          }
-                      }
-                      ?>
-                  </select>
+                <div class="col-md-4">
+                    <label for="academicYearFilter" class="form-label mb-0">Filter by Academic Year:</label>
+                    <select id="academicYearFilter" class="form-control">
+                        <option value="">All</option>
+                        <?php
+                        // Fetch academic years from the database
+                        $academicYearQuery = "SELECT * FROM academic_years WHERE status = 'active'";
+                        $academicYearResult = mysqli_query($conn, $academicYearQuery);
+                        if ($academicYearResult && mysqli_num_rows($academicYearResult) > 0) {
+                            while ($academicYearRow = mysqli_fetch_assoc($academicYearResult)) {
+                                echo '<option value="' . $academicYearRow['id'] . '">' . $academicYearRow['academic_year'] . '</option>';
+                            }
+                        }
+                        ?>
+                    </select>
+                </div>
+                <div class="col-md-4 ml-auto mt-1">
+                    <label for="searchBox" class="form-label mb-0">Search:</label>
+                    <input type="text" class="form-control" id="searchBox" placeholder="Enter keywords">
                 </div>
             </div>
+
             <div class="row">
             <?php
             // Function to calculate the status of an event
@@ -407,6 +410,20 @@ $(document).ready(function() {
         $('.event-card[data-academic-year-id="' + selectedAcademicYearId + '"]').show();
     }
 });
+
+
+    // Add an event listener to the search box to filter events based on input
+    $('#searchBox').on('input', function() {
+        var searchText = $(this).val().toLowerCase();
+        $('.card').each(function() {
+            var eventName = $(this).find('.card-title').text().toLowerCase();
+            if (eventName.includes(searchText)) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    });
 
 
 
