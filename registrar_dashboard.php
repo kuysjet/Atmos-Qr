@@ -53,32 +53,9 @@ $result = mysqli_query($conn, $query);
   <!-- Theme style -->
   <link rel="stylesheet" href="dist/css/adminlte.min.css">
   <!-- Include Bootstrap CSS -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">  
-  
-  <style>
-  /* Custom CSS to adjust the size of SweetAlert dialog */
-  .swal2-popup {
-      font-size: 0.8rem; /* Adjust font size */
-      width: 20rem; /* Adjust width */
-  }
+  <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">   -->
+  <link rel="stylesheet" href="dist/css/dark-table.css">
 
-  .dataTables_wrapper {
-      overflow-x: auto; /* Enable horizontal scrolling for DataTables */
-  }
-
-  /* Adjust the font size and padding for all pagination buttons */
-  .dataTables_wrapper .dataTables_paginate .paginate_button {
-    font-size: 14px; /* Adjust the font size as needed */
-    padding: 4px 8px; /* Adjust the padding as needed */
-  }
-
-  /* Remove padding for the pagination button numbers */
-  .dataTables_wrapper .dataTables_paginate .paginate_button.current, 
-  .dataTables_wrapper .dataTables_paginate .paginate_button:not(.current) {
-    padding: 2px; /* Remove padding */
-  }
-  </style>
-  
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -102,6 +79,13 @@ $result = mysqli_query($conn, $query);
           <i class="fas fa-expand-arrows-alt"></i>
         </a>
       </li>
+      <!-- Dark mode toggle link -->
+      <li class="nav-item">
+        <a href="#" class="nav-link" id="darkModeToggleBtn">
+          <i class="fas fa-moon"></i>
+          <i class="fas fa-sun text-warning d-none"></i>
+        </a>
+      </li>
       <!-- Profile -->
       <li class="nav-item dropdown">
         <a class="nav-link" data-toggle="dropdown" href="#">
@@ -112,6 +96,7 @@ $result = mysqli_query($conn, $query);
             <i class="fas fa-user-cog fa-sm fa-fw mr-2 text-gray"></i> Profile
             <span class="float-right text-muted text-sm"></span>
           </a>
+          <div class="dropdown-divider"></div>
           <a class="dropdown-item" id="changePasswordDropdown" href="#" role="button" data-toggle="modal" data-target="#changePasswordModal">
             <i class="fas fa-key fa-sm fa-fw mr-2 text-gray"></i> Change Password
             <span class="float-right text-muted text-sm"></span>
@@ -208,38 +193,94 @@ $result = mysqli_query($conn, $query);
 
     <!-- Main content -->
     <div class="content">
-      <div class="container-fluid">
-          <div class="row">
+        <div class="container-fluid">
+            <div class="row">
             <?php
+            // Function to calculate the status of an event
+            function calculateEventStatus($eventDate, $loginTime, $logoutTime)
+            {
+                $currentDate = date('Y-m-d');
+                $currentTime = date('H:i:s');
+
+                if ($eventDate < $currentDate || ($eventDate == $currentDate && $logoutTime < $currentTime)) {
+                    return 'Done';
+                } elseif ($eventDate == $currentDate && $currentTime < $loginTime) {
+                    return 'Ongoing';
+                } elseif ($eventDate == $currentDate || $loginTime <= $currentTime && $currentTime <= $logoutTime) {
+                    return 'Ongoing';
+                } else {
+                    return 'Pending';
+                }
+            }
             // Check if events are found
             if ($result && mysqli_num_rows($result) > 0) {
-              // Loop through each event and display it in a card
-              while ($row = mysqli_fetch_assoc($result)) {
-                ?>
-                <div class="col-md-4 mb-4">
-                  <div class="card">
-                    <div class="card-body">
-                      <h5 class="card-title"><?php echo $row['event_name']; ?></h5>
-                      <p class="card-text">Academic Year: <?php echo $row['academic_year']; ?></p>
-                      <p class="card-text">Venue: <?php echo $row['event_venue']; ?></p>
-                      <p class="card-text">Description: <?php echo $row['description']; ?></p>
-                      <p class="card-text">Date: <?php echo $row['event_date']; ?></p>
-                      <p class="card-text">Login Time: <?php echo $row['log_in']; ?></p>
-                      <p class="card-text">Logout Time: <?php echo $row['log_out']; ?></p>
+                // Loop through each event and display it in a card
+                while ($row = mysqli_fetch_assoc($result)) {
+                    // Determine the status of the event using the provided function
+                    $status = calculateEventStatus($row['event_date'], $row['log_in'], $row['log_out']);
+                    ?>
+                    <div class="col-md-4">
+                        <div class="card collapsed-card card-outline <?php echo $status == 'Pending' ? 'card-warning' : ($status == 'Ongoing' ? 'card-primary' : 'card-success'); ?>">
+                            <div class="card-header">
+                                <h3 class="card-title text-truncate" style="max-width: 170px;"><?php echo $row['event_name']; ?></h3>
+                                <div class="card-tools">
+                                    <!-- Display the status badge -->
+                                    <span class="badge badge-<?php echo $status == 'Pending' ? 'warning' : ($status == 'Ongoing' ? 'primary' : 'success'); ?> ml-2"><?php echo $status; ?></span>
+                                    <!-- Card tools -->
+                                    <button type="button" class="btn btn-tool" data-card-widget="maximize">
+                                        <i class="fas fa-expand"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                        <i class="fas fa-plus"></i>
+                                    </button>
+                                </div>
+                                <!-- /.card-tools -->
+                            </div>
+                            <!-- /.card-header -->
+                            <div class="card-body text-left">
+                                <!-- Display the event details -->
+                                <p>Academic Year: <?php echo $row['academic_year']; ?></p>
+                                <p>Venue: <?php echo $row['event_venue']; ?></p>
+                                <p>Description: <?php echo $row['description']; ?></p>
+                                <p>Date: <?php echo $row['event_date']; ?></p>
+                                <p>Login Time: <?php echo $row['log_in']; ?></p>
+                                <p>Logout Time: <?php echo $row['log_out']; ?></p>
+                            </div>
+                            <!-- /.card-body -->
+                            <!-- QR code scan button -->
+                            <div class="card-footer">
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <div class="col-12 text-center">
+                                        <?php
+                                        // Check if the status is 'Done' or 'Pending'
+                                        if ($status === 'Done' || $status === 'Pending') {
+                                            // If status is 'Done' or 'Pending', disable the button
+                                            echo '<button class="btn btn-circle btn-lg btn-primary" style="border-radius: 50%; opacity: 0.15;" disabled><i class="fas fa-qrcode"></i></button>';
+                                        } else {
+                                            // Otherwise, enable the button and pass event details as parameters
+                                            echo '<a href="scanner.php?eventId=' . $row['id'] . '&eventName=' . urlencode($row['event_name']) . '" class="btn btn-circle btn-lg btn-primary" style="border-radius: 50%;"><i class="fas fa-qrcode"></i></a>';
+                                        }
+                                        ?>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /.card -->
                     </div>
-                  </div>
-                </div>
-                <?php
-              }
+                    <?php
+                }
             } else {
-              // No events found
-              echo "<div class='col-md-12'><p>No events assigned</p></div>";
+                // No events found
+                echo "<div class='col-md-12 text-center p-2'><div style='background-color: #f0f0f0; padding: 10px;'><p style='margin: 0; color:black'>No events assigned</p></div></div>";
             }
             ?>
-          </div>
-      </div><!-- /.container-fluid -->
-    </div>
-    <!-- /.content -->
+        </div>
+    </div><!-- /.container-fluid -->
+</div>
+<!-- /.content -->
+
   </div>
   <!-- /.content-wrapper -->
 
@@ -438,7 +479,7 @@ $(document).ready(function() {
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary btn-sm" id="savePasswordChangesBtn">Save Changes</button>
+                <button type="button" class="btn btn-primary btn-sm" id="savePasswordChangesBtn"><i class="fas fa-save"></i> Save Changes</button>
                 <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
             </div>
         </div>
