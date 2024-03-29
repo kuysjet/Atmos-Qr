@@ -2,7 +2,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "haha_db";
+$dbname = "atmos_database";
 
 // Create connection
 $conn = new mysqli($servername, $username, $password, $dbname);
