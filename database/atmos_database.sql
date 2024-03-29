@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 29, 2024 at 04:51 AM
+-- Generation Time: Mar 29, 2024 at 04:18 PM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `haha_db`
+-- Database: `atmos_database`
 --
 
 -- --------------------------------------------------------
@@ -40,9 +40,9 @@ CREATE TABLE `academic_years` (
 --
 
 INSERT INTO `academic_years` (`id`, `academic_year`, `status`, `created_at`, `updated_at`) VALUES
-(86, '2024-2025', 'active', '2024-02-25 17:57:48', '2024-03-25 02:07:19'),
+(86, '2024-2025', 'active', '2024-02-25 17:57:48', '2024-03-29 12:46:13'),
 (106, '2025-2026', 'active', '2024-03-15 06:42:28', '2024-03-16 10:52:48'),
-(110, '2026-2027', 'active', '2024-03-17 13:53:17', '2024-03-17 13:53:17');
+(110, '2026-2027', 'active', '2024-03-17 13:53:17', '2024-03-29 12:32:12');
 
 -- --------------------------------------------------------
 
@@ -86,8 +86,9 @@ INSERT INTO `attendance` (`id`, `college_student_id`, `senior_high_student_id`, 
 (269, NULL, 381, NULL, 19, '10:56:39', '10:31:17', '2024-03-27 14:56:39', '2024-03-29 02:31:17'),
 (270, NULL, 347, NULL, 19, '09:26:03', '09:41:13', '2024-03-28 01:26:03', '2024-03-29 01:41:13'),
 (271, NULL, 396, NULL, 19, '09:26:38', '09:29:37', '2024-03-28 01:26:38', '2024-03-29 01:29:37'),
-(272, 25, NULL, NULL, 19, '09:27:31', '09:44:16', '2024-03-28 01:27:31', '2024-03-28 01:44:16'),
-(274, NULL, 378, NULL, 19, '11:00:51', '11:02:35', '2024-03-29 03:00:51', '2024-03-29 03:02:35');
+(275, NULL, 402, NULL, 19, '11:55:33', '11:55:45', '2024-03-29 03:55:33', '2024-03-29 03:55:45'),
+(278, NULL, 378, NULL, 19, '05:32:42', '20:10:38', '2024-03-29 09:32:42', '2024-03-29 12:10:38'),
+(281, 25, NULL, NULL, 19, '08:18:09', '08:18:23', '2024-03-29 12:18:09', '2024-03-29 12:18:23');
 
 -- --------------------------------------------------------
 
@@ -184,12 +185,12 @@ CREATE TABLE `events` (
 --
 
 INSERT INTO `events` (`id`, `academic_year_id`, `event_name`, `event_venue`, `description`, `event_date`, `log_in`, `log_out`, `registrar_id`, `created_at`, `updated_at`) VALUES
-(19, 86, 'SportsFest', 'UNEP', 'Sports And Competitions', '2024-03-29', '07:17:00', '17:57:00', 28, '2024-03-06 04:30:35', '2024-03-29 03:03:48'),
+(19, 86, 'SportsFest', 'UNEP', 'Sports And Competitions', '2024-03-30', '10:16:00', '22:16:00', 28, '2024-03-06 04:30:35', '2024-03-29 14:16:32'),
 (29, 86, 'First aid', 'ACLC', 'Seminar', '2024-03-29', '01:01:00', '22:05:00', 28, '2024-03-07 16:05:28', '2024-03-29 03:03:55'),
 (30, 86, 'Foundation', 'ACLC', 'Foundation Day ACLC', '2024-03-29', '03:32:00', '23:54:00', 28, '2024-03-08 05:32:13', '2024-03-29 03:04:02'),
 (32, 86, 'Sunday Class', 'ACLC ', 'Discussion', '2024-03-21', '05:06:00', '18:17:00', 28, '2024-03-09 06:46:14', '2024-03-22 13:52:35'),
 (33, 106, 'Blood Letting', 'ACLC', 'Donate', '2024-03-27', '02:42:00', '23:55:00', 28, '2024-03-15 06:43:05', '2024-03-26 23:51:15'),
-(34, 86, 'sdasdafsdgdffghfghjgyujyjujghyjgh', 'gdfgdfgdfghfghdtyhdghfghfghfhj yhuygtuy', 'jghjghjghkhjkgjukfyudtysrfgdgdfgg r rtyedrtdrdfdfgdfg', '2024-03-26', '08:05:00', '17:20:00', 35, '2024-03-20 12:14:12', '2024-03-26 05:02:39');
+(34, 86, 'sdasdafsd', 'gdfgdfgd', 'jghjgh', '2024-03-26', '08:05:00', '17:20:00', 35, '2024-03-20 12:14:12', '2024-03-29 04:21:17');
 
 -- --------------------------------------------------------
 
@@ -605,7 +606,7 @@ ALTER TABLE `academic_years`
 -- AUTO_INCREMENT for table `attendance`
 --
 ALTER TABLE `attendance`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=275;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=282;
 
 --
 -- AUTO_INCREMENT for table `collegestudents`
