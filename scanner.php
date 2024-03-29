@@ -88,6 +88,11 @@ if (isset($_GET['eventId'])) {
       right: 20px;
       z-index: 1000;
     }
+
+    /* Apply the blink animation to the scanner status */
+    .costum-blink {
+        animation: blinker 2s ease-in-out infinite; /* Adjust animation duration and timing function */
+    }
   </style>
 </head>
 <body>
@@ -106,6 +111,9 @@ if (isset($_GET['eventId'])) {
     <div class="row">
       <div class="col-md-12 p-3 shadow-lg rounded">
         <div class="border p-3 shadow-sm rounded">
+          <div id="scannerStatus" class="text-center mb-2">
+            <span id="scannerStatusIcon"></span>
+          </div>
           <marquee class="pb-2" width="100%" direction="left">
             <b class="marquee-text" style="letter-spacing: 5px;">Attendance Monitoring - QR Code</b>
           </marquee>
@@ -351,6 +359,19 @@ function onScanSuccess(decodedText, decodedResult) {
 
 // Function to handle attendance based on identificationNumber and scanOption
 function handleAttendance(identificationNumber, scanOption) {
+          // Check if the system is offline
+          if (!navigator.onLine) {
+            // Handle offline code detection here
+            Swal.fire({
+                icon: 'warning',
+                title: 'Offline',
+                text: 'The system is offline. Please try again when online.',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK'
+            });
+            errorSound.play(); // Play error sound
+            return;
+        }
     // Send AJAX request to add attendance
     $.ajax({
         url: 'attendance_add.php',
@@ -458,7 +479,32 @@ $('#manualInputButton').click(function() {
 });
 
 
+  // Function to update the scanner status UI
+  function updateScannerStatus() {
+      var scannerStatusIcon = document.getElementById("scannerStatusIcon");
+      if (navigator.onLine) {
+          // If online, display a green checkmark icon with text and blinking effect
+          scannerStatusIcon.innerHTML = '<i class="fas fa-circle text-success costum-blink"></i> Online';
+      } else {
+          // If offline, display a red times icon with text and blinking effect
+          scannerStatusIcon.innerHTML = '<i class="fas fa-circle text-danger costum-blink"></i> Offline';
+      }
+  }
 
+  // Call the updateScannerStatus function initially to display the initial status
+  updateScannerStatus();
+
+  // Add event listener to update the scanner status whenever the online/offline status changes
+  window.addEventListener('online', function() {
+      updateScannerStatus();
+  });
+
+  window.addEventListener('offline', function() {
+      updateScannerStatus();
+  });
+
+
+// QR Code Reader
 var html5QrcodeScanner = new Html5QrcodeScanner(
     "reader", { fps: 10, qrbox: 200 });
 html5QrcodeScanner.render(onScanSuccess);
