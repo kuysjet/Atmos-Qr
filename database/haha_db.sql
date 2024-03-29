@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 10, 2024 at 01:13 AM
+-- Generation Time: Mar 29, 2024 at 04:51 AM
 -- Server version: 10.4.27-MariaDB
 -- PHP Version: 8.2.0
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `db_atmos`
+-- Database: `haha_db`
 --
 
 -- --------------------------------------------------------
@@ -40,7 +40,54 @@ CREATE TABLE `academic_years` (
 --
 
 INSERT INTO `academic_years` (`id`, `academic_year`, `status`, `created_at`, `updated_at`) VALUES
-(86, '2024-2025', 'active', '2024-02-25 17:57:48', '2024-03-09 12:06:51');
+(86, '2024-2025', 'active', '2024-02-25 17:57:48', '2024-03-25 02:07:19'),
+(106, '2025-2026', 'active', '2024-03-15 06:42:28', '2024-03-16 10:52:48'),
+(110, '2026-2027', 'active', '2024-03-17 13:53:17', '2024-03-17 13:53:17');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `attendance`
+--
+
+CREATE TABLE `attendance` (
+  `id` int(11) NOT NULL,
+  `college_student_id` int(11) DEFAULT NULL,
+  `senior_high_student_id` int(11) DEFAULT NULL,
+  `faculty_id` int(11) DEFAULT NULL,
+  `event_id` int(11) NOT NULL,
+  `time_in` time DEFAULT NULL,
+  `time_out` time DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `attendance`
+--
+
+INSERT INTO `attendance` (`id`, `college_student_id`, `senior_high_student_id`, `faculty_id`, `event_id`, `time_in`, `time_out`, `created_at`, `updated_at`) VALUES
+(3, NULL, 360, NULL, 19, '08:00:00', '05:00:00', '2024-03-15 12:48:38', '2024-03-15 12:48:38'),
+(4, NULL, NULL, 81, 19, '08:00:00', '05:00:00', '2024-03-15 12:49:12', '2024-03-15 12:49:12'),
+(5, 24, NULL, NULL, 19, '08:00:00', '05:00:00', '2024-03-17 12:37:21', '2024-03-17 12:37:21'),
+(9, NULL, 372, NULL, 19, '08:00:00', '05:00:00', '2024-03-17 12:39:13', '2024-03-17 12:39:13'),
+(11, NULL, NULL, 82, 19, '08:00:00', '05:00:00', '2024-03-17 12:47:24', '2024-03-17 12:47:24'),
+(13, NULL, 357, NULL, 19, '08:00:00', '05:00:00', '2024-03-19 02:42:59', '2024-03-19 02:42:59'),
+(233, NULL, 344, NULL, 19, '07:12:10', '08:57:09', '2024-03-27 11:12:10', '2024-03-27 12:57:09'),
+(253, NULL, 399, NULL, 19, '09:19:39', '10:31:42', '2024-03-27 13:19:40', '2024-03-29 02:31:42'),
+(257, NULL, 399, NULL, 29, '10:15:48', '11:18:09', '2024-03-27 14:15:48', '2024-03-29 03:18:09'),
+(258, NULL, 381, NULL, 29, '10:16:16', '11:17:55', '2024-03-27 14:16:16', '2024-03-29 03:17:55'),
+(259, 25, NULL, NULL, 29, '10:21:16', '11:17:43', '2024-03-27 14:21:16', '2024-03-29 03:17:43'),
+(264, NULL, 381, NULL, 30, '10:45:18', '10:46:35', '2024-03-27 14:45:18', '2024-03-27 14:46:35'),
+(265, NULL, 347, NULL, 30, '10:45:34', '10:47:02', '2024-03-27 14:45:34', '2024-03-27 14:47:02'),
+(266, 25, NULL, NULL, 30, '10:46:04', '10:46:44', '2024-03-27 14:46:05', '2024-03-27 14:46:44'),
+(267, NULL, 339, NULL, 19, '10:56:04', '10:31:35', '2024-03-27 14:56:04', '2024-03-29 02:31:35'),
+(268, NULL, 393, NULL, 19, '10:56:28', '10:31:26', '2024-03-27 14:56:28', '2024-03-29 02:31:26'),
+(269, NULL, 381, NULL, 19, '10:56:39', '10:31:17', '2024-03-27 14:56:39', '2024-03-29 02:31:17'),
+(270, NULL, 347, NULL, 19, '09:26:03', '09:41:13', '2024-03-28 01:26:03', '2024-03-29 01:41:13'),
+(271, NULL, 396, NULL, 19, '09:26:38', '09:29:37', '2024-03-28 01:26:38', '2024-03-29 01:29:37'),
+(272, 25, NULL, NULL, 19, '09:27:31', '09:44:16', '2024-03-28 01:27:31', '2024-03-28 01:44:16'),
+(274, NULL, 378, NULL, 19, '11:00:51', '11:02:35', '2024-03-29 03:00:51', '2024-03-29 03:02:35');
 
 -- --------------------------------------------------------
 
@@ -137,10 +184,12 @@ CREATE TABLE `events` (
 --
 
 INSERT INTO `events` (`id`, `academic_year_id`, `event_name`, `event_venue`, `description`, `event_date`, `log_in`, `log_out`, `registrar_id`, `created_at`, `updated_at`) VALUES
-(19, 86, 'SportsFest', 'UNEP', 'Sports And Competitions', '2024-03-13', '03:30:00', '19:30:00', 28, '2024-03-06 04:30:35', '2024-03-08 14:48:21'),
-(29, 86, 'First aid', 'ACLC', 'Seminar', '2024-03-16', '03:05:00', '17:05:00', 28, '2024-03-07 16:05:28', '2024-03-08 14:47:17'),
-(30, 86, 'Foundation', 'ACLC', 'Foundation Day ACLC', '2024-03-07', '03:32:00', '15:32:00', 35, '2024-03-08 05:32:13', '2024-03-08 14:42:42'),
-(32, 86, 'Sunday Class', 'ACLC ', 'Discussion', '2024-03-10', '08:00:00', '17:00:00', 35, '2024-03-09 06:46:14', '2024-03-09 06:46:14');
+(19, 86, 'SportsFest', 'UNEP', 'Sports And Competitions', '2024-03-29', '07:17:00', '17:57:00', 28, '2024-03-06 04:30:35', '2024-03-29 03:03:48'),
+(29, 86, 'First aid', 'ACLC', 'Seminar', '2024-03-29', '01:01:00', '22:05:00', 28, '2024-03-07 16:05:28', '2024-03-29 03:03:55'),
+(30, 86, 'Foundation', 'ACLC', 'Foundation Day ACLC', '2024-03-29', '03:32:00', '23:54:00', 28, '2024-03-08 05:32:13', '2024-03-29 03:04:02'),
+(32, 86, 'Sunday Class', 'ACLC ', 'Discussion', '2024-03-21', '05:06:00', '18:17:00', 28, '2024-03-09 06:46:14', '2024-03-22 13:52:35'),
+(33, 106, 'Blood Letting', 'ACLC', 'Donate', '2024-03-27', '02:42:00', '23:55:00', 28, '2024-03-15 06:43:05', '2024-03-26 23:51:15'),
+(34, 86, 'sdasdafsdgdffghfghjgyujyjujghyjgh', 'gdfgdfgdfghfghdtyhdghfghfghfhj yhuygtuy', 'jghjghjghkhjkgjukfyudtysrfgdgdfgg r rtyedrtdrdfdfgdfg', '2024-03-26', '08:05:00', '17:20:00', 35, '2024-03-20 12:14:12', '2024-03-26 05:02:39');
 
 -- --------------------------------------------------------
 
@@ -345,7 +394,7 @@ INSERT INTO `seniorhighstudents` (`ID`, `IdentificationNumber`, `FirstName`, `La
 (405, '64873209154', 'Chloe', 'Warren', 'chloe.warren@example.com', 4, 2, 1, '2024-03-08 05:25:07', '2024-03-08 05:25:07'),
 (406, '51976420835', 'Harper', 'Henry', 'harper.henry@example.com', 2, 1, 4, '2024-03-08 05:25:07', '2024-03-08 05:25:07'),
 (407, '69243057189', 'Ethan', 'Sullivan', 'ethan.sullivan@example.com', 3, 2, 1, '2024-03-08 05:25:07', '2024-03-08 05:25:07'),
-(408, '43792650389', 'Avery', 'Vargas', 'avery.vargas@example.com', 4, 1, 2, '2024-03-08 05:25:07', '2024-03-08 05:25:07'),
+(408, '43792650389', 'Avery', 'Vargas', 'avery.vargas@example.com', 2, 1, 2, '2024-03-08 05:25:07', '2024-03-17 12:51:19'),
 (409, '42876509321', 'Liam', 'Fisher', 'liam.fisher@example.com', 1, 1, 4, '2024-03-08 05:25:07', '2024-03-08 05:25:07'),
 (410, '59628730124', 'Emma', 'Mcdonald', 'emma.mcdonald@example.com', 2, 2, 1, '2024-03-08 05:25:07', '2024-03-08 05:25:07'),
 (411, '31098725469', 'Oliver', 'Carpenter', 'oliver.carpenter@example.com', 3, 1, 3, '2024-03-08 05:25:07', '2024-03-08 05:25:07'),
@@ -400,9 +449,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `firstname`, `lastname`, `email`, `username`, `password`, `status`, `user_type_id`, `created_at`, `updated_at`) VALUES
-(1, 'Jetro', 'Bagasala', 'jet@gmail.com', 'Admin', 'Admin123', 'active', 1, '2024-02-14 06:53:14', '2024-03-08 09:29:46'),
-(28, 'Ced', 'Embestro', 'ced@gmail.com', 'Cedrick', 'Cedrick123', 'active', 2, '2024-02-29 03:43:08', '2024-03-09 12:55:24'),
-(35, 'Cynel ', 'Taduran', 'cynel@gmail.com', 'Cynel', 'Cynel123', 'active', 2, '2024-03-06 06:23:55', '2024-03-09 12:55:31'),
+(1, 'Jetro', 'Bagasala', 'jet@gmail.com', 'Admin', 'Admin123', 'active', 1, '2024-02-14 06:53:14', '2024-03-24 04:13:55'),
+(28, 'Ced', 'Embestro', 'ced@gmail.com', 'Cedrick', 'Cedrick123', 'active', 2, '2024-02-29 03:43:08', '2024-03-22 13:51:04'),
+(35, 'Cynel ', 'Taduran', 'cynel@gmail.com', 'Cynel', 'Cynel123', 'active', 2, '2024-03-06 06:23:55', '2024-03-20 10:08:35'),
 (36, 'Anica', 'Ross', 'anic@gmail.com', 'Anica', 'Anica1234', 'active', 1, '2024-03-08 10:04:04', '2024-03-08 11:46:41');
 
 -- --------------------------------------------------------
@@ -436,6 +485,16 @@ INSERT INTO `user_types` (`id`, `name`, `created_at`, `updated_at`) VALUES
 ALTER TABLE `academic_years`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `academic_year` (`academic_year`);
+
+--
+-- Indexes for table `attendance`
+--
+ALTER TABLE `attendance`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `college_student_id` (`college_student_id`),
+  ADD KEY `senior_high_student_id` (`senior_high_student_id`),
+  ADD KEY `faculty_id` (`faculty_id`),
+  ADD KEY `event_id` (`event_id`);
 
 --
 -- Indexes for table `collegestudents`
@@ -540,13 +599,19 @@ ALTER TABLE `user_types`
 -- AUTO_INCREMENT for table `academic_years`
 --
 ALTER TABLE `academic_years`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=106;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=112;
+
+--
+-- AUTO_INCREMENT for table `attendance`
+--
+ALTER TABLE `attendance`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=275;
 
 --
 -- AUTO_INCREMENT for table `collegestudents`
 --
 ALTER TABLE `collegestudents`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `courses`
@@ -564,7 +629,7 @@ ALTER TABLE `departments`
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=33;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT for table `faculties`
@@ -588,7 +653,7 @@ ALTER TABLE `levels`
 -- AUTO_INCREMENT for table `positions`
 --
 ALTER TABLE `positions`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `sections`
@@ -600,7 +665,7 @@ ALTER TABLE `sections`
 -- AUTO_INCREMENT for table `seniorhighstudents`
 --
 ALTER TABLE `seniorhighstudents`
-  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=416;
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=417;
 
 --
 -- AUTO_INCREMENT for table `strands`
@@ -623,6 +688,15 @@ ALTER TABLE `user_types`
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `attendance`
+--
+ALTER TABLE `attendance`
+  ADD CONSTRAINT `attendance_ibfk_1` FOREIGN KEY (`college_student_id`) REFERENCES `collegestudents` (`ID`),
+  ADD CONSTRAINT `attendance_ibfk_2` FOREIGN KEY (`senior_high_student_id`) REFERENCES `seniorhighstudents` (`ID`),
+  ADD CONSTRAINT `attendance_ibfk_3` FOREIGN KEY (`faculty_id`) REFERENCES `faculties` (`ID`),
+  ADD CONSTRAINT `attendance_ibfk_4` FOREIGN KEY (`event_id`) REFERENCES `events` (`id`);
 
 --
 -- Constraints for table `collegestudents`
