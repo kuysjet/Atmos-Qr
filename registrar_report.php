@@ -723,7 +723,7 @@ function updateTableColumns(userType) {
             // Combine Course, Strand, and Level into a single key if all are available
             var key = '';
             if (courseColumnIndex !== -1 && strandColumnIndex !== -1 && levelColumnIndex !== -1) {
-                key = course + '-' + strand + '-' + level;
+                key = course + '-' + strand + '' + level;
             } else if (courseColumnIndex !== -1 && strandColumnIndex !== -1) {
                 key = course + '-' + strand;
             } else if (courseColumnIndex !== -1) {
