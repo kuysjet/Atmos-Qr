@@ -20,8 +20,8 @@ if(isset($_POST['eventId']) && isset($_POST['userType'])) {
                                     NULL AS grade, 
                                     NULL AS section, 
                                     NULL AS position, 
-                                    attendance.time_in, 
-                                    attendance.time_out
+                                    TIME_FORMAT(attendance.time_in, '%h:%i %p') AS time_in,
+                                    TIME_FORMAT(attendance.time_out, '%h:%i %p') AS time_out
                             FROM attendance
                             INNER JOIN collegestudents ON attendance.college_student_id = collegestudents.ID
                             INNER JOIN courses ON collegestudents.courseID = courses.ID
@@ -29,16 +29,16 @@ if(isset($_POST['eventId']) && isset($_POST['userType'])) {
                             WHERE attendance.event_id = $eventId";
     } elseif($userType === "high_school") {
         $attendanceQuery = "SELECT attendance.id, 
-                                  seniorhighstudents.FirstName, 
-                                  seniorhighstudents.LastName, 
-                                  NULL AS course, 
-                                  NULL AS level, 
-                                  strands.strand_name AS strand, 
-                                  grades.grade_name AS grade, 
-                                  sections.section_name AS section, 
-                                  NULL AS position, 
-                                  attendance.time_in, 
-                                  attendance.time_out
+                                    seniorhighstudents.FirstName, 
+                                    seniorhighstudents.LastName, 
+                                    NULL AS course, 
+                                    NULL AS level, 
+                                    strands.strand_name AS strand, 
+                                    grades.grade_name AS grade, 
+                                    sections.section_name AS section, 
+                                    NULL AS position, 
+                                    TIME_FORMAT(attendance.time_in, '%h:%i %p') AS time_in,
+                                    TIME_FORMAT(attendance.time_out, '%h:%i %p') AS time_out
                             FROM attendance
                             INNER JOIN seniorhighstudents ON attendance.senior_high_student_id = seniorhighstudents.ID
                             INNER JOIN strands ON seniorhighstudents.strandID = strands.ID
@@ -47,16 +47,16 @@ if(isset($_POST['eventId']) && isset($_POST['userType'])) {
                             WHERE attendance.event_id = $eventId";
     } elseif($userType === "faculty") {
         $attendanceQuery = "SELECT attendance.id, 
-                                  faculties.FirstName, 
-                                  faculties.LastName, 
-                                  NULL AS course, 
-                                  NULL AS level, 
-                                  NULL AS strand, 
-                                  NULL AS grade, 
-                                  NULL AS section, 
-                                  positions.PositionName AS position, 
-                                  attendance.time_in, 
-                                  attendance.time_out
+                                    faculties.FirstName, 
+                                    faculties.LastName, 
+                                    NULL AS course, 
+                                    NULL AS level, 
+                                    NULL AS strand, 
+                                    NULL AS grade, 
+                                    NULL AS section, 
+                                    positions.PositionName AS position, 
+                                    TIME_FORMAT(attendance.time_in, '%h:%i %p') AS time_in,
+                                    TIME_FORMAT(attendance.time_out, '%h:%i %p') AS time_out
                             FROM attendance
                             INNER JOIN faculties ON attendance.faculty_id = faculties.ID
                             INNER JOIN positions ON faculties.positionID = positions.ID
