@@ -65,14 +65,26 @@ function confirmLogout() {
     toggleDarkModeIcons();
   }
 
-  // Function to toggle the icons
+  // Function to toggle the icons and update their classes based on dark mode status
   function toggleDarkModeIcons() {
-    document.querySelector('#darkModeToggleBtn .fa-moon').classList.toggle('d-none');
-    document.querySelector('#darkModeToggleBtn .fa-sun').classList.toggle('d-none');
+    const moonIcon = document.querySelector('#darkModeToggleBtn .fa-moon');
+    const sunIcon = document.querySelector('#darkModeToggleBtn .fa-sun');
+
+    // Check if dark mode is enabled
+    const darkModeEnabled = document.body.classList.contains('dark-mode');
+
+    // Toggle icons based on dark mode status
+    if (darkModeEnabled) {
+      moonIcon.classList.add('d-none');
+      sunIcon.classList.remove('d-none');
+    } else {
+      moonIcon.classList.remove('d-none');
+      sunIcon.classList.add('d-none');
+    }
   }
 
   // Call the initialization function when the page loads
-  window.onload = function() {
+  // window.onload = function() {
     initializeDarkModeToggle();
-  };
+  // };
 </script>

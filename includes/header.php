@@ -15,7 +15,7 @@
   <!-- Theme style -->
   <link rel="stylesheet" href="dist/css/adminlte.min.css">
   <!-- Include Bootstrap CSS -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
 
     <!-- CSS for navbar and body text in dark mode -->
   <style>
@@ -86,6 +86,22 @@
       color: #343a40 !important; /* Light text color on hover */
   }
   
+      /* Custom CSS for dropdown list in DataTable buttons in dark mode */
+      .dark-mode .dt-button-collection .dropdown-menu {
+        background-color: #343a40; /* Dark background color */
+        color: #ffffff; /* Light text color */
+    }
+
+    /* Custom CSS for dropdown items in DataTable buttons in dark mode */
+    .dark-mode .dt-button-collection .dropdown-menu a {
+        color: #ffffff; /* Light text color */
+    }
+
+    /* Custom CSS for dropdown items hover effect in DataTable buttons in dark mode */
+    .dark-mode .dt-button-collection .dropdown-menu a:hover {
+        background-color: #ffffff; /* White background color */
+        color: #343a40; /* Dark text color */
+    }
   </style>
 
   <style>
