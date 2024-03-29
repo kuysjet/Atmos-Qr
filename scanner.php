@@ -106,7 +106,7 @@ if (isset($_GET['eventId'])) {
     <i class="fas fa-arrow-down"></i>
   </button>
 
-<div class="container-fluid d-flex justify-content-center align-items-center min-vh-100">
+<div class="container-fluid d-flex justify-content-center align-items-center min-vh-100 px-0">
   <div class="container bg-white">
     <div class="row">
       <div class="col-md-12 p-3 shadow-lg rounded">
@@ -155,7 +155,7 @@ if (isset($_GET['eventId'])) {
             <div class="col-md-6">
               <div class="d-flex justify-content-center mb-1"><h6 class="m-0 py-1"><b><?php echo $eventName ?></b></h6></div> 
               <div class="table-responsive"> <!-- Add table-responsive class here -->
-                <table id="attendanceTable" class="table compact table-bordered responsive table-hover no-wrap" style="width:100%;">
+                <table id="attendanceTable" class="table compact table-bordered responsive table-hover nowrap" style="width:100%;">
                   <thead>
                     <tr>
                       <th>No.</th>
