@@ -29,7 +29,8 @@ if (isset($_GET['eventId'])) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QR Code Reader</title>
+  <link rel="icon" type="image/x-icon" href="dist/img/icon.png">
+  <title>ATMOS | Scanner</title>
 
   <!-- Fonts and Icons -->
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500&family=Oswald:wght@200;300;400&display=swap" rel="stylesheet">
@@ -158,62 +159,6 @@ if (isset($_GET['eventId'])) {
                   </thead>
                   <tbody>
                     <!-- Attendance data will be inserted here dynamically -->
-                    <?php
-                    include 'database/db.php';
-
-                    // Check if eventId is set in the URL parameters
-                    if (isset($_GET['eventId'])) {
-                        // Retrieve event details from URL parameters
-                        $eventId = $_GET['eventId'];
-                        $eventName = urldecode($_GET['eventName']);
-
-                        // Use the event details as needed
-                        // echo "Scanning QR Code for Event: $eventName (ID: $eventId)";
-
-                        // Fetch attendance data for the current event
-                        $query = "SELECT 
-                                    attendance.id AS attendance_id, 
-                                    COALESCE(collegestudents.ID, seniorhighstudents.ID, faculties.ID) AS attendee_id,
-                                    COALESCE(collegestudents.FirstName, seniorhighstudents.FirstName, faculties.FirstName) AS first_name,
-                                    COALESCE(collegestudents.LastName, seniorhighstudents.LastName, faculties.LastName) AS last_name,
-                                    attendance.time_in,
-                                    attendance.time_out
-                                  FROM 
-                                    attendance
-                                  LEFT JOIN 
-                                    collegestudents ON attendance.college_student_id = collegestudents.ID
-                                  LEFT JOIN 
-                                    seniorhighstudents ON attendance.senior_high_student_id = seniorhighstudents.ID
-                                  LEFT JOIN 
-                                    faculties ON attendance.faculty_id = faculties.ID
-                                  WHERE 
-                                    attendance.event_id = $eventId
-                                  ORDER BY
-                                    attendance.id DESC"; // Order by attendance ID in descending order
-
-                        $result = mysqli_query($conn, $query);
-
-                        // $rowNumber = 1; // Initialize row number counter
-
-                        if (mysqli_num_rows($result) > 0) {
-                            while ($row = mysqli_fetch_assoc($result)) {
-                                // Output attendance data in the table rows
-                                echo "<tr>";
-                                echo "<td>" . $row['attendance_id'] . "</td>"; // Output auto-incremented number
-                                echo "<td>" . $row['first_name'] . "</td>";
-                                echo "<td>" . $row['last_name'] . "</td>";
-                                echo "<td>" . $row['time_in'] . "</td>";
-                                echo "<td>" . $row['time_out'] . "</td>";
-                                echo "</tr>";
-                            }
-                        } else {
-                            // If no attendance data found
-                            echo "<tr><td colspan='5'>No attendance records found</td></tr>";
-                        }
-                    } else {
-                        echo "Event ID is not set!";
-                    }
-                    ?>
                   </tbody>
                 </table>
               </div>
