@@ -77,7 +77,7 @@ function confirmLogout() {
   }
 
   // Call the initialization function when the page loads
-  window.onload = function() {
+  // window.onload = function() {
     initializeDarkModeToggle();
-  };
+  // };
 </script>
