@@ -185,7 +185,7 @@ if ($eventsResult && mysqli_num_rows($eventsResult) > 0) {
                         </div>
                       </div>
                   </div>
-                  <table id="reportTable" class="display table table-bordered" style="display: none;">
+                  <table id="reportTable" class="display table table-bordered responsive nowrap" style="display: none;">
                     <thead>
                       <tr>
                           <th>No.</th>
@@ -603,7 +603,7 @@ function updateTableColumns(userType) {
             // Combine Course, Strand, and Level into a single key if all are available
             var key = '';
             if (courseColumnIndex !== -1 && strandColumnIndex !== -1 && levelColumnIndex !== -1) {
-                key = course + '-' + strand + '-' + level;
+                key = course + '-' + strand + '' + level;
             } else if (courseColumnIndex !== -1 && strandColumnIndex !== -1) {
                 key = course + '-' + strand;
             } else if (courseColumnIndex !== -1) {

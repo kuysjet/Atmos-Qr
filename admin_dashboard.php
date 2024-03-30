@@ -49,8 +49,8 @@ $resultFinishedEvents = mysqli_query($conn, $queryFinishedEvents);
 $rowFinishedEvents = mysqli_fetch_assoc($resultFinishedEvents);
 $finishedEventCount = $rowFinishedEvents['finishedEventCount'];
 
-// Fetch count of ongoing events based on current date and log_out time
-$queryOngoingEvents = "SELECT COUNT(*) AS ongoingEventCount FROM events WHERE event_date = '$currentDate' AND log_in <= CURRENT_TIME() AND log_out > CURRENT_TIME()";
+// Fetch count of ongoing events based on current date and log_in time
+$queryOngoingEvents = "SELECT COUNT(*) AS ongoingEventCount FROM events WHERE event_date = CURDATE() AND log_in <= NOW() AND log_out > NOW()";
 $resultOngoingEvents = mysqli_query($conn, $queryOngoingEvents);
 $rowOngoingEvents = mysqli_fetch_assoc($resultOngoingEvents);
 $ongoingEventCount = $rowOngoingEvents['ongoingEventCount'];
