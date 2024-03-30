@@ -134,7 +134,7 @@ $result = mysqli_query($conn, $query);
           <i class="fas fa-user-cog fa-lg mr-2 text-gray pl-1 mt-2"></i>
         </div>
         <div class="info">
-          <a href="#" class="d-block"><?php echo "$firstName $lastName"; ?></a>
+          <a href="#" class="d-block text-light"><?php echo "$firstName $lastName"; ?></a>
         </div>
       </div>
 

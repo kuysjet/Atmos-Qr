@@ -88,6 +88,11 @@ if (isset($_GET['eventId'])) {
       right: 20px;
       z-index: 1000;
     }
+
+    /* Apply the blink animation to the scanner status */
+    .costum-blink {
+        animation: blinker 2s ease-in-out infinite; /* Adjust animation duration and timing function */
+    }
   </style>
 </head>
 <body>
@@ -101,11 +106,14 @@ if (isset($_GET['eventId'])) {
     <i class="fas fa-arrow-down"></i>
   </button>
 
-<div class="container-fluid d-flex justify-content-center align-items-center min-vh-100">
+<div class="container-fluid d-flex justify-content-center align-items-center min-vh-100 px-0">
   <div class="container bg-white">
     <div class="row">
       <div class="col-md-12 p-3 shadow-lg rounded">
         <div class="border p-3 shadow-sm rounded">
+          <div id="scannerStatus" class="text-center mb-2">
+            <span id="scannerStatusIcon"></span>
+          </div>
           <marquee class="pb-2" width="100%" direction="left">
             <b class="marquee-text" style="letter-spacing: 5px;">Attendance Monitoring - QR Code</b>
           </marquee>
@@ -147,7 +155,7 @@ if (isset($_GET['eventId'])) {
             <div class="col-md-6">
               <div class="d-flex justify-content-center mb-1"><h6 class="m-0 py-1"><b><?php echo $eventName ?></b></h6></div> 
               <div class="table-responsive"> <!-- Add table-responsive class here -->
-                <table id="attendanceTable" class="table compact table-bordered responsive table-hover no-wrap" style="width:100%;">
+                <table id="attendanceTable" class="table compact table-bordered responsive table-hover nowrap" style="width:100%;">
                   <thead>
                     <tr>
                       <th>No.</th>
@@ -267,6 +275,21 @@ $(document).ready(function() {
         var selectedRows = table.rows({ selected: true }).count();
         table.button(1).enable(selectedRows > 0);
     });
+
+    // Set interval to reload the table every 2 seconds (adjust the interval as needed)
+    setInterval(function() {
+        // Check if there are any rows selected
+        var selectedRows = table.rows({ selected: true }).count();
+
+        // Check if any cell in the table is being edited
+        var editing = $('.dataTables_processing').length > 0;
+
+        // If no rows are selected and no cell is being edited, reload the table
+        if (selectedRows === 0 && !editing) {
+            table.ajax.reload(null, false); // Reload the DataTable without resetting current page
+        }
+    }, 2000); // 2000 milliseconds = 2 seconds
+
 });
 
 // Function to delete attendance record
@@ -351,6 +374,19 @@ function onScanSuccess(decodedText, decodedResult) {
 
 // Function to handle attendance based on identificationNumber and scanOption
 function handleAttendance(identificationNumber, scanOption) {
+          // Check if the system is offline
+          if (!navigator.onLine) {
+            // Handle offline code detection here
+            Swal.fire({
+                icon: 'warning',
+                title: 'Offline',
+                text: 'The system is offline. Please try again when online.',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'OK'
+            });
+            errorSound.play(); // Play error sound
+            return;
+        }
     // Send AJAX request to add attendance
     $.ajax({
         url: 'attendance_add.php',
@@ -458,7 +494,32 @@ $('#manualInputButton').click(function() {
 });
 
 
+  // Function to update the scanner status UI
+  function updateScannerStatus() {
+      var scannerStatusIcon = document.getElementById("scannerStatusIcon");
+      if (navigator.onLine) {
+          // If online, display a green checkmark icon with text and blinking effect
+          scannerStatusIcon.innerHTML = '<i class="fas fa-circle text-success costum-blink"></i> Online';
+      } else {
+          // If offline, display a red times icon with text and blinking effect
+          scannerStatusIcon.innerHTML = '<i class="fas fa-circle text-danger costum-blink"></i> Offline';
+      }
+  }
 
+  // Call the updateScannerStatus function initially to display the initial status
+  updateScannerStatus();
+
+  // Add event listener to update the scanner status whenever the online/offline status changes
+  window.addEventListener('online', function() {
+      updateScannerStatus();
+  });
+
+  window.addEventListener('offline', function() {
+      updateScannerStatus();
+  });
+
+
+// QR Code Reader
 var html5QrcodeScanner = new Html5QrcodeScanner(
     "reader", { fps: 10, qrbox: 200 });
 html5QrcodeScanner.render(onScanSuccess);
