@@ -46,7 +46,7 @@ if ($result) {
 <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.jqueryui.min.css">
 
 </head>
-<body class="hold-transition sidebar-mini">
+<body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
 
 
