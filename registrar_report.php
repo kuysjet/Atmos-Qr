@@ -307,7 +307,7 @@ if ($eventsResult && mysqli_num_rows($eventsResult) > 0) {
                         </div>
                       </div>
                   </div>
-                  <table id="reportTable" class="display table table-bordered" style="display: none;">
+                  <table id="reportTable" class="display table table-bordered responsive nowrap" style="display: none;">
                     <thead>
                       <tr>
                           <th>No.</th>
