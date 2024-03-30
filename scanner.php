@@ -275,6 +275,21 @@ $(document).ready(function() {
         var selectedRows = table.rows({ selected: true }).count();
         table.button(1).enable(selectedRows > 0);
     });
+
+    // Set interval to reload the table every 2 seconds (adjust the interval as needed)
+    setInterval(function() {
+        // Check if there are any rows selected
+        var selectedRows = table.rows({ selected: true }).count();
+
+        // Check if any cell in the table is being edited
+        var editing = $('.dataTables_processing').length > 0;
+
+        // If no rows are selected and no cell is being edited, reload the table
+        if (selectedRows === 0 && !editing) {
+            table.ajax.reload(null, false); // Reload the DataTable without resetting current page
+        }
+    }, 2000); // 2000 milliseconds = 2 seconds
+
 });
 
 // Function to delete attendance record
