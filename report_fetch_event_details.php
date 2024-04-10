@@ -6,7 +6,10 @@ if(isset($_POST['eventId']) && is_numeric($_POST['eventId'])) {
     $eventId = $_POST['eventId'];
 
     // Prepare and execute query to fetch event details
-    $query = "SELECT * FROM events WHERE id = ?";
+    $query = "SELECT *, DATE_FORMAT(event_date, '%W, %M %e, %Y') AS event_date, 
+              TIME_FORMAT(log_in, '%h:%i %p') AS log_in, 
+              TIME_FORMAT(log_out, '%h:%i %p') AS log_out
+              FROM events WHERE id = ?";
     $stmt = mysqli_prepare($conn, $query);
     mysqli_stmt_bind_param($stmt, "i", $eventId);
     mysqli_stmt_execute($stmt);
@@ -25,4 +28,3 @@ if(isset($_POST['eventId']) && is_numeric($_POST['eventId'])) {
     echo json_encode(['error' => 'Invalid event ID']);
 }
 ?>
-
