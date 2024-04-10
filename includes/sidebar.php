@@ -14,7 +14,7 @@
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <i class="fas fa-user-cog fa-lg mr-2 text-gray pl-1 mt-2"></i>
+          <i class="fas fa-user-circle fa-2x mr-2 text-gray"></i>
         </div>
         <div class="info">
           <span class="d-block text-light"><?php echo "$firstname $lastname"; ?></span>
