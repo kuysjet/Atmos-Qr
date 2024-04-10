@@ -54,7 +54,7 @@ $result = mysqli_query($conn, $query);
   <link rel="stylesheet" href="dist/css/adminlte.min.css">
   <!-- Include Bootstrap CSS -->
   <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">   -->
-  <link rel="stylesheet" href="dist/css/dark-table.css">
+  <link rel="stylesheet" href="dist/css/dark-table.css"></link>
 
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -74,22 +74,23 @@ $result = mysqli_query($conn, $query);
 
     <!-- Right navbar links -->
     <ul class="navbar-nav ml-auto">
-      <li class="nav-item">
+      <li class="nav-item mx-1">
         <a class="nav-link" data-widget="fullscreen" href="#" role="button">
           <i class="fas fa-expand-arrows-alt"></i>
         </a>
       </li>
       <!-- Dark mode toggle link -->
       <li class="nav-item">
-        <a href="#" class="nav-link" id="darkModeToggleBtn">
-          <i class="fas fa-moon"></i>
-          <i class="fas fa-sun text-warning d-none"></i>
+        <a href="#" class="nav-link px-1" id="darkModeToggleBtn">
+          <i class="fas fa-sun text-warning"></i>
+          <i class="fas fa-moon d-none"></i>
         </a>
       </li>
       <!-- Profile -->
       <li class="nav-item dropdown">
-        <a class="nav-link" data-toggle="dropdown" href="#">
-          <i class="fas fa-user fa-fw text-gray"></i>
+        <a class="nav-link d-flex justify-content-center align-items-center" data-toggle="dropdown" href="#">
+          <i class="fas fa-user-circle fa-fw " style="font-size: 18px"></i>
+          <i class="fas fa-caret-down fa-xs"></i>
         </a>
         <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
           <a class="dropdown-item" id="profileDropdown" href="#" role="button" data-toggle="modal" data-target="#viewProfileModal">
@@ -131,10 +132,10 @@ $result = mysqli_query($conn, $query);
       <!-- Sidebar user panel (optional) -->
       <div class="user-panel mt-3 pb-3 mb-3 d-flex">
         <div class="image">
-          <i class="fas fa-user-cog fa-lg mr-2 text-gray pl-1 mt-2"></i>
+          <i class="fas fa-user-circle fa-2x mr-2 text-gray"></i>
         </div>
         <div class="info">
-          <a href="#" class="d-block text-light"><?php echo "$firstName $lastName"; ?></a>
+            <span class="d-block text-light"><?php echo "$firstName $lastName"; ?></span>
         </div>
       </div>
 
@@ -179,10 +180,10 @@ $result = mysqli_query($conn, $query);
         <div class="col-sm-6">
           <div class="row">
             <div class="col-sm-12 text-sm-right">
-              <div class="mr-2 small"><b>Philippine Standard Time</b></div>
+              <div class="mr-3 small"><b>Philippine Standard Time</b></div>
             </div>
             <div class="col-sm-12 text-sm-right">
-              <div id="philippine-date-time" class="small"></div>
+              <div id="philippine-date-time" style="font-size: 15px;"></div>
             </div>
           </div>
         </div><!-- /.col -->
@@ -194,8 +195,8 @@ $result = mysqli_query($conn, $query);
     <!-- Main content -->
     <div class="content">
         <div class="container-fluid">
-            <div class="row mb-3">
-                <div class="col-md-4">
+            <div class="row">
+                <div class="col-md-3">
                     <label for="academicYearFilter" class="form-label mb-0">Filter by Academic Year:</label>
                     <select id="academicYearFilter" class="form-control">
                         <option value="">All</option>
@@ -211,30 +212,41 @@ $result = mysqli_query($conn, $query);
                         ?>
                     </select>
                 </div>
-                <div class="col-md-4 ml-auto mt-1">
+                <div class="col-md-4 ml-auto mt-1 position-relative">
                     <label for="searchBox" class="form-label mb-0">Search:</label>
-                    <input type="text" class="form-control" id="searchBox" placeholder="Enter keywords">
+                    <div class="form-group">
+                        <input type="text" class="form-control rounded-pill pr-4" id="searchBox" placeholder="Enter keywords">
+                        <span id="resetSearch" class="input-group-addon position-absolute" style="right: 18px; top: 55%; transform: translateY(-50%);"><i class="fas fa-times" style="color: grey; font-size: smaller;"></i></span>
+                    </div>
                 </div>
             </div>
+
+            <hr class="mt-0">
 
             <div class="row">
             <?php
             // Function to calculate the status of an event
             function calculateEventStatus($eventDate, $loginTime, $logoutTime)
             {
-                $currentDate = date('Y-m-d');
-                $currentTime = date('H:i:s');
-
-                if ($eventDate < $currentDate || ($eventDate == $currentDate && $logoutTime < $currentTime)) {
+                // Set the default time zone to UTC+8
+                date_default_timezone_set('Asia/Manila'); // Example for the Philippines, adjust if needed
+            
+                $currentDate = date('Y-m-d'); // Get the current date in 'Y-m-d' format
+                $currentTime = date('H:i:s'); // Get the current time in 24-hour format 'H:i:s'
+            
+                // Event is Done if it's a past event or today's event has finished
+                if ($eventDate < $currentDate || ($eventDate == $currentDate && $currentTime > $logoutTime)) {
                     return 'Done';
-                } elseif ($eventDate == $currentDate && $currentTime < $loginTime) {
+                }
+                // Event is Ongoing if it's the current date and the current time is between login and logout time
+                elseif ($eventDate == $currentDate && $loginTime <= $currentTime && $currentTime <= $logoutTime) {
                     return 'Ongoing';
-                } elseif ($eventDate == $currentDate || $loginTime <= $currentTime && $currentTime <= $logoutTime) {
-                    return 'Ongoing';
-                } else {
+                }
+                // For future events or today's events that have not started yet
+                else {
                     return 'Pending';
                 }
-            }
+            }            
             // Check if events are found
             if ($result && mysqli_num_rows($result) > 0) {
                 // Loop through each event and display it in a card
@@ -248,26 +260,27 @@ $result = mysqli_query($conn, $query);
                                 <h3 class="card-title text-truncate" style="max-width: 170px;"><?php echo $row['event_name']; ?></h3>
                                 <div class="card-tools">
                                     <!-- Display the status badge -->
-                                    <span class="badge badge-<?php echo $status == 'Pending' ? 'warning' : ($status == 'Ongoing' ? 'primary' : 'success'); ?> ml-2"><?php echo $status; ?></span>
+                                    <span class="badge badge-<?php echo $status == 'Pending' ? 'warning' : ($status == 'Ongoing' ? 'primary' : 'success'); ?> mr-2"><?php echo $status; ?></span>
                                     <!-- Card tools -->
-                                    <button type="button" class="btn btn-tool" data-card-widget="maximize">
+                                    <button type="button" class="btn btn-tool" data-card-widget="maximize" style="box-shadow: none !important;">
                                         <i class="fas fa-expand"></i>
                                     </button>
-                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse" style="box-shadow: none !important;">
                                         <i class="fas fa-plus"></i>
                                     </button>
                                 </div>
                                 <!-- /.card-tools -->
                             </div>
                             <!-- /.card-header -->
-                            <div class="card-body text-left">
+                            <div class="card-body text-center">
                                 <!-- Display the event details -->
-                                <p>Academic Year: <?php echo $row['academic_year']; ?></p>
-                                <p>Venue: <?php echo $row['event_venue']; ?></p>
-                                <p>Description: <?php echo $row['description']; ?></p>
-                                <p>Date: <?php echo $row['event_date']; ?></p>
-                                <p>Login Time: <?php echo $row['log_in']; ?></p>
-                                <p>Logout Time: <?php echo $row['log_out']; ?></p>
+                                <p><strong>Event Name:</strong> <?php echo $row['event_name']; ?></p>
+                                <!-- <p><strong>Academic Year:</strong> <?php echo $row['academic_year']; ?></p> -->
+                                <p><strong>Venue:</strong> <?php echo $row['event_venue']; ?></p>
+                                <p><strong>Description:</strong> <?php echo $row['description']; ?></p>
+                                <p><strong>Date:</strong> <?php echo date('l, F j, Y', strtotime($row['event_date'])); ?></p>
+                                <p><strong>Login Time:</strong> <?php echo date('h:i A', strtotime($row['log_in'])); ?></p>
+                                <p><strong>Logout Time:</strong> <?php echo date('h:i A', strtotime($row['log_out'])); ?></p>
                             </div>
                             <!-- /.card-body -->
                             <!-- QR code scan button -->
@@ -279,10 +292,10 @@ $result = mysqli_query($conn, $query);
                                         // Check if the status is 'Done' or 'Pending'
                                         if ($status === 'Done' || $status === 'Pending') {
                                             // If status is 'Done' or 'Pending', disable the button
-                                            echo '<button class="btn btn-circle btn-lg btn-primary" style="border-radius: 50%; opacity: 0.15;" disabled><i class="fas fa-qrcode"></i></button>';
+                                            echo '<button class="btn btn-secondary fa-lg rounded-pill" title="Disabled" style="width: 100px; opacity: 0.15;" disabled><i class="fas fa-qrcode" style="border: 2px solid; border-radius: 50%; padding: 5px;"></i></a>';
                                         } else {
                                             // Otherwise, enable the button and pass event details as parameters
-                                            echo '<a href="scanner.php?eventId=' . $row['id'] . '&eventName=' . urlencode($row['event_name']) . '" class="btn btn-circle btn-lg btn-primary" style="border-radius: 50%;"><i class="fas fa-qrcode"></i></a>';
+                                            echo '<a href="scanner.php?eventId=' . $row['id'] . '&eventName=' . urlencode($row['event_name']) . '" class="btn btn-primary border border-warning fa-lg rounded-pill btn-glow" title="Scan Qr" style="width: 120px;"><i class="fas fa-qrcode" style="border: 2px solid; border-radius: 50%; padding: 5px;"></i></a>';
                                         }
                                         ?>
                                         </div>
@@ -296,7 +309,7 @@ $result = mysqli_query($conn, $query);
                 }
             } else {
                 // No events found
-                echo "<div class='col-md-12 text-center p-2'><div style='background-color: #f0f0f0; padding: 10px;'><p style='margin: 0; color:black'>No events assigned</p></div></div>";
+                echo "<div class='col-md-12 text-center'><div style='background-color: #f0f0f0; padding: 10px; border-radius: 20px;'><p style='margin: 0; color:black'>No events assigned</p></div></div>";
             }
             ?>
         </div>
@@ -307,10 +320,10 @@ $result = mysqli_query($conn, $query);
   </div>
   <!-- /.content-wrapper -->
 
-  <?php include 'includes/footer.php';?>
-
 </div>
 <!-- ./wrapper -->
+
+<?php include 'includes/footer.php';?>
 
 <!-- REQUIRED SCRIPTS -->
 
@@ -412,18 +425,24 @@ $(document).ready(function() {
 });
 
 
-    // Add an event listener to the search box to filter events based on input
-    $('#searchBox').on('input', function() {
-        var searchText = $(this).val().toLowerCase();
-        $('.card').each(function() {
-            var eventName = $(this).find('.card-title').text().toLowerCase();
-            if (eventName.includes(searchText)) {
-                $(this).show();
-            } else {
-                $(this).hide();
-            }
-        });
+// Reset search input when reset icon is clicked
+$('#resetSearch').on('click', function() {
+    $('#searchBox').val(''); // Clear search input
+    $('.card').show(); // Show all cards
+});
+
+// Filter cards based on search input
+$('#searchBox').on('input', function() {
+    var searchText = $(this).val().toLowerCase();
+    $('.card').each(function() {
+        var eventName = $(this).find('.card-title').text().toLowerCase();
+        if (eventName.includes(searchText)) {
+            $(this).show();
+        } else {
+            $(this).hide();
+        }
     });
+});
 
 
 
