@@ -7,6 +7,10 @@ include 'includes/header.php';
 <!-- <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"> -->
 
   <style>
+  body {
+      color: #4089a6;
+      font-family: "Open Sans", sans-serif;
+    }
 
   .gradient {
     /* Fallback for old browsers */
@@ -50,43 +54,52 @@ include 'includes/header.php';
 </head>
 <body>
 
-<section class="h-100 gradient-form" style="background-color: #eee;">
-  <div class="container py-5 h-100">
+<section class="h-100 gradient-form py-0" style="background-color: #eee;">
+  <div class="container h-100">
     <div class="row d-flex justify-content-center align-items-center h-100">
       <div class="col-xl-10">
-        <div class="card rounded-3 text-black h-100">
+        <div class="card rounded-3 p-0">
           <div class="row g-0 h-100">
-            <div class="col-lg-6 h-100">
-              <div class="card-body p-md-5 mx-md-4 h-100">
-
-              <div class="text-center">
-                <img src="dist/img/aclc_complete_logo.png" alt="logo" class="img-fluid w-75">
-              </div>
-
+            <div class="col-lg-6 h-100 px-4">
+              <div class="card-body p-md-5 mx-md-6 h-100">
+                <div class="text-center">
+                  <img src="dist/img/aclc_complete_logo.png" alt="logo" class="img-fluid" style="width: 200px">
+                </div>
                 <form action="code.php" method="POST">
-                  <h5 class="text-center text-md-center my-3">Login to get started</h5>
-
+                  <h5 class="text-center text-md-center mt-3 mb-4">Login to get started</h5>
                   <div class="form-outline mb-4">
-                        <label class="form-label hidden-label small" >Username</label>
-                        <input type="text" id="username" name="username" class="form-control" placeholder="Enter Username" autocomplete="off" required />
+                    <label class="form-label small" >Username</label>
+                    <input type="text" id="username" name="username" class="form-control" placeholder="Enter Username" autocomplete="off" required />
                   </div>
-                  <div class="form-outline mb-4 position-relative">
-                        <label class="form-label hidden-label small" >Password</label>
-                        <input type="password" id="password" name="password" class="form-control" placeholder="Enter Password" required />
-                        <i class="fas fa-eye-slash password-toggle-icon mt-3" onclick="togglePassword('password')"></i>
+                  <div class="form-group mb-4 position-relative">
+                    <label class="form-label small" for="password">Password</label>
+                    <input type="password" id="password" name="password" class="form-control pr-5" placeholder="Enter Password" required>
+                    <i class="fas fa-eye-slash password-toggle-icon mt-3" onclick="togglePassword('password')" style="position: absolute; top: 50%; right: 10px; transform: translateY(-50%); animation: none !important;"></i>
                   </div>
-
-
-                  <div class="text-center pt-1 mb-5 pb-1">
-                    <button class="btn btn-primary btn-block fa-lg gradient mb-3" type="submit">Login</button>
+                  <div class="text-center pt-1 mb-4 pb-1">
+                    <button class="btn btn-primary btn-block fa-lg gradient mb-3 rounded-pill" type="submit">Login</button>
                   </div>
                 </form>
               </div>
             </div>
             <div class="col-lg-6 d-flex align-items-center gradient">
-              <div class="text-white px-3 py-4 p-md-5 mx-md-4">
-                <!-- <h4 class="">Attendance Monitoring with QR Code</h4> -->
-                <img src="dist/img/visitor-management-img2.png" alt="Attendance Monitoring with QR Code Image" class="img-fluid">
+                <div class="text-white px-3 py-4 p-md-5 mx-md-4 mx-0">
+                    <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                        <div class="carousel-inner">
+                            <!-- <div class="carousel-item">
+                                <img src="dist/img/aclc_complete_logo.png" class="d-block w-100" alt="Attendance Monitoring with QR Code Image 1">
+                            </div> -->
+                            <div class="carousel-item active">
+                                <img src="dist/img/visitor-management-img2.png" class="d-block w-100" alt="Attendance Monitoring with QR Code Image 2">
+                            </div>
+                            <!-- Add more carousel items as needed -->
+                        </div>
+                        <!-- <ol class="carousel-indicators">
+                            <li data-target="#carouselExampleControls" data-slide-to="0" class="active"></li>
+                            <li data-target="#carouselExampleControls" data-slide-to="1"></li>
+                        </ol> -->
+                    </div>
+                </div>
               </div>
             </div>
           </div>
@@ -95,6 +108,7 @@ include 'includes/header.php';
     </div>
   </div>
 </section>
+
 
 <!-- Include Bootstrap Bundle JS -->
 <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script> -->
