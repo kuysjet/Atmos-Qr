@@ -38,7 +38,7 @@ if ($result) {
 <?php include 'includes/header.php'; ?>
 
   <!-- DataTables -->
-  <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <!-- <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css"> -->
   <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
@@ -68,10 +68,10 @@ if ($result) {
         <div class="col-sm-6">
           <div class="row">
             <div class="col-sm-12 text-sm-right">
-              <div class="mr-2 small"><b>Philippine Standard Time</b></div>
+              <div class="mr-3 small"><b>Philippine Standard Time</b></div>
             </div>
             <div class="col-sm-12 text-sm-right">
-              <div id="philippine-date-time" class="small"></div>
+              <div id="philippine-date-time" style="font-size: 15px;"></div>
             </div>
           </div>
         </div><!-- /.col -->
@@ -94,7 +94,7 @@ if ($result) {
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="usersTable" class="display table table-bordered" style="display: none;">
+                <table id="usersTable" class="display table table-bordered nowrap" style="display: none;">
                   <thead>
                   <tr>
                     <th>No.</th>
@@ -119,12 +119,11 @@ if ($result) {
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-
-  <?php include 'includes/footer.php';?>
-  
 </div>
 <!-- ./wrapper -->
 
+<?php include 'includes/footer.php';?>
+  
 <!-- REQUIRED SCRIPTS -->
 
 <!-- jQuery -->
@@ -140,11 +139,12 @@ if ($result) {
 
 <!-- DataTables  & Plugins -->
 <script src="plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<!-- <script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script> -->
 <script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
 <script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
 <script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
 <script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.jqueryui.min.js"></script>
 <script src="plugins/jszip/jszip.min.js"></script>
 <script src="plugins/pdfmake/pdfmake.min.js"></script>
 <script src="plugins/pdfmake/vfs_fonts.js"></script>
@@ -191,8 +191,8 @@ $(document).ready(function() {
               "data": null,
               "render": function(data, type, row) {
                 return '<div class="btn-group">' +
-                        '<button type="button" class="btn btn-primary btn-sm edit-btn mr-1"><i class="fas fa-edit"></i></button>' +
-                        '<button type="button" class="btn btn-danger btn-sm delete-btn"><i class="fas fa-trash-alt"></i></button>' +
+                        '<button type="button" class="btn btn-primary btn-sm edit-btn"><i class="fas fa-edit"></i></button>' +
+                        '<button type="button" class="btn btn-danger btn-sm delete-btn mx-1"><i class="fas fa-trash-alt"></i></button>' +
                       '</div>';
               }
           }
@@ -218,14 +218,15 @@ $(document).ready(function() {
         "buttons": [
             {
                 extend: 'colvis',
-                text: '<i class="fas fa-eye"></i>', 
+                text: '<i class="fas fa-columns"></i>', 
+                titleAttr: 'Column Visibility', // Tooltip for the button
                 className: 'btn-sm btn-light border',
             }
         ]
     });
 
 
-  $(document).tooltip();
+ 
 
 
   // Handle click on "Select all" control
@@ -447,9 +448,16 @@ $('#usersTable').on('click', '.delete-btn', function() {
             <label for="username">Username</label>
             <input type="text" class="form-control" id="username" name="username" required autocomplete="off">
           </div>
-          <div class="form-group">
+          <div class="form-group mb-4 position-relative">
             <label for="password">Password</label>
-            <input type="password" class="form-control" id="password" name="password" required autocomplete="off">
+            <div class="input-group">
+                <input type="password" class="form-control pr-5" id="password" name="password" required autocomplete="off">
+                <div class="input-group-append">
+                    <span class="input-group-text">
+                        <i class="fas fa-eye-slash" id="togglePassword"></i>
+                    </span>
+                </div>
+            </div>
           </div>
           <button type="submit" class="btn btn-primary float-right btn-sm"><i class="fas fa-paper-plane"></i> Submit</button>
         </form>
@@ -499,7 +507,29 @@ $('#usersTable').on('click', '.delete-btn', function() {
 </div>
 
 
+<script>
+  // Function to toggle password visibility
+function togglePasswordVisibility() {
+    var passwordInput = document.getElementById("password");
+    var toggleIcon = document.getElementById("togglePassword");
 
+    // Toggle password visibility
+    if (passwordInput.type === "password") {
+        passwordInput.type = "text";
+        toggleIcon.classList.remove("fa-eye-slash");
+        toggleIcon.classList.add("fa-eye");
+    } else {
+        passwordInput.type = "password";
+        toggleIcon.classList.remove("fa-eye");
+        toggleIcon.classList.add("fa-eye-slash");
+    }
+}
+
+// Event listener for toggle eye icon click
+document.getElementById("togglePassword").addEventListener("click", function() {
+    togglePasswordVisibility();
+});
+</script>
 
 
 </body>
