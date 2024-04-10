@@ -41,7 +41,7 @@ if (isset($_GET['eventId'])) {
   <!-- Add the DataTables CDN -->
   <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
   <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
-  <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+  <!-- <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css"> -->
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.jqueryui.min.css">
   <link rel="stylesheet" href="https://cdn.datatables.net/select/1.3.4/css/select.dataTables.min.css">
@@ -72,7 +72,7 @@ if (isset($_GET['eventId'])) {
     .swal2-popup {
       font-size: 0.8rem; /* Adjust font size */
       width: 20rem; /* Adjust width */
-  }
+    }
 
       /* Styling for scroll buttons */
       .scroll-to-top {
@@ -93,16 +93,29 @@ if (isset($_GET['eventId'])) {
     .costum-blink {
         animation: blinker 2s ease-in-out infinite; /* Adjust animation duration and timing function */
     }
+
+    /* icon palpitate when hover */
+    i:hover {
+    animation: palpitate 0.5s infinite alternate;
+    }
+
+    @keyframes palpitate {
+        0% {
+            transform: scale(1);
+        }
+        100% {
+            transform: scale(1.1);
+        }
+    }
   </style>
 </head>
 <body>
   <!-- Scroll to top button -->
-  <button class="btn btn-primary scroll-to-top d-sm-none" onclick="scrollToTop()" style="opacity: 0.3;">
+  <button class="btn btn-primary scroll-to-top d-sm-none" onclick="scrollToTop()" style="opacity: 0.3; border-radius: 50%;">
     <i class="fas fa-arrow-up"></i>
   </button>
-
   <!-- Scroll to bottom button -->
-  <button class="btn btn-primary scroll-to-bottom d-sm-none" onclick="scrollToBottom()" style="opacity: 0.3;">
+  <button class="btn btn-primary scroll-to-bottom d-sm-none" onclick="scrollToBottom()" style="opacity: 0.3; border-radius: 50%;">
     <i class="fas fa-arrow-down"></i>
   </button>
 
@@ -111,15 +124,12 @@ if (isset($_GET['eventId'])) {
     <div class="row">
       <div class="col-md-12 p-3 shadow-lg rounded">
         <div class="border p-3 shadow-sm rounded">
-          <div id="scannerStatus" class="text-center mb-2">
-            <span id="scannerStatusIcon"></span>
-          </div>
           <marquee class="pb-2" width="100%" direction="left">
             <b class="marquee-text" style="letter-spacing: 5px;">Attendance Monitoring - QR Code</b>
           </marquee>
           <h5 class="text-white py-2 text-center"><span class="blink"><small>SHOW QR CODE</small></span></h5>
           <div class="row align-items-center mb-2">
-            <div class="col-md-6">
+            <div class="col-md-4">
               <div class="input-group">
                 <div class="input-group-prepend">
                   <label for="timeOption" class="input-group-text bg-success text-white">
@@ -131,6 +141,17 @@ if (isset($_GET['eventId'])) {
                   <option value="timeOut">Time Out</option>
                 </select>
               </div>
+            </div>
+            <!-- Add a online/offline status indicator -->
+            <div class="col-md-1 text-center mt-1">
+              <div id="scannerStatus" class="text-center mb-2">
+                <span id="scannerStatusIcon"></span>
+              </div>
+            </div>
+            <div class="col-md-1 text-center">
+              <!-- Add a microphone icon for toggling speech -->
+              <label for="speechToggle"><i id="speechIcon" class="fas fa-microphone" title="Toggle Speech"></i></label>
+                <input type="checkbox" id="speechToggle" class="d-none">
             </div>
             <div class="col-md-6 text-center mt-1">
               <div class="current-date-time">
@@ -146,16 +167,20 @@ if (isset($_GET['eventId'])) {
                 <div class="input-group input-group-sm my-2">
                   <input type="text" id="manualInput" class="form-control border border-success" placeholder="Identification Number">
                     <span class="input-group-append">
-                        <button type="button" id="manualInputButton" class="btn btn-success btn-flat" style="min-width: 65px;"><i class="fa-solid fa-check"></i></button>
+                        <button type="button" id="manualInputButton" class="btn btn-success btn-flat" style="min-width: 65px;"><i class="fas fa-check"></i></button>
                     </span>
               </div>
             </div>
             
             <!-- Table for displaying attendance -->
             <div class="col-md-6">
-              <div class="d-flex justify-content-center mb-1"><h6 class="m-0 py-1"><b><?php echo $eventName ?></b></h6></div> 
-              <div class="table-responsive"> <!-- Add table-responsive class here -->
-                <table id="attendanceTable" class="table compact table-bordered responsive table-hover nowrap" style="width:100%;">
+              <div class="d-flex justify-content-center mb-2">
+                <button type="button" class="btn btn-block btn-light py-0" data-toggle="modal" data-target="#eventModal">
+                    <h6 class="m-0 py-1"><b><?php echo $eventName ?></b></h6>
+                </button>
+              </div>
+              <!-- <div class="table-responsive"> -->
+                <table id="attendanceTable" class="table compact table-bordered table-striped responsive table-hover nowrap" style="width:100%;">
                   <thead>
                     <tr>
                       <th>No.</th>
@@ -169,7 +194,7 @@ if (isset($_GET['eventId'])) {
                     <!-- Attendance data will be inserted here dynamically -->
                   </tbody>
                 </table>
-              </div>
+              <!-- </div> -->
             </div>
           </div>
         </div>
@@ -204,12 +229,19 @@ $(document).ready(function() {
     // Initialize DataTable with responsive, select, and Buttons extensions
     table = $('#attendanceTable').DataTable({
         responsive: true,
+        "lengthChange": false, 
+        "autoWidth": false,
         select: 'multi', // Enable row selection
-        dom: 'Bfrtip', // Add buttons to the DataTable (B for buttons, l for length menu)
+        dom: 'Blfrtip', // Add buttons to the DataTable (B for buttons, l for length menu)
         buttons: [
             {
+                extend: 'pageLength', // Add the "Page Length" button
+                text: '<i class="fas fa-list-ol"></i>', // Icon for Page Length button
+                titleAttr: 'Page Length', // Tooltip for the button
+            },
+            {
                 extend: 'colvis', // ColVis button
-                text: '<i class="fas fa-eye"></i>', // Icon for column visibility
+                text: '<i class="fas fa-columns"></i>', // Icon for column visibility
                 titleAttr: 'Column Visibility' // Tooltip for the button
             },
             {
@@ -273,7 +305,7 @@ $(document).ready(function() {
     table.on('select deselect', function () {
         // Enable or disable the delete button based on whether any rows are selected
         var selectedRows = table.rows({ selected: true }).count();
-        table.button(1).enable(selectedRows > 0);
+        table.button(2).enable(selectedRows > 0);
     });
 
     // Set interval to reload the table every 2 seconds (adjust the interval as needed)
@@ -372,6 +404,20 @@ function onScanSuccess(decodedText, decodedResult) {
     handleAttendance(identificationNumber, scanOption);
 }
 
+// Function to speak the alert message using Web Speech API
+function speakAlertMessage(message) {
+    // Check if speech functionality is enabled
+    if ($('#speechToggle').is(':checked')) {
+        // Delay the speech by 1 second
+        setTimeout(function() {
+            // Create a new SpeechSynthesisUtterance object with the message
+            var utterance = new SpeechSynthesisUtterance(message);
+            // Speak the message
+            speechSynthesis.speak(utterance);
+        }, 1000); // Delay for 1 second (1000 milliseconds)
+    }
+}
+
 // Function to handle attendance based on identificationNumber and scanOption
 function handleAttendance(identificationNumber, scanOption) {
           // Check if the system is offline
@@ -385,6 +431,8 @@ function handleAttendance(identificationNumber, scanOption) {
                 confirmButtonText: 'OK'
             });
             errorSound.play(); // Play error sound
+            // Speak the alert message
+            speakAlertMessage('The system is offline. Please try again when online.');
             return;
         }
     // Send AJAX request to add attendance
@@ -405,6 +453,8 @@ function handleAttendance(identificationNumber, scanOption) {
                     text: 'Identification number not found or not registered.'
                 });
                 errorSound.play(); // Play error sound
+                // Speak the alert message
+                speakAlertMessage('Identification number not found or not registered.');
             } else {
                 if (scanOption === "timeIn") {
                     if (response.trim() === "Attendance added successfully!") {
@@ -417,6 +467,8 @@ function handleAttendance(identificationNumber, scanOption) {
                             showConfirmButton: false
                         });
                         successSound.play(); // Play success sound
+                        // Speak the alert message
+                        speakAlertMessage('Attendance added successfully!');
                         // Clear manual input field
                         $('#manualInput').val('');
                     } else {
@@ -428,6 +480,8 @@ function handleAttendance(identificationNumber, scanOption) {
                             confirmButtonText: 'OK'
                         });
                         errorSound.play(); // Play error sound
+                        // Speak the alert message
+                        speakAlertMessage('This QR code has already been scanned for Time In.');
                     }
                 } else if (scanOption === "timeOut") {
                     if (response.trim() === "Attendance added successfully!") {
@@ -440,6 +494,8 @@ function handleAttendance(identificationNumber, scanOption) {
                             showConfirmButton: false
                         });
                         successSound.play(); // Play success sound
+                        // Speak the alert message
+                        speakAlertMessage('Attendance added successfully!');
                         // Clear manual input field
                         $('#manualInput').val('');
                     } else if (response.includes('Time in is required')) {
@@ -451,6 +507,8 @@ function handleAttendance(identificationNumber, scanOption) {
                             confirmButtonText: 'OK'
                         });
                         errorSound.play(); // Play error sound
+                        // Speak the alert message
+                        speakAlertMessage('Please Time In first before scanning for Time Out.');
                     } else {
                         Swal.fire({
                             icon: 'warning',
@@ -460,6 +518,8 @@ function handleAttendance(identificationNumber, scanOption) {
                             confirmButtonText: 'OK'
                         });
                         errorSound.play(); // Play error sound
+                        // Speak the alert message
+                        speakAlertMessage('This QR code has already been scanned for Time Out.');
                     }
                 }
                 
@@ -478,6 +538,8 @@ function handleAttendance(identificationNumber, scanOption) {
                 text: 'Failed to add attendance. Please try again.'
             });
             errorSound.play(); // Play error sound
+            // Speak the alert message
+            speakAlertMessage('Failed to add attendance. Please try again.');
         }
     });
 }
@@ -565,6 +627,72 @@ updateDateTime();
       window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
     }
   </script>
+  <script>
+    // Function to toggle the speech icon
+  function toggleSpeechIcon() {
+      var icon = document.getElementById('speechIcon');
+      var checkbox = document.getElementById('speechToggle');
+      
+      // Check if the checkbox is checked
+      if (checkbox.checked) {
+          // If checked, display the microphone icon with a slash
+          icon.className = 'fas fa-microphone';
+      } else {
+          // If not checked, display the microphone icon without a slash
+          icon.className = 'fas fa-microphone-slash';
+      }
+  }
+
+  // Event listener for checkbox change
+  document.getElementById('speechToggle').addEventListener('change', toggleSpeechIcon);
+
+  // Call the function initially to set the initial icon state
+  toggleSpeechIcon();
+  </script>
+
+
+<!-- Modal -->
+<div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header bg-info">
+                <h6 class="modal-title text-light" id="eventModalLabel">Event Details</h6>
+                <span type="button" class="close text-light" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </span>
+            </div>
+            <div class="modal-body ml-3">
+                <?php
+                // Fetch event details from the database based on $eventId
+                $query = "SELECT * FROM events WHERE id = $eventId";
+                $result = mysqli_query($conn, $query);
+
+                // Check if query was successful and if there is at least one row returned
+                if ($result && mysqli_num_rows($result) > 0) {
+                    // Fetch event details
+                    $event = mysqli_fetch_assoc($result);
+                    ?>
+                      <p><strong class="mr-2">Event Name:</strong> <?php echo $event['event_name']; ?></p>
+                      <p><strong class="mr-2">Event Venue:</strong> <?php echo $event['event_venue']; ?></p>
+                      <p><strong class="mr-2">Description:</strong> <?php echo $event['description']; ?></p>
+                      <p><strong class="mr-2">Event Date:</strong> <?php echo date('l, F j, Y', strtotime($event['event_date'])); ?></p>
+                      <p><strong class="mr-2">Log In:</strong> <?php echo date('h:i A', strtotime($event['log_in'])); ?></p>
+                      <p><strong class="mr-2">Log Out:</strong> <?php echo date('h:i A', strtotime($event['log_out'])); ?></p>
+                    <?php
+                } else {
+                    // Display a message if no event details are found
+                    echo "Event details not found.";
+                }
+                ?>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                <!-- Add more modal buttons if needed -->
+            </div>
+        </div>
+    </div>
+</div>
+
 
 </body>
 </html>
