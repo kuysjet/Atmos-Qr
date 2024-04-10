@@ -152,10 +152,10 @@ $totalRegistrants = array_sum($collegeData) + array_sum($seniorHighData);
         <div class="col-sm-6">
           <div class="row">
             <div class="col-sm-12 text-sm-right">
-              <div class="mr-2 small"><b>Philippine Standard Time</b></div>
+              <div class="mr-3 small"><b>Philippine Standard Time</b></div>
             </div>
             <div class="col-sm-12 text-sm-right">
-              <div id="philippine-date-time" class="small"></div>
+              <div id="philippine-date-time" style="font-size: 15px;"></div>
             </div>
           </div>
         </div><!-- /.col -->
@@ -175,7 +175,7 @@ $totalRegistrants = array_sum($collegeData) + array_sum($seniorHighData);
 
               <div class="info-box-content">
                 <span class="info-box-text">Events</span>
-                <span class="info-box-number"><?php echo $eventCount; ?></span>
+                <span class="info-box-number mt-0" style="font-size: 18px;"><?php echo $eventCount; ?></span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -188,7 +188,7 @@ $totalRegistrants = array_sum($collegeData) + array_sum($seniorHighData);
 
               <div class="info-box-content">
                 <span class="info-box-text">Listed Students</span>
-                <span class="info-box-number"><?php echo $totalRegistrants; ?></span>
+                <span class="info-box-number mt-0" style="font-size: 18px;"><?php echo $totalRegistrants; ?></span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -205,7 +205,7 @@ $totalRegistrants = array_sum($collegeData) + array_sum($seniorHighData);
 
               <div class="info-box-content">
                 <span class="info-box-text">Finished Events</span>
-                <span class="info-box-number"><?php echo $finishedEventCount; ?></span>
+                <span class="info-box-number mt-0" style="font-size: 18px;"><?php echo $finishedEventCount; ?></span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -218,7 +218,7 @@ $totalRegistrants = array_sum($collegeData) + array_sum($seniorHighData);
 
               <div class="info-box-content">
                 <span class="info-box-text">On-Going Events</span>
-                <span class="info-box-number"><?php echo $ongoingEventCount; ?></span>
+                <span class="info-box-number mt-0" style="font-size: 18px;"><?php echo $ongoingEventCount; ?></span>
               </div>
               <!-- /.info-box-content -->
             </div>
@@ -234,12 +234,12 @@ $totalRegistrants = array_sum($collegeData) + array_sum($seniorHighData);
                   <div class="card-header">
                     <h3 class="card-title m-0">Courses and Strands</h3>
                     <div class="card-tools">
-                      <button type="button" class="btn btn-tool" data-card-widget="maximize">
+                      <button type="button" class="btn btn-tool" id="expandChartBtn" data-card-widget="maximize" style="box-shadow: none !important;">
                         <i class="fas fa-expand"></i>
                       </button>
                     </div>
                   </div>
-                  <div class="card-body">
+                  <div class="card-body d-flex justify-content-center align-items-center" id="chartContainer">
                     <canvas id="donutChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
                   </div>
                   <!-- /.card-body -->
@@ -253,7 +253,7 @@ $totalRegistrants = array_sum($collegeData) + array_sum($seniorHighData);
                   <div class="card-header">
                     <h3 class="card-title m-0">Levels and Grades</h3>
                     <div class="card-tools">
-                      <button type="button" class="btn btn-tool" data-card-widget="maximize">
+                      <button type="button" class="btn btn-tool" data-card-widget="maximize" style="box-shadow: none !important;">
                         <i class="fas fa-expand"></i>
                       </button>
                     </div>
@@ -277,11 +277,10 @@ $totalRegistrants = array_sum($collegeData) + array_sum($seniorHighData);
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-
-  <?php include 'includes/footer.php';?>
-
 </div>
 <!-- ./wrapper -->
+
+<?php include 'includes/footer.php';?>
 
 <!-- REQUIRED SCRIPTS -->
 
@@ -323,6 +322,11 @@ $totalRegistrants = array_sum($collegeData) + array_sum($seniorHighData);
       maintainAspectRatio: false,
       responsive: true,
       cutoutPercentage: 65, // Adjust this value to control the size of the hole in the center of the donut
+      legend: {
+      labels: {
+        fontColor: '#959595' // Set font color of legend labels
+      }
+    },
     };
     new Chart(donutChartCanvas, {
       type: 'doughnut',
@@ -365,10 +369,16 @@ $totalRegistrants = array_sum($collegeData) + array_sum($seniorHighData);
       scales: {
         xAxes: [{
           ticks: {
-            beginAtZero: true
-          }
+            beginAtZero: true,
+            fontColor: '#959595' // Set font color of ticks to #757575
+          },
+        }],
+        yAxes: [{
+          ticks: {
+            fontColor: '#959595' // Set font color of ticks to #757575
+          },
         }]
-      }
+      },
     }
     new Chart(barChartCanvas, {
       type: 'horizontalBar',
@@ -388,6 +398,31 @@ $totalRegistrants = array_sum($collegeData) + array_sum($seniorHighData);
   });
 </script>
 
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const donutChart = document.getElementById('donutChart');
+        const expandChartBtn = document.getElementById('expandChartBtn');
+        const chartContainer = document.getElementById('chartContainer');
+
+        // Function to toggle chart size and centering
+        function toggleChartSize() {
+            if (donutChart.style.maxHeight === '250px') {
+                // Expand chart
+                donutChart.style.maxHeight = '400px';
+                chartContainer.style.display = 'flex'; // Display as flex to center
+            } else {
+                // Collapse chart
+                donutChart.style.maxHeight = '250px';
+                chartContainer.style.display = 'block'; // Revert to block display
+            }
+        }
+
+        // Add click event listener to the expand button
+        expandChartBtn.addEventListener('click', toggleChartSize);
+    });
+</script>
 
 </body>
 </html>
