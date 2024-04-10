@@ -1,7 +1,7 @@
 <!-- Main Footer -->
 <footer class="main-footer text-right">
   <!-- Align to the right -->
-  <small><strong>&copy; <span id="currentYear"></span> Atmos. All rights reserved.</strong></small>
+  <small><strong>&copy; <span id="currentYear"></span>&nbsp;<a href="#" class="text-black">Atmos.com</a> All rights reserved.</strong></small>
 </footer>
 
 <script>
@@ -77,9 +77,11 @@ function confirmLogout() {
     if (darkModeEnabled) {
       moonIcon.classList.add('d-none');
       sunIcon.classList.remove('d-none');
+      sunIcon.classList.add('rotate'); // Add rotation class
     } else {
       moonIcon.classList.remove('d-none');
       sunIcon.classList.add('d-none');
+      sunIcon.classList.remove('rotate'); // Remove rotation class
     }
   }
 
