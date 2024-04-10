@@ -38,7 +38,7 @@ if ($result) {
 <?php include 'includes/header.php'; ?>
 
   <!-- DataTables -->
-  <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <!-- <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css"> -->
   <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
@@ -67,10 +67,10 @@ if ($result) {
         <div class="col-sm-6">
           <div class="row">
             <div class="col-sm-12 text-sm-right">
-              <div class="mr-2 small"><b>Philippine Standard Time</b></div>
+              <div class="mr-3 small"><b>Philippine Standard Time</b></div>
             </div>
             <div class="col-sm-12 text-sm-right">
-              <div id="philippine-date-time" class="small"></div>
+              <div id="philippine-date-time" style="font-size: 15px;"></div>
             </div>
           </div>
         </div><!-- /.col -->
@@ -96,7 +96,7 @@ if ($result) {
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="collegeStudentsTable" class="display table table-bordered" style="display: none;">
+                <table id="collegeStudentsTable" class="display table table-bordered nowrap" style="display: none;">
                   <thead>
                   <tr>
                     <th>
@@ -128,12 +128,11 @@ if ($result) {
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-
-  <?php include 'includes/footer.php';?>
-  
 </div>
 <!-- ./wrapper -->
 
+<?php include 'includes/footer.php';?>
+  
 <!-- REQUIRED SCRIPTS -->
 
 <!-- jQuery -->
@@ -146,11 +145,12 @@ if ($result) {
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- DataTables  & Plugins -->
 <script src="plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<!-- <script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script> -->
 <script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
 <script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
 <script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
 <script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.jqueryui.min.js"></script>
 <script src="plugins/jszip/jszip.min.js"></script>
 <script src="plugins/pdfmake/pdfmake.min.js"></script>
 <script src="plugins/pdfmake/vfs_fonts.js"></script>
@@ -204,9 +204,9 @@ $(document).ready(function() {
       {
         "data": null,
         "render": function(data, type, row) {
-          return '<button type="button" class="btn btn-primary btn-sm edit-btn"><i class="fas fa-edit"></i></button>' +
-                '<button type="button" class="btn btn-danger btn-sm delete-btn mx-1"><i class="fas fa-trash-alt"></i></button>' +
-                '<button type="button" class="btn btn-info btn-sm view-qr-btn" data-id="' + row.IdentificationNumber + '"><i class="fas fa-qrcode"></i></button>';
+          return '<button type="button" class="btn btn-primary btn-sm edit-btn"><i class="fas fa-edit"></i></button>' +             
+                 '<button type="button" class="btn btn-success btn-sm view-qr-btn mx-1" data-id="' + row.IdentificationNumber + '"><i class="fas fa-qrcode"></i></button>' +
+                 '<button type="button" class="btn btn-danger btn-sm delete-btn"><i class="fas fa-trash-alt"></i></button>';
         }
       }
     ],
@@ -234,12 +234,13 @@ $(document).ready(function() {
     },
     "lengthChange": false, 
     "autoWidth": false,
-    "dom": 'Bfrtip', 
+    "dom": 'Blfrtip', 
     "buttons": [
     {
         extend: 'collection',
         text: '<i class="fas fa-file-export"></i> ',
-        className: 'btn-sm btn-light border mr-1',
+        titleAttr: 'Export', // Tooltip for the button
+        className: 'btn-sm btn-light border',
         buttons: [
                   {
                       extend: 'csv',
@@ -273,13 +274,20 @@ $(document).ready(function() {
           },
           {
               extend: 'colvis',
-              text: '<i class="fas fa-eye"></i> ',
-              className: 'btn-sm btn-light border',
+              text: '<i class="fas fa-columns"></i> ',
+              titleAttr: 'Column Visibility', // Tooltip for the button
+              className: 'btn-sm btn-light border mx-1',
+          },
+          {
+            extend: 'pageLength', // Add the "Page Length" button
+            text: '<i class="fas fa-list-ol"></i> ', // Icon for Page Length button
+            titleAttr: 'Page Length', // Tooltip for the button
+            className: 'btn-sm btn-light border',
           }
         ],  
   });
 
-  $(document).tooltip();
+  
 
 
   // Handle click on "Select all" control
@@ -321,9 +329,16 @@ $(document).ready(function() {
           $('#addCollegeModal').modal('hide');
           // Show success message
           Swal.fire("Success", "New student added successfully!", "success");
-        } else {
-          // Show error message if addition failed
-          Swal.fire("Error", "Failed to add student", "error");
+        } else if (response.status === 'error') {
+          // Check for specific error messages
+          if (response.error === 'Duplicate identification number') {
+            Swal.fire("Error", "Duplicate identification number", "error");
+          } else if (response.error === 'Duplicate email') {
+            Swal.fire("Error", "Duplicate email", "error");
+          } else {
+            // Show general error message if addition failed for other reasons
+            Swal.fire("Error", "Failed to add student", "error");
+          }
         }
       },
       error: function(xhr, status, error) {
@@ -552,6 +567,8 @@ $('#collegeStudentsTable').on('click', '.view-qr-btn', function() {
   var rowData = table.row($(this).closest('tr')).data();
   var firstName = rowData['FirstName'].trim();
   var lastName = rowData['LastName'].trim();
+  var course = rowData['course_name']; 
+  var level = rowData['level_name']; 
 
   // Construct the QR code path using the student's Identification Number
   var qrCodePath = 'qr_codes/' + identificationNumber + '.png';
@@ -565,6 +582,9 @@ $('#collegeStudentsTable').on('click', '.view-qr-btn', function() {
 
   // Display the student's name inside the card
   $('#studentName').text(firstName + ' ' + lastName);
+
+  // Display the student's course & level inside the card
+  $('#studentCL').text(course + '-' + level);
 
   // Show the modal
   $('#viewQrCodeModal').modal('show');
@@ -853,7 +873,7 @@ function dataURLtoBlob(dataURL) {
         </form>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary btn-sm" form="importCsvForm">Import</button>
+        <button type="submit" class="btn btn-primary btn-sm" form="importCsvForm"><i class="fas fa-file-import"></i> Import</button>
       </div>
     </div>
   </div>
@@ -866,7 +886,7 @@ function dataURLtoBlob(dataURL) {
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header bg-info">
-        <h5 class="modal-title" id="viewQrCodeModalLabel">QR Code</h5>
+        <h5 class="modal-title" id="viewQrCodeModalLabel">Digital QR ID</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
@@ -874,14 +894,16 @@ function dataURLtoBlob(dataURL) {
       <div class="modal-body text-center d-flex flex-column align-items-center justify-content-center" id="modalBodyToDownload">
         <!-- Card with Background Image inside Modal Body with Medium Size -->
         <div class="card" id="cardToDownload" style="width: 300px;">
-          <img src="dist/img/Card.png" class="card-img" alt="Background Image" style="width: 100%; height: auto;">
+          <img src="dist/img/Card.png" class="card-img" alt="Background Image" style="width: 100%; height: auto; image-rendering: pixelated;">
           <div class="card-img-overlay d-flex flex-column justify-content-center align-items-center" style="height: 100%;">
             <!-- Logo above the QR Code -->
             <img src="dist/img/aclc_complete_logo.png" alt="Logo" style="width: 150px; height: auto; margin-bottom: 20px;">
             <!-- QR Code Image -->
-            <img id="qrCodeImage" alt="QR Code" style="width: 200px; height: auto;">
+            <img id="qrCodeImage" alt="QR Code" style="width: 200px; height: auto; image-rendering: pixelated;">
             <!-- Student Name -->
             <div id="studentName" class="font-weight-bold" style="font-size: 14px; margin-top: 20px; color: black; display: inline-block; max-width: 70%;">Student Name</div>
+            <!-- Student Course & Level -->
+            <div id="studentCL" class="font-weight-bold text-secondary" style="font-size: 12px;">Course & Level</div>
           </div>
         </div>
       </div>
