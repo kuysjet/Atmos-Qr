@@ -38,71 +38,104 @@ elseif ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['identificationNumb
     $gradeName = $_POST['grade'];
     $sectionName = $_POST['section'];
 
-    // Get StrandID from strands table
-    $strandQuery = "SELECT id FROM strands WHERE strand_name = ?";
-    $strandStmt = $conn->prepare($strandQuery);
-    $strandStmt->bind_param("s", $strandName);
-    $strandStmt->execute();
-    $strandResult = $strandStmt->get_result();
+    // Check for duplicate identification number
+    $checkDuplicateIdQuery = "SELECT * FROM SeniorHighStudents WHERE IdentificationNumber = ?";
+    $stmt = $conn->prepare($checkDuplicateIdQuery);
+    $stmt->bind_param("s", $identificationNumber);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($result->num_rows > 0) {
+        // Duplicate identification number found
+        echo json_encode(array("status" => "error", "error" => "Duplicate identification number"));
+        exit; // Stop further execution
+    }
 
-    if ($strandResult->num_rows > 0) {
-        $strandRow = $strandResult->fetch_assoc();
-        $strandID = $strandRow['id'];
+    // Check for duplicate email
+    $checkDuplicateEmailQuery = "SELECT * FROM SeniorHighStudents WHERE Email = ?";
+    $stmt = $conn->prepare($checkDuplicateEmailQuery);
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    if ($result->num_rows > 0) {
+        // Duplicate email found
+        echo json_encode(array("status" => "error", "error" => "Duplicate email"));
+        exit; // Stop further execution
 
-        // Get GradeID from grades table
-        $gradeQuery = "SELECT id FROM grades WHERE grade_name = ?";
-        $gradeStmt = $conn->prepare($gradeQuery);
-        $gradeStmt->bind_param("s", $gradeName);
-        $gradeStmt->execute();
-        $gradeResult = $gradeStmt->get_result();
+    } else {
+        // Continue with insertion
+        // Get StrandID from strands table
+        $strandQuery = "SELECT id FROM strands WHERE strand_name = ?";
+        $strandStmt = $conn->prepare($strandQuery);
+        $strandStmt->bind_param("s", $strandName);
+        $strandStmt->execute();
+        $strandResult = $strandStmt->get_result();
 
-        if ($gradeResult->num_rows > 0) {
-            $gradeRow = $gradeResult->fetch_assoc();
-            $gradeID = $gradeRow['id'];
+        if ($strandResult->num_rows > 0) {
+            $strandRow = $strandResult->fetch_assoc();
+            $strandID = $strandRow['id'];
 
-            // Get SectionID from sections table
-            $sectionQuery = "SELECT id FROM sections WHERE section_name = ?";
-            $sectionStmt = $conn->prepare($sectionQuery);
-            $sectionStmt->bind_param("s", $sectionName);
-            $sectionStmt->execute();
-            $sectionResult = $sectionStmt->get_result();
+            // Get GradeID from grades table
+            $gradeQuery = "SELECT id FROM grades WHERE grade_name = ?";
+            $gradeStmt = $conn->prepare($gradeQuery);
+            $gradeStmt->bind_param("s", $gradeName);
+            $gradeStmt->execute();
+            $gradeResult = $gradeStmt->get_result();
 
-            if ($sectionResult->num_rows > 0) {
-                $sectionRow = $sectionResult->fetch_assoc();
-                $sectionID = $sectionRow['id'];
+            if ($gradeResult->num_rows > 0) {
+                $gradeRow = $gradeResult->fetch_assoc();
+                $gradeID = $gradeRow['id'];
 
-                // Prepare INSERT statement
-                $stmt = $conn->prepare("INSERT INTO SeniorHighStudents (IdentificationNumber, FirstName, LastName, Email, StrandID, GradeID, SectionID) VALUES (?, ?, ?, ?, ?, ?, ?)");
-                
-                // Bind parameters
-                $stmt->bind_param("ssssiii", $identificationNumber, $firstName, $lastName, $email, $strandID, $gradeID, $sectionID);
-                
-                // Execute statement
-                if ($stmt->execute()) {
-                    // After successfully adding the student
-                    $data = $identificationNumber; // Or any unique data
-                    $qrCodePath = 'qr_codes/' . $identificationNumber . '.png';
-                    QRcode::png($data, $qrCodePath);
+                // Get SectionID from sections table
+                $sectionQuery = "SELECT id FROM sections WHERE section_name = ?";
+                $sectionStmt = $conn->prepare($sectionQuery);
+                $sectionStmt->bind_param("s", $sectionName);
+                $sectionStmt->execute();
+                $sectionResult = $sectionStmt->get_result();
 
-                    echo json_encode(array("status" => "success"));
-                    http_response_code(200); // OK
+                if ($sectionResult->num_rows > 0) {
+                    $sectionRow = $sectionResult->fetch_assoc();
+                    $sectionID = $sectionRow['id'];
+
+                    // Prepare INSERT statement
+                    $stmt = $conn->prepare("INSERT INTO SeniorHighStudents (IdentificationNumber, FirstName, LastName, Email, StrandID, GradeID, SectionID) VALUES (?, ?, ?, ?, ?, ?, ?)");
+                    
+                    // Bind parameters
+                    $stmt->bind_param("ssssiii", $identificationNumber, $firstName, $lastName, $email, $strandID, $gradeID, $sectionID);
+                    
+                    // Execute statement
+                    if ($stmt->execute()) {
+                        // After successfully adding the student
+                        $data = $identificationNumber; // Or any unique data
+                        $qrCodePath = 'qr_codes/' . $identificationNumber . '.png';
+                        
+                        // Generate QR code
+                        $errorCorrectionLevel = 'L'; // QR code error correction level
+                        $matrixPointSize = 26; // QR code point size
+
+                        // Generate QR code without logo
+                        QRcode::png($data, $qrCodePath, $errorCorrectionLevel, $matrixPointSize, 4); // Generate QR code without saving it
+
+                        echo json_encode(array("status" => "success"));
+                        http_response_code(200); // OK
+                    } else {
+                        echo json_encode(array("error" => "Failed to add student"));
+                        http_response_code(500); // Internal Server Error
+                    }
                 } else {
-                    echo json_encode(array("error" => "Failed to add student"));
-                    http_response_code(500); // Internal Server Error
+                    echo json_encode(array("error" => "Invalid Section"));
+                    http_response_code(400); // Bad Request
                 }
             } else {
-                echo json_encode(array("error" => "Invalid Section"));
+                echo json_encode(array("error" => "Invalid Grade"));
                 http_response_code(400); // Bad Request
             }
         } else {
-            echo json_encode(array("error" => "Invalid Grade"));
+            echo json_encode(array("error" => "Invalid Strand"));
             http_response_code(400); // Bad Request
         }
-    } else {
-        echo json_encode(array("error" => "Invalid Strand"));
-        http_response_code(400); // Bad Request
     }
 }
+
 
 
 
@@ -168,9 +201,13 @@ elseif ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editSeniorHighId']
                             unlink($oldQrCodePath); // Delete the old QR code file
                         }
                         
+                        // Set the error correction level and matrix point size
+                        $errorCorrectionLevel = 'L'; // QR code error correction level
+                        $matrixPointSize = 26; // Increase the point size for higher resolution
+
                         // Generate a new QR code with the new identification number
                         $newQrCodePath = 'qr_codes/' . $newIdentificationNumber . '.png';
-                        QRcode::png($newIdentificationNumber, $newQrCodePath);
+                        QRcode::png($newIdentificationNumber, $newQrCodePath, $errorCorrectionLevel, $matrixPointSize, 4);
                     }
 
                     echo json_encode(array("status" => "success"));

@@ -34,6 +34,31 @@ elseif ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['identificationNumb
     $course = $_POST['course'];
     $level = $_POST['level'];
 
+        // Check for duplicate identification number
+        $checkDuplicateIdQuery = "SELECT * FROM CollegeStudents WHERE IdentificationNumber = ?";
+        $stmt = $conn->prepare($checkDuplicateIdQuery);
+        $stmt->bind_param("s", $identificationNumber);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result->num_rows > 0) {
+            // Duplicate identification number found
+            echo json_encode(array("status" => "error", "error" => "Duplicate identification number"));
+            exit; // Stop further execution
+        }
+    
+        // Check for duplicate email
+        $checkDuplicateEmailQuery = "SELECT * FROM CollegeStudents WHERE Email = ?";
+        $stmt = $conn->prepare($checkDuplicateEmailQuery);
+        $stmt->bind_param("s", $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if ($result->num_rows > 0) {
+            // Duplicate email found
+            echo json_encode(array("status" => "error", "error" => "Duplicate email"));
+            exit; // Stop further execution
+        }
+    
+
     // Prepare INSERT statement
     $stmt = $conn->prepare("INSERT INTO CollegeStudents (IdentificationNumber, FirstName, LastName, Email, CourseID, LevelID) VALUES (?, ?, ?, ?, ?, ?)");
     
@@ -45,12 +70,18 @@ elseif ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['identificationNumb
         // After successfully adding the student
         $data = $identificationNumber; // Or any unique data
         $qrCodePath = 'qr_codes/' . $identificationNumber . '.png';
-        QRcode::png($data, $qrCodePath);
-    
+
+        // Generate QR code
+        $errorCorrectionLevel = 'L'; // QR code error correction level
+        $matrixPointSize = 26; // QR code point size
+
+        // Generate QR code without logo
+        QRcode::png($data, $qrCodePath, $errorCorrectionLevel, $matrixPointSize, 4); // Generate QR code without saving it
+
         echo json_encode(array("status" => "success"));
         http_response_code(200); // OK
     } else {
-        echo json_encode(array("error" => "Failed to add faculty"));
+        echo json_encode(array("error" => "Failed to add student"));
         http_response_code(500); // Internal Server Error
     }
 }
@@ -107,9 +138,14 @@ elseif ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editStudentId'])) 
                         unlink($oldQrCodePath); // Delete the old QR code file
                     }
                     
+                    // Set the error correction level and matrix point size
+                    $errorCorrectionLevel = 'L'; // QR code error correction level
+                    $matrixPointSize = 26; // Increase the point size for higher resolution
+
                     // Generate a new QR code with the new identification number
                     $newQrCodePath = 'qr_codes/' . $newIdentificationNumber . '.png';
-                    QRcode::png($newIdentificationNumber, $newQrCodePath);
+                    QRcode::png($newIdentificationNumber, $newQrCodePath, $errorCorrectionLevel, $matrixPointSize, 4);
+
                 }
 
                 echo json_encode(array("status" => "success"));
