@@ -71,7 +71,7 @@ if ($eventsResult && mysqli_num_rows($eventsResult) > 0) {
 <?php include 'includes/header.php'; ?>
 
   <!-- DataTables -->
-  <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+  <!-- <link rel="stylesheet" href="plugins/datatables-bs4/css/dataTables.bootstrap4.min.css"> -->
   <link rel="stylesheet" href="plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
   <link rel="stylesheet" href="plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
   <link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
@@ -101,10 +101,10 @@ if ($eventsResult && mysqli_num_rows($eventsResult) > 0) {
         <div class="col-sm-6">
           <div class="row">
             <div class="col-sm-12 text-sm-right">
-              <div class="mr-2 small"><b>Philippine Standard Time</b></div>
+              <div class="mr-3 small"><b>Philippine Standard Time</b></div>
             </div>
             <div class="col-sm-12 text-sm-right">
-              <div id="philippine-date-time" class="small"></div>
+              <div id="philippine-date-time" style="font-size: 15px;"></div>
             </div>
           </div>
         </div><!-- /.col -->
@@ -125,20 +125,20 @@ if ($eventsResult && mysqli_num_rows($eventsResult) > 0) {
               <div class="card-body">
                 <div class="row mb-2">
                   <div class="col-md-3">
-                    <label class="m-0" for="academicYearFilter">Academic Year:</label>
+                    <label class="mt-2 mb-0" for="academicYearFilter">Academic Year:</label>
                       <select id="academicYearFilter" class="form-control">`
                       <option value="" disabled selected>Select Academic Year</option>
                       <?php echo $academicYearsOptions; ?>
                       </select>
                   </div>
                   <div class="col-md-3">
-                      <label class="m-0" for="eventsFilter">Events:</label>
+                      <label class="mt-2 mb-0" for="eventsFilter">Events:</label>
                       <select id="eventsFilter" class="form-control">
                       <option value="" disabled selected>Select Event</option>
                       </select>
                   </div>
                   <div class="col-md-3">
-                      <label class="m-0" for="userTypeFilter">Filter by Registrant Type:</label>
+                      <label class="mt-2 mb-0" for="userTypeFilter">Filter by Registrant Type:</label>
                       <select id="userTypeFilter" class="form-control">
                           <option value="" disabled selected>Select Registrant Type</option>
                           <option value="college">College</option>
@@ -213,12 +213,11 @@ if ($eventsResult && mysqli_num_rows($eventsResult) > 0) {
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-
-  <?php include 'includes/footer.php';?>
-  
 </div>
 <!-- ./wrapper -->
 
+<?php include 'includes/footer.php';?>
+  
 <!-- REQUIRED SCRIPTS -->
 
 <!-- jQuery -->
@@ -231,11 +230,12 @@ if ($eventsResult && mysqli_num_rows($eventsResult) > 0) {
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <!-- DataTables  & Plugins -->
 <script src="plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<!-- <script src="plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script> -->
 <script src="plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
 <script src="plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
 <script src="plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
 <script src="plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.jqueryui.min.js"></script>
 <script src="plugins/jszip/jszip.min.js"></script>
 <script src="plugins/pdfmake/pdfmake.min.js"></script>
 <script src="plugins/pdfmake/vfs_fonts.js"></script>
@@ -243,7 +243,7 @@ if ($eventsResult && mysqli_num_rows($eventsResult) > 0) {
 <script src="plugins/datatables-buttons/js/buttons.print.min.js"></script>
 <script src="plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
 <script src="//code.highcharts.com/highcharts.js"></script>
-<!-- <script src="https://code.highcharts.com/modules/accessibility.js"></script> -->
+<script src="https://code.highcharts.com/modules/accessibility.js"></script>
 <!-- AdminLTE App -->
 <script src="dist/js/adminlte.min.js"></script>
 <script src="dist/js/datetime.js"></script>
@@ -329,13 +329,14 @@ if ($eventsResult && mysqli_num_rows($eventsResult) > 0) {
         "lengthChange": false,
         "autoWidth": false,
         "orderable": true,
-        "dom": 'Bfrtip', // Ensure the buttons container is included
+        "dom": 'Blfrtip', // Ensure the buttons container is included
         "buttons": [
-            {
-                extend: 'collection',
-                text: '<i class="fas fa-file-export"></i>',
-                className: 'btn-sm btn-light border mr-1',
-                buttons: [
+                    {
+                        extend: 'collection',
+                        text: '<i class="fas fa-file-export"></i>',
+                        titleAttr: 'Export', // Tooltip for the button
+                        className: 'btn-sm btn-light border mr-1',
+                        buttons: [
                     {
                         extend: 'excel',
                         text: '<i class="far fa-file-excel"></i> Excel',
@@ -405,7 +406,13 @@ if ($eventsResult && mysqli_num_rows($eventsResult) > 0) {
                         }
                     }
                 ]
-            }
+            },
+            {
+                extend: 'pageLength', // Add the "Page Length" button
+                text: '<i class="fas fa-list-ol"></i>', // Icon for Page Length button
+                titleAttr: 'Page Length', // Tooltip for the button
+                className: 'btn-sm btn-light border',
+            },
         ],
         "columnDefs": [ {
             "targets": 0, // Targeting the first column (index 0)
