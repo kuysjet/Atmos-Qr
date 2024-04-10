@@ -8,9 +8,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    // Query to find the user
-    $query = "SELECT * FROM users WHERE username = '$username'";
-    $result = mysqli_query($conn, $query);
+    // Prepare and execute the query
+    $query = "SELECT * FROM users WHERE username = ?";
+    $stmt = mysqli_prepare($conn, $query);
+    mysqli_stmt_bind_param($stmt, "s", $username);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
 
     if (mysqli_num_rows($result) > 0) {
         $user = mysqli_fetch_assoc($result);
@@ -42,7 +45,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         } else {
             // Password is incorrect, redirect to login page with error parameter
-            header('Location: index.php?error=invalid_password');
+            header('Location: index.php?error=invalid_password&username=' . urlencode($username));
             exit(); // Stop further execution
         }
     } else {
