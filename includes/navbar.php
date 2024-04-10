@@ -19,29 +19,30 @@
       </li>
       <!-- Dark mode toggle link -->
       <li class="nav-item">
-        <a href="#" class="nav-link" id="darkModeToggleBtn">
+        <a href="#" class="nav-link px-1" id="darkModeToggleBtn">
           <i class="fas fa-sun text-warning"></i>
           <i class="fas fa-moon d-none"></i>
         </a>
       </li>
       <!-- Profile -->
       <li class="nav-item dropdown">
-        <a class="nav-link" data-toggle="dropdown" href="#">
-          <i class="fas fa-user fa-fw"></i>
+        <a class="nav-link d-flex justify-content-center align-items-center" data-toggle="dropdown" href="#">
+          <i class="fas fa-user-circle fa-fw " style="font-size: 18px"></i>
+          <i class="fas fa-caret-down fa-xs"></i>
         </a>
         <div class="dropdown-menu dropdown-menu-md dropdown-menu-right">
           <a class="dropdown-item" id="profileDropdown" href="#" role="button" data-toggle="modal" data-target="#viewProfileModal">
-            <i class="fas fa-user-cog fa-sm fa-fw mr-2"></i> Profile
+            <i class="fas fa-user-cog fa-sm fa-fw mr-2 text-gray"></i> Profile
             <span class="float-right text-sm"></span>
           </a>
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" id="changePasswordDropdown" href="#" role="button" data-toggle="modal" data-target="#changePasswordModal">
-            <i class="fas fa-key fa-sm fa-fw mr-2"></i> Change Password
+            <i class="fas fa-key fa-sm fa-fw mr-2 text-gray"></i> Change Password
             <span class="float-right text-sm"></span>
           </a>
           <div class="dropdown-divider"></div>
           <a href="#" class="dropdown-item" onclick="confirmLogout()">
-            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2"></i> Logout
+            <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray"></i> Logout
               <span class="float-right text-sm"></span>
           </a>
         </div>
