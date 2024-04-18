@@ -81,25 +81,23 @@ elseif ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['identificationNumb
         $posRow = $posResult->fetch_assoc();
         $posID = $posRow['ID'];
 
-        // Prepare INSERT statement
-        $stmt = $conn->prepare("INSERT INTO Faculties (IdentificationNumber, FirstName, LastName, Email, DepartmentID, PositionID) VALUES (?, ?, ?, ?, ?, ?)");
+        // Prepare INSERT statement with QR code image data
+        $stmt = $conn->prepare("INSERT INTO Faculties (IdentificationNumber, FirstName, LastName, Email, DepartmentID, PositionID, QRCodeImage) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        
+        // Generate QR code
+        $data = $identificationNumber; // Or any unique data
+        $errorCorrectionLevel = 'L'; // QR code error correction level
+        $matrixPointSize = 26; // QR code point size
+        ob_start(); // Start output buffering
+        QRcode::png($data, null, $errorCorrectionLevel, $matrixPointSize, 4); // Generate QR code without saving it to a file
+        $qrCodeImageBinary = ob_get_contents(); // Get the binary image data
+        ob_end_clean(); // End output buffering and discard output
         
         // Bind parameters
-        $stmt->bind_param("ssssii", $identificationNumber, $firstName, $lastName, $email, $deptID, $posID);
+        $stmt->bind_param("ssssiis", $identificationNumber, $firstName, $lastName, $email, $deptID, $posID, $qrCodeImageBinary);
         
         // Execute statement
         if ($stmt->execute()) {
-            // After successfully adding the faculty
-            $data = $identificationNumber; // Or any unique data
-            $qrCodePath = 'qr_codes/' . $identificationNumber . '.png';
-            
-            // Generate QR code
-            $errorCorrectionLevel = 'L'; // QR code error correction level
-            $matrixPointSize = 26; // QR code point size
-
-            // Generate QR code without logo
-            QRcode::png($data, $qrCodePath, $errorCorrectionLevel, $matrixPointSize, 4); // Generate QR code without saving it
-
             echo json_encode(array("status" => "success"));
             http_response_code(200); // OK
         } else {
@@ -158,20 +156,22 @@ elseif ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editFacultyId'])) 
 
             // Execute statement
             if ($stmtUpdate->execute()) {
-                // Delete the old QR code if the identification number has changed
+                // If the identification number has changed, update the QR code in the database
                 if ($currentIdentificationNumber !== $newIdentificationNumber) {
-                    $oldQrCodePath = 'qr_codes/' . $currentIdentificationNumber . '.png';
-                    if (file_exists($oldQrCodePath)) {
-                        unlink($oldQrCodePath); // Delete the old QR code file
-                    }
-                    
                     // Set the error correction level and matrix point size
                     $errorCorrectionLevel = 'L'; // QR code error correction level
                     $matrixPointSize = 26; // Increase the point size for higher resolution
 
                     // Generate a new QR code with the new identification number
-                    $newQrCodePath = 'qr_codes/' . $newIdentificationNumber . '.png';
-                    QRcode::png($newIdentificationNumber, $newQrCodePath, $errorCorrectionLevel, $matrixPointSize, 4);
+                    ob_start(); // Start output buffering
+                    QRcode::png($newIdentificationNumber, null, $errorCorrectionLevel, $matrixPointSize, 4); // Generate QR code without saving it
+                    $qrCodeImageBinary = ob_get_contents(); // Get the binary image data
+                    ob_end_clean(); // End output buffering and discard output
+
+                    // Update the QR code image in the database
+                    $stmtUpdateQrCode = $conn->prepare("UPDATE Faculties SET QRCodeImage=? WHERE ID=?");
+                    $stmtUpdateQrCode->bind_param("si", $qrCodeImageBinary, $facultyId);
+                    $stmtUpdateQrCode->execute();
                 }
 
                 echo json_encode(array("status" => "success"));
@@ -210,11 +210,10 @@ elseif ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['faculty_id'])) {
         $stmt->bind_param("i", $faculty_id);
 
         if ($stmt->execute()) {
-            // After successful deletion, delete the associated QR code if it exists
-            $qrCodePath = 'qr_codes/' . $identificationNumber . '.png';
-            if (file_exists($qrCodePath)) {
-                unlink($qrCodePath); // Delete the QR code file
-            }
+            // After successful deletion, delete the associated QR code if it exists from the database
+            $deleteQRStmt = $conn->prepare("UPDATE Faculties SET QRCodeImage = NULL WHERE ID = ?");
+            $deleteQRStmt->bind_param("i", $faculty_id);
+            $deleteQRStmt->execute();
 
             echo json_encode(array('status' => 'success', 'message' => 'Faculty deleted successfully'));
             http_response_code(200); // OK
@@ -256,12 +255,12 @@ elseif ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['bulkDelete'])) {
         $deleteStmt->bind_param(str_repeat('i', count($faculty_ids)), ...$faculty_ids);
         
         if ($deleteStmt->execute()) {
-            // Delete QR codes for each faculty
+            // Delete QR code data for each faculty
             foreach ($identificationNumbers as $idNum) {
-                $qrCodePath = 'qr_codes/' . $idNum . '.png';
-                if (file_exists($qrCodePath)) {
-                    unlink($qrCodePath); // Delete the QR code file
-                }
+                // Update QR code image to NULL in the database
+                $updateQRStmt = $conn->prepare("UPDATE Faculties SET QRCodeImage = NULL WHERE IdentificationNumber = ?");
+                $updateQRStmt->bind_param("s", $idNum);
+                $updateQRStmt->execute();
             }
             
             echo json_encode(array('status' => 'success', 'message' => 'Faculties and their QR codes deleted successfully'));

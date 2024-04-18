@@ -60,24 +60,22 @@ elseif ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['identificationNumb
     
 
     // Prepare INSERT statement
-    $stmt = $conn->prepare("INSERT INTO CollegeStudents (IdentificationNumber, FirstName, LastName, Email, CourseID, LevelID) VALUES (?, ?, ?, ?, ?, ?)");
+    $stmt = $conn->prepare("INSERT INTO CollegeStudents (IdentificationNumber, FirstName, LastName, Email, CourseID, LevelID, QRCodeImage) VALUES (?, ?, ?, ?, ?, ?, ?)");
     
+    // Generate QR code
+    $data = $identificationNumber; // Or any unique data
+    $errorCorrectionLevel = 'L'; // QR code error correction level
+    $matrixPointSize = 26; // QR code point size
+    ob_start(); // Start output buffering
+    QRcode::png($data, null, $errorCorrectionLevel, $matrixPointSize, 4); // Generate QR code without saving it to a file
+    $qrCodeImageBinary = ob_get_contents(); // Get the binary image data
+    ob_end_clean(); // End output buffering and discard output
+
     // Bind parameters
-    $stmt->bind_param("ssssss", $identificationNumber, $firstName, $lastName, $email, $course, $level);
+    $stmt->bind_param("ssssiis", $identificationNumber, $firstName, $lastName, $email, $course, $level, $qrCodeImageBinary);
     
     // Inside the section that handles adding a new student
     if ($stmt->execute()) {
-        // After successfully adding the student
-        $data = $identificationNumber; // Or any unique data
-        $qrCodePath = 'qr_codes/' . $identificationNumber . '.png';
-
-        // Generate QR code
-        $errorCorrectionLevel = 'L'; // QR code error correction level
-        $matrixPointSize = 26; // QR code point size
-
-        // Generate QR code without logo
-        QRcode::png($data, $qrCodePath, $errorCorrectionLevel, $matrixPointSize, 4); // Generate QR code without saving it
-
         echo json_encode(array("status" => "success"));
         http_response_code(200); // OK
     } else {
@@ -131,21 +129,22 @@ elseif ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['editStudentId'])) 
 
             // Execute statement
             if ($stmtUpdate->execute()) {
-                // Delete the old QR code if the identification number has changed
+                // If the identification number has changed, update the QR code in the database
                 if ($currentIdentificationNumber !== $newIdentificationNumber) {
-                    $oldQrCodePath = 'qr_codes/' . $currentIdentificationNumber . '.png';
-                    if (file_exists($oldQrCodePath)) {
-                        unlink($oldQrCodePath); // Delete the old QR code file
-                    }
-                    
                     // Set the error correction level and matrix point size
                     $errorCorrectionLevel = 'L'; // QR code error correction level
                     $matrixPointSize = 26; // Increase the point size for higher resolution
 
                     // Generate a new QR code with the new identification number
-                    $newQrCodePath = 'qr_codes/' . $newIdentificationNumber . '.png';
-                    QRcode::png($newIdentificationNumber, $newQrCodePath, $errorCorrectionLevel, $matrixPointSize, 4);
+                    ob_start(); // Start output buffering
+                    QRcode::png($newIdentificationNumber, null, $errorCorrectionLevel, $matrixPointSize, 4); // Generate QR code without saving it
+                    $qrCodeImageBinary = ob_get_contents(); // Get the binary image data
+                    ob_end_clean(); // End output buffering and discard output
 
+                    // Update the QR code image in the database
+                    $stmtUpdateQrCode = $conn->prepare("UPDATE CollegeStudents SET QRCodeImage=? WHERE ID=?");
+                    $stmtUpdateQrCode->bind_param("si", $qrCodeImageBinary, $studentId);
+                    $stmtUpdateQrCode->execute();
                 }
 
                 echo json_encode(array("status" => "success"));
@@ -185,11 +184,10 @@ elseif ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['student_id'])) {
         $stmt->bind_param("i", $student_id);
 
         if ($stmt->execute()) {
-            // After successful deletion, delete the QR code
-            $qrCodePath = 'qr_codes/' . $identificationNumber . '.png';
-            if (file_exists($qrCodePath)) {
-                unlink($qrCodePath); // Delete the QR code file
-            }
+            // After successful deletion, delete the associated QR code if it exists from the database
+            $deleteQRStmt = $conn->prepare("UPDATE CollegeStudents SET QRCodeImage = NULL WHERE ID = ?");
+            $deleteQRStmt->bind_param("i", $student_id);
+            $deleteQRStmt->execute();
 
             echo json_encode(array('status' => 'success', 'message' => 'Student deleted successfully'));
             http_response_code(200); // OK
@@ -230,12 +228,12 @@ elseif ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['bulkDelete'])) {
         $deleteStmt->bind_param(str_repeat('i', count($student_ids)), ...$student_ids);
         
         if ($deleteStmt->execute()) {
-            // Delete QR codes for each student
+            // Delete QR code data for each student
             foreach ($identificationNumbers as $idNum) {
-                $qrCodePath = 'qr_codes/' . $idNum . '.png';
-                if (file_exists($qrCodePath)) {
-                    unlink($qrCodePath); // Delete the QR code file
-                }
+                // Update QR code image to NULL in the database
+                $updateQRStmt = $conn->prepare("UPDATE CollegeStudents SET QRCodeImage = NULL WHERE IdentificationNumber = ?");
+                $updateQRStmt->bind_param("s", $idNum);
+                $updateQRStmt->execute();
             }
             
             echo json_encode(array('status' => 'success', 'message' => 'Students and their QR codes deleted successfully'));
