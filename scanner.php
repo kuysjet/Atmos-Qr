@@ -675,9 +675,9 @@ updateDateTime();
                       <p><strong class="mr-2">Event Name:</strong> <?php echo $event['event_name']; ?></p>
                       <p><strong class="mr-2">Event Venue:</strong> <?php echo $event['event_venue']; ?></p>
                       <p><strong class="mr-2">Description:</strong> <?php echo $event['description']; ?></p>
-                      <p><strong class="mr-2">Event Date:</strong> <?php echo date('l, F j, Y', strtotime($event['event_date'])); ?></p>
-                      <p><strong class="mr-2">Log In:</strong> <?php echo date('h:i A', strtotime($event['log_in'])); ?></p>
-                      <p><strong class="mr-2">Log Out:</strong> <?php echo date('h:i A', strtotime($event['log_out'])); ?></p>
+                      <p><strong class="mr-2">Event Date: &nbsp;</strong> <?php echo date('l, F j, Y', strtotime($event['event_date'])); ?></p>
+                      <p><strong class="mr-2">Log In: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </strong> <?php echo date('h:i A', strtotime($event['log_in'])); ?></p>
+                      <p><strong class="mr-2">Log Out: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </strong> <?php echo date('h:i A', strtotime($event['log_out'])); ?></p>
                     <?php
                 } else {
                     // Display a message if no event details are found
