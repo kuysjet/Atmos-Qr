@@ -347,6 +347,9 @@ $('#addFacultyForm').on('submit', function(e) {
 // Submit form for importing CSV file
 $('#importFacultyCsvForm').on('submit', function(e) {
     e.preventDefault(); // Prevent default form submission
+    // Show loader
+    $('#loader').removeClass('d-none');
+    
     var formData = new FormData(this); // Create FormData object
     // Send AJAX request to import CSV
     $.ajax({
@@ -357,6 +360,9 @@ $('#importFacultyCsvForm').on('submit', function(e) {
         contentType: false,
         processData: false,
         success: function(response) {
+            // Hide loader
+            $('#loader').addClass('d-none');
+
             if (response.status === 'success') {
                 // Refresh DataTable upon successful import
                 table.ajax.reload();
@@ -374,6 +380,9 @@ $('#importFacultyCsvForm').on('submit', function(e) {
         },
         error: function(xhr, status, error) {
             console.error(xhr.responseText);
+            // Hide loader
+            $('#loader').addClass('d-none');
+            
             // Show error message if AJAX request fails
             Swal.fire("Error", "Failed to import faculties", "error");
         }
@@ -561,29 +570,38 @@ $('#facultyTable').on('click', '.view-qr-btn', function() {
   // Retrieve the faculty's Identification Number from the button's data attribute
   var identificationNumber = $(this).data('id');
 
-  // Fetch the faculty's information from the DataTable row
-  var rowData = table.row($(this).closest('tr')).data();
-  var firstName = rowData['FirstName'].trim();
-  var lastName = rowData['LastName'].trim();
-  var position = rowData['PositionName']; 
+  // Fetch the QR code image data from the server
+  $.ajax({
+    url: 'fetch_faculty_qr_code.php', // URL to fetch QR code from server
+    type: 'POST',
+    dataType: 'json',
+    data: { identificationNumber: identificationNumber },
+    success: function(response) {
+      if (response.status === 'success') {
+        // Set the src attribute of the QR code image in the modal
+        $('#qrCodeImage').attr('src', 'data:image/png;base64,' + response.qrCodeImage);
 
-  // Construct the QR code path using the faculty's Identification Number
-  var qrCodePath = 'qr_codes/' + identificationNumber + '.png';
+        // Set the filename for downloading to the faculty's first name and last name
+        var filename = response.firstName + '_' + response.lastName + '_qr_code.png';
+        $('#downloadQR').attr('download', filename);
 
-  // Set the src attribute of the QR code image in the modal
-  $('#qrCodeImage').attr('src', qrCodePath);
+        // Display the faculty's name inside the card
+        $('#facultyName').text(response.firstName + ' ' + response.lastName);
+        // Display the faculty's position inside the card
+        $('#facultyPosition').text(response.position);
 
-  // Set the filename for downloading to the faculty's first name and last name
-  var filename = firstName + '_' + lastName + '_qr_code.png'; // Using faculty's first name and last name for filename
-  $('#downloadQR').attr('download', filename);
-
-  // Display the faculty's name inside the card
-  $('#facultyName').text(firstName + ' ' + lastName);
-  // Display the faculty's position inside the card
-  $('#facultyPosition').text(position);
-
-  // Show the modal
-  $('#viewQrCodeModal').modal('show');
+        // Show the modal
+        $('#viewQrCodeModal').modal('show');
+      } else {
+        // Handle error
+        alert('Failed to fetch QR code.');
+      }
+    },
+    error: function() {
+      // Handle error
+      alert('Failed to fetch QR code. Please try again later.');
+    }
+  });
 });
 
 
@@ -866,6 +884,13 @@ function dataURLtoBlob(dataURL) {
           <div class="form-group">
             <label for="csvFile">Choose CSV File</label>
             <input type="file" class="form-control-file" id="csvFile" name="csvFile" accept=".csv" required>
+          </div>
+          <!-- Loader -->
+          <div id="loader" class="text-center d-none">
+            <div class="spinner-border text-primary" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+            <p class="mt-2">Importing...</p>
           </div>
         </form>
       </div>
