@@ -148,7 +148,7 @@ if ($eventsResult && mysqli_num_rows($eventsResult) > 0) {
                   </div>
                 </div>
                 <div class="card shadow-md">
-                    <div class="card-body">
+                    <div class="card-body bg-light">
                         <div class="row mb-6">
                             <!-- Event Name column -->
                             <div class="col-md-6">
