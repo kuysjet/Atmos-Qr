@@ -15,8 +15,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["csvFile"])) {
         $headerSkipped = false; // Variable to track if the header row has been skipped
 
         // Prepare statement outside the loop for better performance
-        $stmt = $conn->prepare("INSERT INTO SeniorHighStudents (IdentificationNumber, FirstName, LastName, Email, StrandID, GradeID, SectionID) VALUES (?, ?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssssiii", $identificationNumber, $firstName, $lastName, $email, $strandId, $gradeId, $sectionId);
+        $stmt = $conn->prepare("INSERT INTO SeniorHighStudents (IdentificationNumber, FirstName, LastName, Email, StrandID, GradeID, SectionID, QRCodeImage) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssiiis", $identificationNumber, $firstName, $lastName, $email, $strandId, $gradeId, $sectionId, $qrCodeData);
 
         // Fetch valid strands from the Strands table
         $strandQuery = "SELECT ID, strand_name FROM Strands";
@@ -95,19 +95,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["csvFile"])) {
                 continue;
             }
 
-            // Execute the prepared statement
-            if ($stmt->execute()) {
-                $successCount++;
-                // Generate and save the QR code
-                $errorCorrectionLevel = 'L'; // QR code error correction level
-                $matrixPointSize = 26; // Increase the point size for higher resolution
+            // Generate the QR code with the identification number
+            $errorCorrectionLevel = 'L'; // QR code error correction level
+            $matrixPointSize = 26; // Matrix point size
+            ob_start(); // Start buffering
+            QRcode::png($identificationNumber, false, $errorCorrectionLevel, $matrixPointSize, 4);
+            $qrCodeData = ob_get_contents(); // Get the QR code image data
+            ob_end_clean(); // End buffering and discard output
 
-                // Generate the QR code with the identification number
-                $qrCodePath = 'qr_codes/' . $identificationNumber . '.png'; // Make sure the qr_codes directory exists and is writable
-                QRcode::png($identificationNumber, $qrCodePath, $errorCorrectionLevel, $matrixPointSize, 4);
-            } else {
-                $errorCount++;
-            }
+            // Prepare and execute the INSERT statement to add faculty to database
+            $stmt->execute();
+            $successCount++;
         }
 
         fclose($handle);
