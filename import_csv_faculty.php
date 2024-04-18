@@ -15,8 +15,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["csvFile"])) {
         $headerSkipped = false; // Variable to track if the header row has been skipped
 
         // Prepare statement outside the loop for better performance
-        $stmt = $conn->prepare("INSERT INTO Faculties (IdentificationNumber, FirstName, LastName, Email, DepartmentID, PositionID) VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt->bind_param("ssssii", $identificationNumber, $firstName, $lastName, $email, $departmentID, $positionID);
+        $stmt = $conn->prepare("INSERT INTO Faculties (IdentificationNumber, FirstName, LastName, Email, DepartmentID, PositionID, QRCodeImage) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        $stmt->bind_param("ssssiis", $identificationNumber, $firstName, $lastName, $email, $departmentID, $positionID, $qrCodeData);
 
         while (($data = fgetcsv($handle, 1000, ",")) !== FALSE) {
             // Skip the header row
@@ -49,6 +49,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["csvFile"])) {
             $departmentStmt = $conn->prepare("SELECT ID FROM Departments WHERE DepartmentName = ?");
             $departmentStmt->bind_param("s", $departmentName);
             $departmentStmt->execute();
+            $departmentStmt->store_result();
+            
+            if ($departmentStmt->num_rows == 0) {
+                // Skip this row if the department name is invalid
+                $errorCount++;
+                continue;
+            }
+            
             $departmentStmt->bind_result($departmentID);
             $departmentStmt->fetch();
             $departmentStmt->close();
@@ -57,6 +65,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["csvFile"])) {
             $positionStmt = $conn->prepare("SELECT ID FROM Positions WHERE PositionName = ?");
             $positionStmt->bind_param("s", $positionName);
             $positionStmt->execute();
+            $positionStmt->store_result();
+            
+            if ($positionStmt->num_rows == 0) {
+                // Skip this row if the position name is invalid
+                $errorCount++;
+                continue;
+            }
+            
             $positionStmt->bind_result($positionID);
             $positionStmt->fetch();
             $positionStmt->close();
@@ -75,19 +91,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["csvFile"])) {
                 continue;
             }
 
-            // Execute the prepared statement
-            if ($stmt->execute()) {
-                $successCount++;
-                // Generate and save the QR code
-                $errorCorrectionLevel = 'L'; // QR code error correction level
-                $matrixPointSize = 26; // Increase the point size for higher resolution
+            // Generate the QR code with the identification number
+            $errorCorrectionLevel = 'L'; // QR code error correction level
+            $matrixPointSize = 26; // Matrix point size
+            ob_start(); // Start buffering
+            QRcode::png($identificationNumber, false, $errorCorrectionLevel, $matrixPointSize, 4);
+            $qrCodeData = ob_get_contents(); // Get the QR code image data
+            ob_end_clean(); // End buffering and discard output
 
-                // Generate the QR code with the identification number
-                $qrCodePath = 'qr_codes/' . $identificationNumber . '.png'; // Make sure the qr_codes directory exists and is writable
-                QRcode::png($identificationNumber, $qrCodePath, $errorCorrectionLevel, $matrixPointSize, 4);
-            } else {
-                $errorCount++;
-            }
+            // Prepare and execute the INSERT statement to add faculty to database
+            $stmt->execute();
+            $successCount++;
         }
 
         fclose($handle);
