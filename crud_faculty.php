@@ -8,7 +8,8 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
     $query = "SELECT f.ID, f.IdentificationNumber, f.FirstName, f.LastName, f.Email, d.DepartmentName, p.PositionName 
               FROM Faculties f
               INNER JOIN Departments d ON f.DepartmentID = d.ID
-              INNER JOIN Positions p ON f.PositionID = p.ID";
+              INNER JOIN Positions p ON f.PositionID = p.ID
+              ORDER BY f.ID DESC"; // Order by ID in descending order
     $result = mysqli_query($conn, $query);
 
     if ($result) {

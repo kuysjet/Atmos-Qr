@@ -9,7 +9,8 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
               FROM seniorhighstudents shs
               INNER JOIN strands s ON shs.StrandID = s.id
               INNER JOIN grades g ON shs.GradeID = g.id
-              INNER JOIN sections se ON shs.SectionID = se.id";
+              INNER JOIN sections se ON shs.SectionID = se.id
+              ORDER BY shs.ID DESC"; // Order by ID in descending order
     $result = mysqli_query($conn, $query);
 
     if ($result) {
