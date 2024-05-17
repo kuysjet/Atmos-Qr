@@ -3,7 +3,7 @@
     <!-- Brand Logo -->
     <a href="https://www.facebook.com/ACLCCollegeIRIGA/" class="brand-link"">
       <img src="dist/img/amalogo.png" alt="ACLC Logo" class="brand-image img-circle elevation-2" style="opacity: .8; width: 32px;">
-      <span class="brand-text" style="font-size: small;"><b>ACLC COLLEGE IRIGA INC.</b></span>
+      <span class="brand-text" style="font-size: small;"><b>ACLC COLLEGE OF IRIGA INC.</b></span>
     </a>
 
     <!-- active link change -->
