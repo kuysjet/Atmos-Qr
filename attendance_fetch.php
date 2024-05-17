@@ -15,8 +15,8 @@ if (isset($_POST['eventId'])) {
                 attendance.id AS attendance_id, 
                 COALESCE(collegestudents.FirstName, seniorhighstudents.FirstName, faculties.FirstName) AS first_name,
                 COALESCE(collegestudents.LastName, seniorhighstudents.LastName, faculties.LastName) AS last_name,
-                TIME_FORMAT(attendance.time_in, '%h:%i %p') AS time_in,
-                TIME_FORMAT(attendance.time_out, '%h:%i %p') AS time_out
+                attendance.time_in,
+                attendance.time_out
               FROM 
                 attendance
               LEFT JOIN 
