@@ -64,28 +64,45 @@
                 </button>
             </div>
             <div class="modal-body">
-                <!-- Profile View Form -->
-                <form id="viewProfileForm">
-                    <div class="form-group">
-                        <label for="vfirstname">First Name</label>
-                        <input type="text" class="form-control" id="vfirstname" name="firstname" value="<?php echo $firstname; ?>" readonly>
+                <div class="row">
+                    <!-- Profile Image Icon -->
+                    <div class="col-md-6 mt-2">
+                        <div class="text-center py-2 border border-info rounded mb-2">
+                            <i class="fas fa-user-circle text-gray" style="font-size: 130px"></i>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="vlastname">Last Name</label>
-                        <input type="text" class="form-control" id="vlastname" name="lastname" value="<?php echo $lastname; ?>" readonly>
+                    <!-- Profile View Form -->
+                    <div class="col-md-6">
+                        <form id="viewProfileForm">
+                            <div class="form-group">
+                                <label for="vfirstname">First Name</label>
+                                <input type="text" class="form-control" id="vfirstname" name="firstname" value="<?php echo $firstname; ?>" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="vlastname">Last Name</label>
+                                <input type="text" class="form-control" id="vlastname" name="lastname" value="<?php echo $lastname; ?>" readonly>
+                            </div>
+                        </form>
                     </div>
-                    <div class="form-group">
-                        <label for="vemail">Email</label>
-                        <input type="email" class="form-control" id="vemail" name="email" value="<?php echo $email; ?>" readonly>
+                </div>
+                <!-- Email and Username Fields -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="vemail">Email</label>
+                            <input type="email" class="form-control" id="vemail" name="email" value="<?php echo $email; ?>" readonly>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="vusername">Username</label>
-                        <input type="text" class="form-control" id="vusername" name="username" value="<?php echo $username; ?>" readonly>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="vusername">Username</label>
+                            <input type="text" class="form-control" id="vusername" name="username" value="<?php echo $username; ?>" readonly>
+                        </div>
                     </div>
-                </form>
+                </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fas fa-times fa-sm"></i> Close</button>
             </div>
         </div>
     </div>
@@ -127,16 +144,13 @@
                         <label for="confirmPassword">Confirm New Password</label>
                         <div class="input-group">
                             <input type="password" class="form-control" id="confirmPassword" name="confirmPassword">
-                            <div class="input-group-append">
-                                <span class="input-group-text" id="toggleConfirmPassword"><i class="fa fa-eye-slash" aria-hidden="true"></i></span>
-                            </div>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary btn-sm" id="savePasswordChangesBtn"><i class="fas fa-save"></i> Save Changes</button>
-                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary btn-sm" id="savePasswordChangesBtn"><i class="fas fa-save fa-sm"></i> Save Changes</button>
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fas fa-times fa-sm"></i> Close</button>
             </div>
         </div>
     </div>
