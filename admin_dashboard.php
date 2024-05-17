@@ -135,6 +135,7 @@ $totalRegistrants = array_sum($collegeData) + array_sum($seniorHighData);
 
 
 <?php 
+  include 'includes/scroll-button.php';
   include 'includes/navbar.php';
   include 'includes/sidebar.php';
 ?>
@@ -232,7 +233,7 @@ $totalRegistrants = array_sum($collegeData) + array_sum($seniorHighData);
               <div class="col-md-6">
                 <div class="card card-danger">
                   <div class="card-header">
-                    <h3 class="card-title m-0">Courses and Strands</h3>
+                    <h3 class="card-title m-0">Course and Strand</h3>
                     <div class="card-tools">
                       <button type="button" class="btn btn-tool" id="expandChartBtn" data-card-widget="maximize" style="box-shadow: none !important;">
                         <i class="fas fa-expand"></i>
@@ -251,7 +252,7 @@ $totalRegistrants = array_sum($collegeData) + array_sum($seniorHighData);
               <div class="col-md-6">
                 <div class="card card-success">
                   <div class="card-header">
-                    <h3 class="card-title m-0">Levels and Grades</h3>
+                    <h3 class="card-title m-0">Level and Grade</h3>
                     <div class="card-tools">
                       <button type="button" class="btn btn-tool" data-card-widget="maximize" style="box-shadow: none !important;">
                         <i class="fas fa-expand"></i>
