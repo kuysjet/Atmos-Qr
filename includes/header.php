@@ -5,7 +5,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="dist/img/icon.png">
+  <link rel="icon" type="image/x-icon" href="dist/img/new-icon.png">
   <title>ATMOS</title>
 
   <!-- Google Font: Source Sans Pro -->
@@ -19,6 +19,22 @@
 
   <link rel="stylesheet" href="dist/css/dark-table.css"></link>
 
+  <style>
+      /* Styling for scroll buttons */
+  .scroll-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.scroll-to-bottom {
+  position: fixed;
+  bottom: 70px;
+  right: 20px;
+  z-index: 1000;
+}
+  </style>
 
 <script>
 // Function to set the title based on the current page
