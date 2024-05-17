@@ -43,7 +43,7 @@ $result = mysqli_query($conn, $query);
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="dist/img/icon.png">
+  <link rel="icon" type="image/x-icon" href="dist/img/new-icon.png">
   <title>ATMOS | Dashboard</title>
 
   <!-- Google Font: Source Sans Pro -->
@@ -56,9 +56,27 @@ $result = mysqli_query($conn, $query);
   <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">   -->
   <link rel="stylesheet" href="dist/css/dark-table.css"></link>
 
+  <style>
+      /* Styling for scroll buttons */
+  .scroll-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.scroll-to-bottom {
+  position: fixed;
+  bottom: 70px;
+  right: 20px;
+  z-index: 1000;
+}
+  </style>
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
+
+<?php include 'includes/scroll-button.php'; ?>
 
   <!-- Navbar -->
   <nav class="main-header navbar navbar-expand navbar-white navbar-light">
@@ -121,7 +139,7 @@ $result = mysqli_query($conn, $query);
     <!-- Brand Logo -->
     <a href="https://www.facebook.com/ACLCCollegeIRIGA/" class="brand-link"">
       <img src="dist/img/amalogo.png" alt="ACLC Logo" class="brand-image img-circle elevation-2" style="opacity: .8; width: 32px;">
-      <span class="brand-text" style="font-size: small;"><b>ACLC COLLEGE IRIGA INC.</b></span>
+      <span class="brand-text" style="font-size: small;"><b>ACLC COLLEGE OF IRIGA INC.</b></span>
     </a>
 
     <!-- active link change -->
@@ -480,28 +498,45 @@ $('#searchBox').on('input', function() {
                 </button>
             </div>
             <div class="modal-body">
-                <!-- Profile View Form -->
-                <form id="viewProfileForm">
-                    <div class="form-group">
-                        <label for="firstname">First Name</label>
-                        <input type="text" class="form-control" id="firstname" name="firstname" value="<?php echo $firstName; ?>" readonly>
+                <div class="row">
+                    <!-- Profile Image Icon -->
+                    <div class="col-md-6 mt-2">
+                        <div class="text-center py-2 border border-info rounded mb-2">
+                            <i class="fas fa-user-circle text-gray" style="font-size: 130px"></i>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="lastname">Last Name</label>
-                        <input type="text" class="form-control" id="lastname" name="lastname" value="<?php echo $lastName; ?>" readonly>
+                    <!-- Profile View Form -->
+                    <div class="col-md-6">
+                        <form id="viewProfileForm">
+                            <div class="form-group">
+                                <label for="vfirstname">First Name</label>
+                                <input type="text" class="form-control" id="vfirstname" name="firstname" value="<?php echo $firstName; ?>" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="vlastname">Last Name</label>
+                                <input type="text" class="form-control" id="vlastname" name="lastname" value="<?php echo $lastName; ?>" readonly>
+                            </div>
+                        </form>
                     </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" value="<?php echo $email; ?>" readonly>
+                </div>
+                <!-- Email and Username Fields -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="vemail">Email</label>
+                            <input type="email" class="form-control" id="vemail" name="email" value="<?php echo $email; ?>" readonly>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" class="form-control" id="username" name="username" value="<?php echo $username; ?>" readonly>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="vusername">Username</label>
+                            <input type="text" class="form-control" id="vusername" name="username" value="<?php echo $username; ?>" readonly>
+                        </div>
                     </div>
-                </form>
+                </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fas fa-times fa-sm"></i> Close</button>
             </div>
         </div>
     </div>
@@ -543,16 +578,13 @@ $('#searchBox').on('input', function() {
                         <label for="confirmPassword">Confirm New Password</label>
                         <div class="input-group">
                             <input type="password" class="form-control" id="confirmPassword" name="confirmPassword">
-                            <div class="input-group-append">
-                                <span class="input-group-text" id="toggleConfirmPassword"><i class="fa fa-eye-slash" aria-hidden="true"></i></span>
-                            </div>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary btn-sm" id="savePasswordChangesBtn"><i class="fas fa-save"></i> Save Changes</button>
-                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary btn-sm" id="savePasswordChangesBtn"><i class="fas fa-save fa-sm"></i> Save Changes</button>
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fas fa-times fa-sm"></i> Close</button>
             </div>
         </div>
     </div>
