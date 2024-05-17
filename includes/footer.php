@@ -1,7 +1,7 @@
 <!-- Main Footer -->
 <footer class="main-footer text-right">
   <!-- Align to the right -->
-  <small><strong>&copy; <span id="currentYear"></span>&nbsp;<a href="#" class="text-black">Atmos.com</a> All rights reserved.</strong></small>
+  <small><strong>&copy; <span id="currentYear"></span>&nbsp;<a href="https://atmoscanpro.com" target="_blank" class="text-black">atmoscanpro.com</a> All rights reserved.</strong></small>
 </footer>
 
 <script>
@@ -90,3 +90,15 @@ function confirmLogout() {
     initializeDarkModeToggle();
   // };
 </script>
+
+<script>
+    // Function to scroll to the top of the page
+    function scrollToTop() {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    // Function to scroll to the bottom of the page
+    function scrollToBottom() {
+      window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+    }
+  </script>
