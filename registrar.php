@@ -51,6 +51,7 @@ if ($result) {
 
 
 <?php 
+  include 'includes/scroll-button.php';
   include 'includes/navbar.php';
   include 'includes/sidebar.php';
 ?>
@@ -89,12 +90,12 @@ if ($result) {
               </div>
               <div class="card-header m-0">
               <button type="button" class="btn btn-info float-end btn-sm" data-toggle="modal" data-target="#addUserModal">
-                <i class="fas fa-user-plus"></i> Add New
+                <i class="fas fa-user-plus fa-sm"></i> Add New
               </button>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="usersTable" class="display table table-bordered nowrap" style="display: none;">
+                <table id="usersTable" class="display table table-bordered nowrap" style="display: none; width:100%;">
                   <thead>
                   <tr>
                     <th>No.</th>
@@ -214,13 +215,17 @@ $(document).ready(function() {
         },
         "lengthChange": false, 
         "autoWidth": false,
-        "dom": 'Bfrtip', 
+        "dom": 'Blfrtip', 
         "buttons": [
             {
                 extend: 'colvis',
-                text: '<i class="fas fa-columns"></i>', 
-                titleAttr: 'Column Visibility', // Tooltip for the button
-                className: 'btn-sm btn-light border',
+                text: '<i class="fas fa-columns fa-sm"></i> Column Visibility', 
+                className: 'btn-sm btn-light border mr-1',
+            }, 
+            {
+              extend: 'pageLength', // Add the "Page Length" button
+              text: '<i class="fas fa-list-ol fa-sm"></i> Show Entries', // Icon for Page Length button
+              className: 'btn-sm btn-light border',
             }
         ]
     });
@@ -430,16 +435,25 @@ $('#usersTable').on('click', '.delete-btn', function() {
         </button>
       </div>
       <div class="modal-body">
-        <!-- Add form fields for collecting user information here -->
-        <form id="addUserForm">
-          <div class="form-group">
-            <label for="firstname">First Name</label>
-            <input type="text" class="form-control" id="firstname" name="firstname" required autocomplete="off">
+        <div class="row">
+            <div class="col-md-6 mt-2">
+                <div class="text-center py-2 border border-info rounded mb-2">
+                    <i class="fas fa-user-circle text-gray" style="font-size: 130px"></i>
+                </div>
+            </div>
+          <!-- Add form fields for collecting user information here -->
+          <div class="col-md-6">
+            <form id="addUserForm">
+              <div class="form-group">
+                <label for="firstname">First Name</label>
+                <input type="text" class="form-control" id="firstname" name="firstname" required autocomplete="off">
+              </div>
+              <div class="form-group">
+                <label for="lastname">Last Name</label>
+                <input type="text" class="form-control" id="lastname" name="lastname" required autocomplete="off">
+              </div>
           </div>
-          <div class="form-group">
-            <label for="lastname">Last Name</label>
-            <input type="text" class="form-control" id="lastname" name="lastname" required autocomplete="off">
-          </div>
+        </div>
           <div class="form-group">
             <label for="email">Email</label>
             <input type="email" class="form-control" id="email" name="email" required autocomplete="off">
@@ -459,7 +473,7 @@ $('#usersTable').on('click', '.delete-btn', function() {
                 </div>
             </div>
           </div>
-          <button type="submit" class="btn btn-primary float-right btn-sm"><i class="fas fa-paper-plane"></i> Submit</button>
+          <button type="submit" class="btn btn-primary float-right btn-sm"><i class="fas fa-paper-plane fa-sm"></i> Submit</button>
         </form>
       </div>
     </div>
@@ -480,27 +494,42 @@ $('#usersTable').on('click', '.delete-btn', function() {
         </button>
       </div>
       <div class="modal-body">
-        <!-- Form for editing user data -->
-        <form id="editUserForm">
-          <input type="hidden" id="editUserId" name="userId">
-          <div class="form-group">
-            <label for="editFirstname">First Name</label>
-            <input type="text" class="form-control" id="editFirstname" name="firstname" required autocomplete="off">
+        <div class="row">
+        <div class="col-md-6 mt-2">
+              <div class="text-center py-2 border border-info rounded mb-2">
+                  <i class="fas fa-user-circle text-gray" style="font-size: 130px"></i>
+              </div>
           </div>
-          <div class="form-group">
-            <label for="editLastname">Last Name</label>
-            <input type="text" class="form-control" id="editLastname" name="lastname" required>
+          <!-- Form for editing user data -->
+          <div class="col-md-6">
+            <form id="editUserForm">
+              <input type="hidden" id="editUserId" name="userId">
+              <div class="form-group">
+                <label for="editFirstname">First Name</label>
+                <input type="text" class="form-control" id="editFirstname" name="firstname" required autocomplete="off">
+              </div>
+              <div class="form-group">
+                <label for="editLastname">Last Name</label>
+                <input type="text" class="form-control" id="editLastname" name="lastname" required>
+              </div>
+            </div>
           </div>
-          <div class="form-group">
-            <label for="editEmail">Email</label>
-            <input type="email" class="form-control" id="editEmail" name="email" required>
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group">
+                <label for="editEmail">Email</label>
+                <input type="email" class="form-control" id="editEmail" name="email" required>
+              </div>
+            </div>
+            <div class="col-md-12">
+              <div class="form-group">
+                <label for="editUsername">Username</label>
+                <input type="text" class="form-control" id="editUsername" name="username" required>
+              </div>
+            </div>
           </div>
-          <div class="form-group">
-            <label for="editUsername">Username</label>
-            <input type="text" class="form-control" id="editUsername" name="username" required>
-          </div>
-          <button type="submit" class="btn btn-primary float-right btn-sm"><i class="fas fa-save"></i> Save Changes</button>
-        </form>
+            <button type="submit" class="btn btn-primary float-right btn-sm"><i class="fas fa-save fa-sm"></i> Save Changes</button>
+          </form>
       </div>
     </div>
   </div>
