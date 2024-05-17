@@ -51,6 +51,7 @@ if ($result) {
 
 
 <?php 
+  include 'includes/scroll-button.php';
   include 'includes/navbar.php';
   include 'includes/sidebar.php';
 ?>
@@ -89,12 +90,12 @@ if ($result) {
               </div>
               <div class="card-header m-0">
               <button type="button" class="btn btn-info float-end btn-sm" data-toggle="modal" data-target="#addPositionModal">
-                <i class="fas fa-plus"></i> Add New
+                <i class="fas fa-plus fa-sm"></i> Add New
               </button>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="positionTable" class="display table table-bordered" style="display: none;">
+                <table id="positionTable" class="display table table-bordered nowrap" style="display: none; width:100%;">
                   <thead>
                   <tr>
                     <th>No.</th>
@@ -197,12 +198,16 @@ $(document).ready(function() {
       },
     "lengthChange": false, 
     "autoWidth": false,
-    "dom": 'Bfrtip', 
+    "dom": 'Blfrtip', 
     "buttons": [
       {
         extend: 'colvis',
-        text: '<i class="fas fa-columns"></i>',
-        titleAttr: 'Column Visibility', // Tooltip for the button
+        text: '<i class="fas fa-columns fa-sm"></i> Column Visibility',
+        className: 'btn-sm btn-light border mr-1',
+      },
+      {
+        extend: 'pageLength', // Add the "Page Length" button
+        text: '<i class="fas fa-list-ol fa-sm"></i> Show Entries', // Icon for Page Length button
         className: 'btn-sm btn-light border',
       }
     ]
@@ -358,7 +363,7 @@ $(document).ready(function() {
         </form>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary btn-sm" form="addPositionForm"><i class="fas fa-paper-plane"></i> Submit</button>
+        <button type="submit" class="btn btn-primary btn-sm" form="addPositionForm"><i class="fas fa-paper-plane fa-sm"></i> Submit</button>
       </div>
     </div>
   </div>
@@ -385,7 +390,7 @@ $(document).ready(function() {
         </form>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary btn-sm" form="editPositionForm"><i class="fas fa-save"></i> Save Changes</button>
+        <button type="submit" class="btn btn-primary btn-sm" form="editPositionForm"><i class="fas fa-save fa-sm"></i> Save Changes</button>
       </div>
     </div>
   </div>
