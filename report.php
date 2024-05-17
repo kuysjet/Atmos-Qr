@@ -84,6 +84,7 @@ if ($eventsResult && mysqli_num_rows($eventsResult) > 0) {
 
 
 <?php 
+  include 'includes/scroll-button.php';
   include 'includes/navbar.php';
   include 'includes/sidebar.php';
 ?>
@@ -151,24 +152,24 @@ if ($eventsResult && mysqli_num_rows($eventsResult) > 0) {
                     <div class="card-body bg-light">
                         <div class="row mb-6">
                             <!-- Event Name column -->
-                            <div class="col-md-6">
+                            <div class="col-md-5">
                                 <strong>Event Name:</strong>
                                 <p id="eventName"></p>
                             </div>
                             <!-- Event Description column -->
-                            <div class="col-md-6">
+                            <div class="col-md-7">
                                 <strong>Event Description:</strong>
                                 <p id="eventDescription"></p>
                             </div>
                         </div>
                         <div class="row mb-6">
                             <!-- Event Venue column -->
-                            <div class="col-md-6">
+                            <div class="col-md-5">
                                 <strong>Event Venue:</strong>
                                 <p id="eventVenue"></p>
                             </div>
                             <!-- Event Date -->
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <strong>Event Date:</strong>
                                 <p id="eventDate"></p>
                             </div>
@@ -185,7 +186,7 @@ if ($eventsResult && mysqli_num_rows($eventsResult) > 0) {
                         </div>
                       </div>
                   </div>
-                  <table id="reportTable" class="display table table-bordered responsive nowrap" style="display: none;">
+                  <table id="reportTable" class="display table table-bordered responsive nowrap" style="display: none; width:100%;">
                     <thead>
                       <tr>
                           <th>No.</th>
@@ -203,6 +204,21 @@ if ($eventsResult && mysqli_num_rows($eventsResult) > 0) {
                     </thead>
                     <tbody>
                     </tbody>
+                    <tfoot>
+                        <tr>
+                          <th>No.</th>
+                          <th>First Name</th>
+                          <th>Last Name</th>
+                          <th class="course-header">Course</th>
+                          <th class="level-header">Level</th>
+                          <th class="strand-header">Strand</th>
+                          <th class="grade-header">Grade</th>
+                          <th class="section-header">Section</th>
+                          <th class="position-header">Position</th>
+                          <th>Time In</th>
+                          <th>Time Out</th>
+                        </tr>
+                    </tfoot>
                   </table>
                 </div>
               <!-- /.card-body -->
@@ -333,8 +349,7 @@ if ($eventsResult && mysqli_num_rows($eventsResult) > 0) {
         "buttons": [
                     {
                         extend: 'collection',
-                        text: '<i class="fas fa-file-export"></i>',
-                        titleAttr: 'Export', // Tooltip for the button
+                        text: '<i class="fas fa-file-export fa-sm"></i> Export',
                         className: 'btn-sm btn-light border mr-1',
                         buttons: [
                     {
@@ -344,53 +359,121 @@ if ($eventsResult && mysqli_num_rows($eventsResult) > 0) {
                             columns: ':visible' // Only include visible columns in the print
                         }
                     },
-                    {
-                        extend: 'pdf',
-                        text: '<i class="far fa-file-pdf"></i> PDF',
-                        exportOptions: {
-                            columns: ':visible' // Only include visible columns in the print
-                        }
-                    },
+                    // {
+                    //     extend: 'pdf',
+                    //     text: '<i class="far fa-file-pdf"></i> PDF',
+                    //     exportOptions: {
+                    //         columns: ':visible' // Only include visible columns in the print
+                    //     },
+                    //     customize: function (doc) {
+                    //     // Remove the header
+                    //     doc.content.splice(0, 1);
+
+                    //     // Add custom content to the PDF document
+                    //     var eventData = getEventDataFromCard(); // Get event data from the card
+
+                    //     // Create a data array for the table
+                    //     var tableData = [
+                    //         ['Event Name:', eventData.eventName],
+                    //         ['Description:', eventData.eventDescription],
+                    //         ['Venue:', eventData.eventVenue],
+                    //         ['Date:', eventData.eventDate + '                         Time: ' + eventData.loginTime] // Add spaces between eventDate and Time label
+                    //     ];
+
+                    //     // Add event details to the header of the PDF
+                    //     doc.content.splice(0, 0, {
+                    //         text: 'ACLC College of Iriga Inc.',
+                    //         style: 'header',
+                    //         margin: [20, 20, 20, 10] // Add margin bottom of 10 units
+                    //     });
+
+                    //     // Add the table to the PDF
+                    //     doc.content.splice(1, 0, {
+                    //         table: {
+                    //             widths: ['30%', '70%'], // Set the width of each column to be equal
+                    //             body: tableData // Set the data for the table
+                    //         },
+                    //         margin: [20, 10, 20, 10], // Add margins to the table
+                    //         layout: {
+                    //             hLineWidth: function (i, node) {
+                    //                 return i === 0 || i === node.table.body.length ? 1 : 0.5; // Thicker horizontal lines for the header and footer rows
+                    //             },
+                    //             vLineWidth: function (i, node) {
+                    //                 return i === 0 || i === node.table.widths.length ? 1 : 0.5; // Thicker vertical lines for the first and last columns
+                    //             },
+                    //             hLineColor: function (i, node) {
+                    //                 return i === 0 || i === node.table.body.length ? '#333' : '#ccc'; // Darker horizontal lines for the header and footer rows
+                    //             },
+                    //             vLineColor: function (i, node) {
+                    //                 return i === 0 || i === node.table.widths.length ? '#333' : '#ccc'; // Darker vertical lines for the first and last columns
+                    //             },
+                    //             paddingLeft: function (i, node) {
+                    //                 return 5; // Add left padding to cells
+                    //             },
+                    //             paddingRight: function (i, node) {
+                    //                 return 5; // Add right padding to cells
+                    //             }
+                    //         }
+                    //     });
+
+                    //     // Add custom styling
+                    //     var header = {};
+                    //     header['alignment'] = 'center';
+                    //     header['fontSize'] = 16;
+                    //     header['bold'] = true;
+                    //     doc.styles['header'] = header;
+
+                    //     // Add custom styling for table headers
+                    //     doc.defaultStyle.tableHeader = {
+                    //         fillColor: '#f3f3f3',
+                    //         bold: true,
+                    //         fontSize: 12
+                    //     };
+                    // }
+                    // },
                     {
                         extend: 'print',
                         text: '<i class="fas fa-print"></i> Print',
                         exportOptions: {
                             columns: ':visible' // Only include visible columns in the print
-                    },
+                        },
                         customize: function(win) {
                             var eventData = getEventDataFromCard();
-                            // Prepend event details above the table in two columns with borders in the print view
+                            // Prepend a custom header above the event details
                             $(win.document.body).prepend(
-                        '<div class="print-header">' +
-                            '<table class="event-details">' +
-                                '<tr style="border: 1px solid #ddd;">' +
-                                    '<td><strong>Event Name:</strong></td>' +
-                                    '<td colspan="6">' + eventData.eventName + '</td>' +
-                                    '<td><strong>Event Venue:</strong></td>' +
-                                    '<td colspan="6">' + eventData.eventVenue + '</td>' +
-                                '</tr>' +
-                                '<tr style="border: 1px solid #ddd;">' +
-                                    '<td><strong>Event Description:</strong></td>' +
-                                    '<td colspan="12">' + eventData.eventDescription + '</td>' +
-                                '</tr>' +
-                                '<tr style="border: 1px solid #ddd;">' +
-                                    '<td><strong>Event Date:</strong></td>' +
-                                    '<td colspan="3">' + eventData.eventDate + '</td>' +
-                                    '<td><strong>Login Time:</strong></td>' +
-                                    '<td colspan="3">' + eventData.loginTime + '</td>' +
-                                    '<td><strong>Logout Time:</strong></td>' +
-                                    '<td colspan="3">' + eventData.logoutTime + '</td>' +
-                                    
-                                '</tr>' +
-                        
-                            '</table>' +
-                            '<style>' +
-                                '.print-header { margin-bottom: 20px; }' +
-                                '.event-details { border-collapse: collapse; width: 100%; }' +
-                                '.event-details th, .event-details td { border: 1px solid #ddd; padding: 8px; }' +
-                                '.dataTables_info { display: none; }' + // Hide table title
-                            '</style>' +
-                        '</div>'
+                                '<div class="custom-header">' +
+                                    '<h3><b>ACLC COLLEGE OF IRIGA INC.</b></h3>' + // Your custom header content
+                                    '<p><b>ATTENDANCE REPORT</b></p>' +
+                                '</div>' +
+                                '<div class="print-header">' +
+                                    '<table class="event-details">' +
+                                        '<tr style="border: 1px solid #ddd;">' +
+                                            '<td><strong>Event Name:</strong></td>' +
+                                            '<td colspan="3">' + eventData.eventName + '</td>' +
+                                            '<td><strong>Event Venue:</strong></td>' +
+                                            '<td colspan="9">' + eventData.eventVenue + '</td>' +
+                                        '</tr>' +
+                                        '<tr style="border: 1px solid #ddd;">' +
+                                            '<td><strong>Event Description:</strong></td>' +
+                                            '<td colspan="12">' + eventData.eventDescription + '</td>' +
+                                        '</tr>' +
+                                        '<tr style="border: 1px solid #ddd;">' +
+                                            '<td><strong>Event Date:</strong></td>' +
+                                            '<td colspan="3">' + eventData.eventDate + '</td>' +
+                                            '<td><strong>Login Time:</strong></td>' +
+                                            '<td colspan="3">' + eventData.loginTime + '</td>' +
+                                            '<td><strong>Logout Time:</strong></td>' +
+                                            '<td colspan="3">' + eventData.logoutTime + '</td>' +
+                                        '</tr>' +
+                                    '</table>' +
+                                    '<style>' +
+                                        '.custom-header { text-align: center; margin-bottom: 20px; }' + // Style for custom header
+                                        '.print-header { margin-bottom: 20px; }' +
+                                        '.event-details { border-collapse: collapse; width: 100%; }' +
+                                        '.event-details th, .event-details td { border: 1px solid #ddd; padding: 8px; }' +
+                                        '.dataTables_info { display: none; }' + // Hide table title
+                                    '</style>' +
+                                '</div>'
                             );
 
 
@@ -409,8 +492,7 @@ if ($eventsResult && mysqli_num_rows($eventsResult) > 0) {
             },
             {
                 extend: 'pageLength', // Add the "Page Length" button
-                text: '<i class="fas fa-list-ol"></i>', // Icon for Page Length button
-                titleAttr: 'Page Length', // Tooltip for the button
+                text: '<i class="fas fa-list-ol fa-sm"></i> Show Entries', // Icon for Page Length button
                 className: 'btn-sm btn-light border',
             },
         ],
@@ -421,6 +503,26 @@ if ($eventsResult && mysqli_num_rows($eventsResult) > 0) {
                 return meta.row + 1; // Add auto-increment number starting from 1
             }
         } ],
+    });
+
+    // Setup - add a text input to each footer cell for individual column search
+    $('#reportTable tfoot th').each(function(index) {
+        if (index > 2) { // Skip the first column
+            var title = $(this).text();
+            $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+        }
+    });
+
+    // DataTable - apply the search
+    table.columns().every(function(index) {
+        if (index > 2) { // Skip the first column
+            var that = this;
+            $('input', this.footer()).on('keyup change', function() {
+                if (that.search() !== this.value) {
+                    that.search(this.value).draw();
+                }
+            });
+        }
     });
 
 // Handle user type change

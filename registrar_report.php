@@ -76,7 +76,7 @@ if ($eventsResult && mysqli_num_rows($eventsResult) > 0) {
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="dist/img/icon.png">
+  <link rel="icon" type="image/x-icon" href="dist/img/new-icon.png">
   <title>ATMOS | Report</title>
 
   <!-- Google Font: Source Sans Pro -->
@@ -96,12 +96,28 @@ if ($eventsResult && mysqli_num_rows($eventsResult) > 0) {
   <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/dataTables.jqueryui.min.css">
   <link rel="stylesheet" href="//code.highcharts.com/css/highcharts.css">
   
-  
+  <style>
+      /* Styling for scroll buttons */
+  .scroll-to-top {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+}
+
+.scroll-to-bottom {
+  position: fixed;
+  bottom: 70px;
+  right: 20px;
+  z-index: 1000;
+}
+  </style>
 
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
 
+<?php include 'includes/scroll-button.php'; ?>
 
   <!-- Navbar -->
   <nav class="main-header navbar navbar-expand navbar-white navbar-light">
@@ -164,7 +180,7 @@ if ($eventsResult && mysqli_num_rows($eventsResult) > 0) {
     <!-- Brand Logo -->
     <a href="https://www.facebook.com/ACLCCollegeIRIGA/" class="brand-link"">
       <img src="dist/img/amalogo.png" alt="ACLC Logo" class="brand-image img-circle elevation-2" style="opacity: .8; width: 32px;">
-      <span class="brand-text" style="font-size: small;"><b>ACLC COLLEGE IRIGA INC.</b></span>
+      <span class="brand-text" style="font-size: small;"><b>ACLC COLLEGE OF IRIGA INC.</b></span>
     </a>
 
     <!-- active link change -->
@@ -273,24 +289,24 @@ if ($eventsResult && mysqli_num_rows($eventsResult) > 0) {
                     <div class="card-body bg-light">
                         <div class="row mb-6">
                             <!-- Event Name column -->
-                            <div class="col-md-6">
+                            <div class="col-md-5">
                                 <strong>Event Name:</strong>
                                 <p id="eventName"></p>
                             </div>
                             <!-- Event Description column -->
-                            <div class="col-md-6">
+                            <div class="col-md-7">
                                 <strong>Event Description:</strong>
                                 <p id="eventDescription"></p>
                             </div>
                         </div>
                         <div class="row mb-6">
                             <!-- Event Venue column -->
-                            <div class="col-md-6">
+                            <div class="col-md-5">
                                 <strong>Event Venue:</strong>
                                 <p id="eventVenue"></p>
                             </div>
                             <!-- Event Date -->
-                            <div class="col-md-2">
+                            <div class="col-md-3">
                                 <strong>Event Date:</strong>
                                 <p id="eventDate"></p>
                             </div>
@@ -307,7 +323,7 @@ if ($eventsResult && mysqli_num_rows($eventsResult) > 0) {
                         </div>
                       </div>
                   </div>
-                  <table id="reportTable" class="display table table-bordered responsive nowrap" style="display: none;">
+                  <table id="reportTable" class="display table table-bordered responsive nowrap" style="display: none; width:100%;">
                     <thead>
                       <tr>
                           <th>No.</th>
@@ -325,6 +341,21 @@ if ($eventsResult && mysqli_num_rows($eventsResult) > 0) {
                     </thead>
                     <tbody>
                     </tbody>
+                    <tfoot>
+                        <tr>
+                          <th>No.</th>
+                          <th>First Name</th>
+                          <th>Last Name</th>
+                          <th class="course-header">Course</th>
+                          <th class="level-header">Level</th>
+                          <th class="strand-header">Strand</th>
+                          <th class="grade-header">Grade</th>
+                          <th class="section-header">Section</th>
+                          <th class="position-header">Position</th>
+                          <th>Time In</th>
+                          <th>Time Out</th>
+                        </tr>
+                    </tfoot>
                   </table>
                 </div>
               <!-- /.card-body -->
@@ -449,12 +480,11 @@ if ($eventsResult && mysqli_num_rows($eventsResult) > 0) {
         "lengthChange": false,
         "autoWidth": false,
         "orderable": true,
-        "dom": 'Bfrtip', // Ensure the buttons container is included
+        "dom": 'Blfrtip', // Ensure the buttons container is included
         "buttons": [
                     {
                         extend: 'collection',
-                        text: '<i class="fas fa-file-export"></i>',
-                        titleAttr: 'Export', // Tooltip for the button
+                        text: '<i class="fas fa-file-export"></i> Export',
                         className: 'btn-sm btn-light border mr-1',
                         buttons: [
                     {
@@ -464,53 +494,56 @@ if ($eventsResult && mysqli_num_rows($eventsResult) > 0) {
                             columns: ':visible' // Only include visible columns in the print
                         }
                     },
-                    {
-                        extend: 'pdf',
-                        text: '<i class="far fa-file-pdf"></i> PDF',
-                        exportOptions: {
-                            columns: ':visible' // Only include visible columns in the print
-                        }
-                    },
+                    // {
+                    //     extend: 'pdf',
+                    //     text: '<i class="far fa-file-pdf"></i> PDF',
+                    //     exportOptions: {
+                    //         columns: ':visible' // Only include visible columns in the print
+                    //     }
+                    // },
                     {
                         extend: 'print',
                         text: '<i class="fas fa-print"></i> Print',
                         exportOptions: {
                             columns: ':visible' // Only include visible columns in the print
-                    },
+                        },
                         customize: function(win) {
                             var eventData = getEventDataFromCard();
-                            // Prepend event details above the table in two columns with borders in the print view
+                            // Prepend a custom header above the event details
                             $(win.document.body).prepend(
-                        '<div class="print-header">' +
-                            '<table class="event-details">' +
-                                '<tr style="border: 1px solid #ddd;">' +
-                                    '<td><strong>Event Name:</strong></td>' +
-                                    '<td colspan="6">' + eventData.eventName + '</td>' +
-                                    '<td><strong>Event Venue:</strong></td>' +
-                                    '<td colspan="6">' + eventData.eventVenue + '</td>' +
-                                '</tr>' +
-                                '<tr style="border: 1px solid #ddd;">' +
-                                    '<td><strong>Event Description:</strong></td>' +
-                                    '<td colspan="12">' + eventData.eventDescription + '</td>' +
-                                '</tr>' +
-                                '<tr style="border: 1px solid #ddd;">' +
-                                    '<td><strong>Event Date:</strong></td>' +
-                                    '<td colspan="3">' + eventData.eventDate + '</td>' +
-                                    '<td><strong>Login Time:</strong></td>' +
-                                    '<td colspan="3">' + eventData.loginTime + '</td>' +
-                                    '<td><strong>Logout Time:</strong></td>' +
-                                    '<td colspan="3">' + eventData.logoutTime + '</td>' +
-                                    
-                                '</tr>' +
-                        
-                            '</table>' +
-                            '<style>' +
-                                '.print-header { margin-bottom: 20px; }' +
-                                '.event-details { border-collapse: collapse; width: 100%; }' +
-                                '.event-details th, .event-details td { border: 1px solid #ddd; padding: 8px; }' +
-                                '.dataTables_info { display: none; }' + // Hide table title
-                            '</style>' +
-                        '</div>'
+                                '<div class="custom-header">' +
+                                    '<h3><b>ACLC COLLEGE OF IRIGA INC.</b></h3>' + // Your custom header content
+                                    '<p><b>ATTENDANCE REPORT</b></p>' +
+                                '</div>' +
+                                '<div class="print-header">' +
+                                    '<table class="event-details">' +
+                                        '<tr style="border: 1px solid #ddd;">' +
+                                            '<td><strong>Event Name:</strong></td>' +
+                                            '<td colspan="3">' + eventData.eventName + '</td>' +
+                                            '<td><strong>Event Venue:</strong></td>' +
+                                            '<td colspan="9">' + eventData.eventVenue + '</td>' +
+                                        '</tr>' +
+                                        '<tr style="border: 1px solid #ddd;">' +
+                                            '<td><strong>Event Description:</strong></td>' +
+                                            '<td colspan="12">' + eventData.eventDescription + '</td>' +
+                                        '</tr>' +
+                                        '<tr style="border: 1px solid #ddd;">' +
+                                            '<td><strong>Event Date:</strong></td>' +
+                                            '<td colspan="3">' + eventData.eventDate + '</td>' +
+                                            '<td><strong>Login Time:</strong></td>' +
+                                            '<td colspan="3">' + eventData.loginTime + '</td>' +
+                                            '<td><strong>Logout Time:</strong></td>' +
+                                            '<td colspan="3">' + eventData.logoutTime + '</td>' +
+                                        '</tr>' +
+                                    '</table>' +
+                                    '<style>' +
+                                        '.custom-header { text-align: center; margin-bottom: 20px; }' + // Style for custom header
+                                        '.print-header { margin-bottom: 20px; }' +
+                                        '.event-details { border-collapse: collapse; width: 100%; }' +
+                                        '.event-details th, .event-details td { border: 1px solid #ddd; padding: 8px; }' +
+                                        '.dataTables_info { display: none; }' + // Hide table title
+                                    '</style>' +
+                                '</div>'
                             );
 
 
@@ -529,8 +562,7 @@ if ($eventsResult && mysqli_num_rows($eventsResult) > 0) {
             },
             {
                 extend: 'pageLength', // Add the "Page Length" button
-                text: '<i class="fas fa-list-ol"></i>', // Icon for Page Length button
-                titleAttr: 'Page Length', // Tooltip for the button
+                text: '<i class="fas fa-list-ol"></i> Show Entries', // Icon for Page Length button
                 className: 'btn-sm btn-light border',
             },
         ],
@@ -541,6 +573,26 @@ if ($eventsResult && mysqli_num_rows($eventsResult) > 0) {
                 return meta.row + 1; // Add auto-increment number starting from 1
             }
         } ],
+    });
+
+    // Setup - add a text input to each footer cell for individual column search
+    $('#reportTable tfoot th').each(function(index) {
+        if (index > 2) { // Skip the first column
+            var title = $(this).text();
+            $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+        }
+    });
+
+    // DataTable - apply the search
+    table.columns().every(function(index) {
+        if (index > 2) { // Skip the first column
+            var that = this;
+            $('input', this.footer()).on('keyup change', function() {
+                if (that.search() !== this.value) {
+                    that.search(this.value).draw();
+                }
+            });
+        }
     });
 
 // Handle user type change
@@ -861,28 +913,45 @@ $(document).ready(function() {
                 </button>
             </div>
             <div class="modal-body">
-                <!-- Profile View Form -->
-                <form id="viewProfileForm">
-                    <div class="form-group">
-                        <label for="firstname">First Name</label>
-                        <input type="text" class="form-control" id="firstname" name="firstname" value="<?php echo $firstName; ?>" readonly>
+                <div class="row">
+                    <!-- Profile Image Icon -->
+                    <div class="col-md-6 mt-2">
+                        <div class="text-center py-2 border border-info rounded mb-2">
+                            <i class="fas fa-user-circle text-gray" style="font-size: 130px"></i>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="lastname">Last Name</label>
-                        <input type="text" class="form-control" id="lastname" name="lastname" value="<?php echo $lastName; ?>" readonly>
+                    <!-- Profile View Form -->
+                    <div class="col-md-6">
+                        <form id="viewProfileForm">
+                            <div class="form-group">
+                                <label for="vfirstname">First Name</label>
+                                <input type="text" class="form-control" id="vfirstname" name="firstname" value="<?php echo $firstName; ?>" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label for="vlastname">Last Name</label>
+                                <input type="text" class="form-control" id="vlastname" name="lastname" value="<?php echo $lastName; ?>" readonly>
+                            </div>
+                        </form>
                     </div>
-                    <div class="form-group">
-                        <label for="email">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" value="<?php echo $email; ?>" readonly>
+                </div>
+                <!-- Email and Username Fields -->
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="vemail">Email</label>
+                            <input type="email" class="form-control" id="vemail" name="email" value="<?php echo $email; ?>" readonly>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="username">Username</label>
-                        <input type="text" class="form-control" id="username" name="username" value="<?php echo $username; ?>" readonly>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label for="vusername">Username</label>
+                            <input type="text" class="form-control" id="vusername" name="username" value="<?php echo $username; ?>" readonly>
+                        </div>
                     </div>
-                </form>
+                </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fas fa-times fa-sm"></i> Close</button>
             </div>
         </div>
     </div>
@@ -924,16 +993,13 @@ $(document).ready(function() {
                         <label for="confirmPassword">Confirm New Password</label>
                         <div class="input-group">
                             <input type="password" class="form-control" id="confirmPassword" name="confirmPassword">
-                            <div class="input-group-append">
-                                <span class="input-group-text" id="toggleConfirmPassword"><i class="fa fa-eye-slash" aria-hidden="true"></i></span>
-                            </div>
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary btn-sm" id="savePasswordChangesBtn"><i class="fas fa-save"></i> Save Changes</button>
-                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary btn-sm" id="savePasswordChangesBtn"><i class="fas fa-save fa-sm"></i> Save Changes</button>
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal"><i class="fas fa-times fa-sm"></i> Close</button>
             </div>
         </div>
     </div>
