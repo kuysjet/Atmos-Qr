@@ -53,6 +53,7 @@ if ($result) {
 
 
 <?php 
+  include 'includes/scroll-button.php';
   include 'includes/navbar.php';
   include 'includes/sidebar.php';
 ?>
@@ -91,12 +92,12 @@ if ($result) {
               </div>
               <div class="card-header m-0">
               <button type="button" class="btn btn-info float-end btn-sm" data-toggle="modal" data-target="#addAcademicYearModal">
-                <i class="fas fa-plus"></i> Add New
+                <i class="fas fa-plus fa-sm"></i> Add New
               </button>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="academicyearTable" class="display table table-bordered">
+                <table id="academicyearTable" class="display table table-bordered nowrap" style="width:100%;">
                   <thead>
                   <tr>
                     <th>No.</th>
@@ -206,8 +207,7 @@ $(document).ready(function() {
     "buttons": [
       {
         extend: 'colvis',
-        text: '<i class="fas fa-columns"></i>',
-        titleAttr: 'Column Visibility', // Tooltip for the button
+        text: '<i class="fas fa-columns fa-sm"></i> Column Visibility',
         className: 'btn-sm btn-light border',
       }
     ]
