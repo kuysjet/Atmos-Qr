@@ -50,6 +50,7 @@ if ($result) {
 
 
 <?php 
+  include 'includes/scroll-button.php';
   include 'includes/navbar.php';
   include 'includes/sidebar.php';
 ?>
@@ -88,15 +89,15 @@ if ($result) {
               </div>
               <div class="card-header m-0">
                 <button type="button" class="btn btn-info float-end btn-sm" data-toggle="modal" data-target="#addCollegeModal">
-                  <i class="fas fa-user-plus"></i> Add New
+                  <i class="fas fa-user-plus fa-sm"></i> Add New
                 </button>
                 <button type="button" class="btn btn-success float-end btn-sm" data-toggle="modal" data-target="#importCsvModal">
-                  <i class="fas fa-file-import"></i> Import CSV
+                  <i class="fas fa-file-import fa-sm"></i> Import CSV
                 </button>
               </div>
               <!-- /.card-header -->
               <div class="card-body">
-                <table id="collegeStudentsTable" class="display table table-bordered nowrap" style="display: none;">
+                <table id="collegeStudentsTable" class="display table table-bordered nowrap" style="display: none; width:100%;">
                   <thead>
                   <tr>
                     <th>
@@ -117,6 +118,17 @@ if ($result) {
                   </thead>
                   <tbody>
                   </tbody>
+                    <tfoot>
+                      <th></th>
+                      <th>No.</th>
+                      <th>ID Number</th>
+                      <th>First Name</th>
+                      <th>Last Name</th>
+                      <th>Email Address</th>
+                      <th>Course</th>
+                      <th>Level</th>
+                      <th>Action</th>
+                    </tfoot>
                 </table>
               </div>
               <!-- /.card-body -->
@@ -284,10 +296,28 @@ $(document).ready(function() {
             titleAttr: 'Page Length', // Tooltip for the button
             className: 'btn-sm btn-light border',
           }
-        ],  
+        ], 
   });
 
-  
+    // Setup - add a text input to each footer cell for individual column search
+    $('#collegeStudentsTable tfoot th').each(function(index) {
+        if (index > 5 && index !== 8) { // Skip the five column and the eighth column
+            var title = $(this).text();
+            $(this).html('<input type="text" placeholder="Search ' + title + '" />');
+        }
+    });
+
+    // DataTable - apply the search
+    table.columns().every(function(index) {
+        if (index > 5 && index !== 8) { // Skip the five column and the eighth column
+            var that = this;
+            $('input', this.footer()).on('keyup change', function() {
+                if (that.search() !== this.value) {
+                    that.search(this.value).draw();
+                }
+            });
+        }
+    });
 
 
   // Handle click on "Select all" control
@@ -755,7 +785,7 @@ function dataURLtoBlob(dataURL) {
         </form>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary btn-sm" form="addCollegeForm"><i class="fas fa-paper-plane"></i> Submit</button>
+        <button type="submit" class="btn btn-primary btn-sm" form="addCollegeForm"><i class="fas fa-paper-plane fa-sm"></i> Submit</button>
       </div>
     </div>
   </div>
@@ -856,7 +886,7 @@ function dataURLtoBlob(dataURL) {
         </form>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary btn-sm" form="editStudentForm"><i class="fas fa-save"></i> Save Changes</button>
+        <button type="submit" class="btn btn-primary btn-sm" form="editStudentForm"><i class="fas fa-save fa-sm"></i> Save Changes</button>
       </div>
     </div>
   </div>
@@ -895,7 +925,7 @@ function dataURLtoBlob(dataURL) {
         </form>
       </div>
       <div class="modal-footer">
-        <button type="submit" class="btn btn-primary btn-sm" form="importCsvForm"><i class="fas fa-file-import"></i> Import</button>
+        <button type="submit" class="btn btn-primary btn-sm" form="importCsvForm"><i class="fas fa-file-import fa-sm"></i> Import</button>
       </div>
     </div>
   </div>
@@ -916,21 +946,25 @@ function dataURLtoBlob(dataURL) {
       <div class="modal-body text-center d-flex flex-column align-items-center justify-content-center" id="modalBodyToDownload">
         <!-- Card with Background Image inside Modal Body with Medium Size -->
         <div class="card" id="cardToDownload" style="width: 300px;">
-          <img src="dist/img/Card.png" class="card-img" alt="Background Image" style="width: 100%; height: auto; image-rendering: pixelated;">
+          <img src="dist/img/Card-College.png" class="card-img" alt="Background Image" style="width: 100%; height: auto;">
           <div class="card-img-overlay d-flex flex-column justify-content-center align-items-center" style="height: 100%;">
             <!-- Logo above the QR Code -->
-            <img src="dist/img/aclc_complete_logo.png" alt="Logo" style="width: 150px; height: auto; margin-bottom: 20px;">
-            <!-- QR Code Image -->
-            <img id="qrCodeImage" alt="QR Code" style="width: 200px; height: auto; image-rendering: pixelated;">
+            <img src="dist/img/aclc_complete_logo.png" alt="Logo" style="width: 100px; height: auto; margin-bottom: 20px; position:absolute; top: 0%; right:0%;">
+            <!-- Profile Image -->
+            <img src="dist/img/no-avatar.jpg" class="rounded-circle" id="collegeProfile" alt="Profile Image" style="width: 140px; height: 140px; border: 3px solid #233DFF;">
             <!-- Student Name -->
-            <div id="studentName" class="font-weight-bold" style="font-size: 14px; margin-top: 20px; color: black; display: inline-block; max-width: 70%;">Student Name</div>
+            <div id="studentName" class="font-weight-bold" style="font-size: 14px; font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin-top: 6px; color: black; display: inline-block; max-width: 70%;">Student Name</div>
             <!-- Student Course & Level -->
-            <div id="studentCL" class="font-weight-bold text-secondary" style="font-size: 12px;">Course & Level</div>
+            <div id="studentCL" class="font-weight-bold mb-2" style="font-size: 10px; color:#233DFF; font-family:'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;">Course & Level</div>
+            <!-- QR Code Image -->
+            <img id="qrCodeImage" alt="QR Code" style="width: 180px; height: auto;">
+            <!-- Logo below the QR Code -->
+            <img src="dist/img/new-icon.png" class="rounded-circle" alt="Logo" style="width: 30px; height: auto; margin-bottom: 8px; position:absolute; bottom: 0%; right: 2%;">
           </div>
         </div>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-primary btn-sm" id="downloadQR"><i class="fas fa-download"></i> Download</button>
+        <button type="button" class="btn btn-primary btn-sm" id="downloadQR"><i class="fas fa-download fa-sm"></i> Download</button>
       </div>
     </div>
   </div>
